@@ -9,19 +9,25 @@ import { AntiBanConfig, AntiBanSettings } from '@/components/dispatch/AntiBanCon
 import { ProgressView, StreamEvent } from '@/components/dispatch/ProgressView'
 import { SourceTabs } from '@/components/dispatch/SourceTabs'
 import { ContactTable } from '@/components/dispatch/ContactTable'
+import { InstanceSelector, DistributionConfig } from '@/components/dispatch/InstanceSelector'
 import useAppStore from '@/stores/useAppStore'
 import { useToast } from '@/hooks/use-toast'
 import { api } from '@/lib/api'
 import { useDispatchSimulation } from '@/hooks/useDispatchSimulation'
 
 export default function Index() {
-  const { selectedContacts, setSelectedContacts } = useAppStore()
+  const { selectedContacts, setSelectedContacts, instances } = useAppStore()
   const { toast } = useToast()
   const { start: simulateStart, stop: simulateStop } = useDispatchSimulation()
 
   const [message, setMessage] = useState('')
   const [isScheduled, setIsScheduled] = useState(false)
   const [scheduleDate, setScheduleDate] = useState('')
+  const [distConfig, setDistConfig] = useState<DistributionConfig>({
+    mode: 'equal',
+    selection: [],
+    isValid: true,
+  })
 
   const [antiBan, setAntiBan] = useState<AntiBanSettings>({
     mainBatch: { interval: 50, minDelay: 60, maxDelay: 120 },
@@ -56,9 +62,23 @@ export default function Index() {
       return toast({ title: 'Adicione contatos', variant: 'destructive' })
     if (!message) return toast({ title: 'Escreva uma mensagem', variant: 'destructive' })
 
+    const activeInstances = instances.filter((i) => i.status === 'connected')
+    if (activeInstances.length >= 2) {
+      if (distConfig.selection.length === 0) {
+        return toast({ title: 'Selecione pelo menos um número de envio', variant: 'destructive' })
+      }
+      if (!distConfig.isValid) {
+        return toast({
+          title: 'Distribuição inválida',
+          description: 'A soma das porcentagens deve ser 100%.',
+          variant: 'destructive',
+        })
+      }
+    }
+
     if (isScheduled) {
       if (!scheduleDate) return toast({ title: 'Selecione a data', variant: 'destructive' })
-      await api.scheduleDispatch({ message, antiBan, date: scheduleDate })
+      await api.scheduleDispatch({ message, antiBan, date: scheduleDate, distConfig })
       toast({ title: 'Disparo Agendado com sucesso!' })
       return
     }
@@ -69,7 +89,7 @@ export default function Index() {
     setSelectedContacts(selectedContacts.map((c) => ({ ...c, status: 'Processando', error: '' })))
 
     try {
-      await api.startDispatch({ message, antiBan })
+      await api.startDispatch({ message, antiBan, distConfig })
       const { token } = await api.getStreamToken()
       // Simulate EventSource fallback
       simulateStart(selectedContacts, antiBan, handleEvent)
@@ -94,6 +114,9 @@ export default function Index() {
             <CardContent className="p-6 space-y-6">
               <SourceTabs />
               <MessageEditor message={message} setMessage={setMessage} />
+
+              <InstanceSelector instances={instances} onChange={setDistConfig} />
+
               <AntiBanConfig config={antiBan} onChange={setAntiBan} />
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-border gap-4">

@@ -25,12 +25,21 @@ export interface User {
   role: UserRole
 }
 
+export interface WhatsAppInstance {
+  id: string
+  name: string
+  phone: string
+  status: 'connected' | 'disconnected'
+}
+
 interface AppState {
   user: User | null
   login: (user: User) => void
   logout: () => void
   selectedContacts: Contact[]
   setSelectedContacts: (contacts: Contact[]) => void
+  instances: WhatsAppInstance[]
+  setInstances: (instances: WhatsAppInstance[]) => void
 }
 
 const AppContext = createContext<AppState | null>(null)
@@ -38,6 +47,13 @@ const AppContext = createContext<AppState | null>(null)
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([])
+
+  // Mock instances to enable Instance Selection testing
+  const [instances, setInstances] = useState<WhatsAppInstance[]>([
+    { id: '1', name: 'Atendimento Principal', phone: '+55 11 99999-1111', status: 'connected' },
+    { id: '2', name: 'Suporte Secundário', phone: '+55 11 99999-2222', status: 'connected' },
+    { id: '3', name: 'Vendas VIP', phone: '+55 11 99999-3333', status: 'disconnected' },
+  ])
 
   return (
     <AppContext.Provider
@@ -47,6 +63,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         logout: () => setUser(null),
         selectedContacts,
         setSelectedContacts,
+        instances,
+        setInstances,
       }}
     >
       {children}
