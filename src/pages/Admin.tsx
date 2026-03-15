@@ -1,8 +1,8 @@
+import { useState } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Activity, Users, Zap, Database, RefreshCw, Shield, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   Table,
   TableBody,
@@ -11,33 +11,75 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import useAppStore from '@/stores/useAppStore'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import useAppStore, { UserRole } from '@/stores/useAppStore'
+import { cn } from '@/lib/utils'
 
-const MOCK_USERS = [
+const MOCK_USERS_DATA = [
   {
     id: 1,
     name: 'Admin Principal',
     email: 'admin@adapta.org',
-    role: 'SuperAdmin',
+    role: 'SuperAdmin' as UserRole,
     lastActive: 'Há 5 mins',
   },
-  { id: 2, name: 'Kimberly', email: 'kimberly@adapta.org', role: 'Elite', lastActive: 'Há 1 hora' },
-  { id: 3, name: 'Matheus', email: 'matheus@adapta.org', role: 'Elite', lastActive: 'Há 2 horas' },
-  { id: 4, name: 'Leticia User', email: 'user@adapta.org', role: 'Geral', lastActive: 'Ontem' },
+  {
+    id: 2,
+    name: 'Kimberly',
+    email: 'kimberly@adapta.org',
+    role: 'Elite' as UserRole,
+    lastActive: 'Há 1 hora',
+  },
+  {
+    id: 3,
+    name: 'Matheus',
+    email: 'matheus@adapta.org',
+    role: 'Elite' as UserRole,
+    lastActive: 'Há 2 horas',
+  },
+  {
+    id: 4,
+    name: 'Leticia User',
+    email: 'user@adapta.org',
+    role: 'Geral' as UserRole,
+    lastActive: 'Ontem',
+  },
   {
     id: 5,
     name: 'Copy Dev',
     email: 'dev@copyexperts.com.br',
-    role: 'Geral',
+    role: 'Geral' as UserRole,
     lastActive: 'Há 3 dias',
   },
 ]
 
 export default function Admin() {
   const { user } = useAppStore()
+  const [usersList, setUsersList] = useState(MOCK_USERS_DATA)
 
   if (user?.role !== 'SuperAdmin') {
     return <Navigate to="/" replace />
+  }
+
+  const updateRole = (id: number, newRole: UserRole) => {
+    setUsersList(usersList.map((u) => (u.id === id ? { ...u, role: newRole } : u)))
+  }
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'SuperAdmin':
+        return 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20'
+      case 'Elite':
+        return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20 hover:bg-yellow-500/20'
+      default:
+        return 'bg-slate-500/10 text-slate-500 border-slate-500/20 hover:bg-slate-500/20'
+    }
   }
 
   const stats = [
@@ -117,27 +159,29 @@ export default function Admin() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_USERS.map((u) => (
+              {usersList.map((u) => (
                 <TableRow key={u.id}>
                   <TableCell className="font-medium">{u.name}</TableCell>
                   <TableCell className="text-muted-foreground">{u.email}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        u.role === 'SuperAdmin'
-                          ? 'default'
-                          : u.role === 'Elite'
-                            ? 'secondary'
-                            : 'outline'
-                      }
-                      className={
-                        u.role === 'SuperAdmin'
-                          ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border-red-500/20'
-                          : ''
-                      }
+                    <Select
+                      value={u.role}
+                      onValueChange={(val) => updateRole(u.id, val as UserRole)}
                     >
-                      {u.role}
-                    </Badge>
+                      <SelectTrigger
+                        className={cn(
+                          'w-[140px] h-8 text-xs font-semibold rounded-full border-transparent transition-colors',
+                          getRoleColor(u.role),
+                        )}
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="SuperAdmin">SuperAdmin</SelectItem>
+                        <SelectItem value="Elite">Elite</SelectItem>
+                        <SelectItem value="Geral">Geral</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </TableCell>
                   <TableCell className="text-right text-sm text-muted-foreground">
                     {u.lastActive}

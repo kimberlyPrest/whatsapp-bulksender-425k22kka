@@ -15,12 +15,21 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 export default function Config() {
   const { user } = useAppStore()
   const { toast } = useToast()
   const [copied, setCopied] = useState(false)
   const [mappingModalOpen, setMappingModalOpen] = useState(false)
+
+  // API State
+  const [evoUrl, setEvoUrl] = useState('https://evo.adapta.org')
+  const [evoKey, setEvoKey] = useState('sk_live_123456789')
+  const [evoInstance, setEvoInstance] = useState('Adapta_Main_WP')
+  const [googleJson, setGoogleJson] = useState('')
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
 
   // Mock mappings
   const [mappings, setMappings] = useState([
@@ -29,6 +38,17 @@ export default function Config() {
   ])
   const [newMapping, setNewMapping] = useState({ id: '', email: '' })
 
+  const isGoogleConfigured = googleJson && isValidJson(googleJson)
+
+  function isValidJson(str: string) {
+    try {
+      JSON.parse(str)
+      return true
+    } catch {
+      return false
+    }
+  }
+
   const handleCopy = () => {
     navigator.clipboard.writeText('https://api.bulksender.adapta.org/webhook/hs-xyz123')
     setCopied(true)
@@ -36,20 +56,37 @@ export default function Config() {
   }
 
   const handleSave = () => {
-    toast({
-      title: 'Configuration Saved',
-      description: 'Your settings have been updated successfully.',
-      className: 'bg-primary text-primary-foreground border-none',
-    })
+    if (!evoUrl || !evoKey || !evoInstance) {
+      setFeedback({ type: 'error', msg: 'Preencha todos os campos da Evolution API.' })
+      return
+    }
+    if (googleJson && !isValidJson(googleJson)) {
+      setFeedback({ type: 'error', msg: 'JSON do Google Credentials inválido.' })
+      return
+    }
+    setFeedback({ type: 'success', msg: 'Configurações salvas com sucesso!' })
+    setTimeout(() => setFeedback(null), 4000)
   }
 
   const handleAddMapping = () => {
+    if (!/^\d+$/.test(newMapping.id)) {
+      toast({
+        title: 'Erro de Validação',
+        description: 'O HubSpot ID deve conter apenas números.',
+        variant: 'destructive',
+      })
+      return
+    }
     if (newMapping.id && newMapping.email) {
       setMappings([...mappings, newMapping])
       setNewMapping({ id: '', email: '' })
       setMappingModalOpen(false)
-      toast({ title: 'Mapeamento adicionado' })
+      toast({ title: 'Mapeamento adicionado com sucesso.' })
     }
+  }
+
+  const removeMapping = (idx: number) => {
+    setMappings(mappings.filter((_, i) => i !== idx))
   }
 
   const canSeeAdvanced = user?.role === 'SuperAdmin' || user?.role === 'Elite'
@@ -59,12 +96,25 @@ export default function Config() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Configuração</h1>
-          <p className="text-muted-foreground mt-1">System integrations and API settings.</p>
+          <p className="text-muted-foreground mt-1">Gerencie integrações e credenciais da API.</p>
         </div>
         <Button onClick={handleSave} className="gap-2 font-bold shadow-lg shadow-primary/20">
           <Save className="w-4 h-4" /> Salvar Alterações
         </Button>
       </div>
+
+      {feedback && (
+        <div
+          className={cn(
+            'p-4 rounded-md font-medium text-sm border animate-in slide-in-from-top-2',
+            feedback.type === 'success'
+              ? 'bg-green-500/10 text-green-600 border-green-500/20'
+              : 'bg-red-500/10 text-red-600 border-red-500/20',
+          )}
+        >
+          {feedback.msg}
+        </div>
+      )}
 
       <Tabs defaultValue="evolution" className="w-full">
         <TabsList className="flex w-full mb-6 bg-secondary/50 p-1">
@@ -91,26 +141,29 @@ export default function Config() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>API URL</Label>
+                <Label>Evolution API URL</Label>
                 <Input
-                  defaultValue="https://evo.adapta.org"
+                  value={evoUrl}
+                  onChange={(e) => setEvoUrl(e.target.value)}
                   className="font-mono text-sm bg-background"
                   readOnly={user?.role === 'Geral'}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Global API Key</Label>
+                <Label>API Key</Label>
                 <Input
                   type="password"
-                  defaultValue="sk_live_123456789"
+                  value={evoKey}
+                  onChange={(e) => setEvoKey(e.target.value)}
                   className="font-mono text-sm bg-background"
                   readOnly={user?.role === 'Geral'}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Instance Name</Label>
+                <Label>Instância</Label>
                 <Input
-                  defaultValue="Adapta_Main_WP"
+                  value={evoInstance}
+                  onChange={(e) => setEvoInstance(e.target.value)}
                   className="font-mono text-sm bg-background"
                   readOnly={user?.role === 'Geral'}
                 />
@@ -122,12 +175,23 @@ export default function Config() {
         {user?.role === 'SuperAdmin' && (
           <TabsContent value="google">
             <Card className="shadow-md border-border/50">
-              <CardHeader>
-                <CardTitle>Google Service Account</CardTitle>
-                <CardDescription>Paste your credentials JSON to read Google Sheets</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Google Service Account</CardTitle>
+                  <CardDescription className="mt-1">
+                    Cole o JSON de credenciais para leitura de planilhas
+                  </CardDescription>
+                </div>
+                {isGoogleConfigured && (
+                  <Badge className="bg-green-500/20 text-green-600 border-green-500/30 font-medium">
+                    Credenciais Google configuradas
+                  </Badge>
+                )}
               </CardHeader>
               <CardContent>
                 <Textarea
+                  value={googleJson}
+                  onChange={(e) => setGoogleJson(e.target.value)}
                   placeholder={`{\n  "type": "service_account",\n  "project_id": "..."\n}`}
                   className="font-mono text-xs min-h-[250px] bg-background border-border resize-none"
                 />
@@ -193,6 +257,7 @@ export default function Config() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        onClick={() => removeMapping(idx)}
                         className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -211,7 +276,6 @@ export default function Config() {
         )}
       </Tabs>
 
-      {/* HubSpot Mapping Modal */}
       <Dialog open={mappingModalOpen} onOpenChange={setMappingModalOpen}>
         <DialogContent className="backdrop-blur-sm sm:max-w-md">
           <DialogHeader>

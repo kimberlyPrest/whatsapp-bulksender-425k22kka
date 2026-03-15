@@ -12,7 +12,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Send, Users, HistoryIcon, Settings, ShieldAlert, LogOut, Menu } from 'lucide-react'
-import useAppStore, { UserRole } from '@/stores/useAppStore'
+import useAppStore from '@/stores/useAppStore'
 import Auth from '@/pages/Auth'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -55,7 +55,7 @@ export default function Layout() {
       icon: Settings,
       roles: ['SuperAdmin', 'Elite', 'Geral'],
     },
-    { name: 'Admin', path: '/admin', icon: ShieldAlert, roles: ['SuperAdmin'] },
+    { name: 'Administração', path: '/admin', icon: ShieldAlert, roles: ['SuperAdmin'] },
   ]
 
   const navItems = allNavItems.filter((item) => item.roles.includes(user.role))

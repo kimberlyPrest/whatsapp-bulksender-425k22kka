@@ -9,10 +9,12 @@ export interface Contact {
   error?: string
   time?: string
   // Legacy fields for clients page
+  email?: string
   product?: string
   stage?: string
   days?: number
   owner?: string
+  noMeeting?: boolean
 }
 
 export type UserRole = 'SuperAdmin' | 'Elite' | 'Geral'
