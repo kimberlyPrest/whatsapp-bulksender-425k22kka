@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, Users, Percent, RotateCcw, ArrowRight } from 'lucide-react'
 import { HistoryLogModal } from '@/components/history/HistoryLogModal'
-import { api } from '@/lib/api'
+import { mockableApi } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
 
 interface Campaign {
@@ -77,13 +77,13 @@ export default function History() {
   }, [])
 
   const mockableApiFetch = async () => {
-    const res = await api.mockableApi('/api/dispatches', { method: 'GET' }, () => MOCK_CAMPAIGNS)
+    const res = await mockableApi('/api/dispatches', { method: 'GET' }, () => MOCK_CAMPAIGNS)
     setCampaigns(res)
   }
 
   const handleResume = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    await api.mockableApi(`/api/dispatch/${id}/resume`, { method: 'POST' }, () => ({
+    await mockableApi(`/api/dispatch/${id}/resume`, { method: 'POST' }, () => ({
       success: true,
     }))
     toast({ title: 'Disparo retomado', description: 'A campanha foi reiniciada.' })

@@ -32587,11 +32587,11 @@ function History() {
 		mockableApiFetch();
 	}, []);
 	const mockableApiFetch = async () => {
-		setCampaigns(await api.mockableApi("/api/dispatches", { method: "GET" }, () => MOCK_CAMPAIGNS));
+		setCampaigns(await mockableApi("/api/dispatches", { method: "GET" }, () => MOCK_CAMPAIGNS));
 	};
 	const handleResume = async (id, e) => {
 		e.stopPropagation();
-		await api.mockableApi(`/api/dispatch/${id}/resume`, { method: "POST" }, () => ({ success: true }));
+		await mockableApi(`/api/dispatch/${id}/resume`, { method: "POST" }, () => ({ success: true }));
 		toast({
 			title: "Disparo retomado",
 			description: "A campanha foi reiniciada."
@@ -34192,4 +34192,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-DOngFpG9.js.map
+//# sourceMappingURL=index-CM6cKjbP.js.map
