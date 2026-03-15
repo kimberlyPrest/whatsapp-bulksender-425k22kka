@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -8,8 +9,26 @@ interface Props {
 }
 
 export function MessageEditor({ message, setMessage }: Props) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
   const insertVariable = (variable: string) => {
-    setMessage((prev) => prev + `{${variable}}`)
+    const textarea = textareaRef.current
+    if (!textarea) {
+      setMessage((prev) => prev + `{${variable}}`)
+      return
+    }
+
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const textToInsert = `{${variable}}`
+
+    const newMessage = message.substring(0, start) + textToInsert + message.substring(end)
+    setMessage(newMessage)
+
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(start + textToInsert.length, start + textToInsert.length)
+    }, 0)
   }
 
   return (
@@ -29,9 +48,12 @@ export function MessageEditor({ message, setMessage }: Props) {
         </div>
       </div>
       <Textarea
+        id="template"
+        ref={textareaRef}
         placeholder="Olá {primeiro_nome}, segue a atualização..."
         className="min-h-[150px] resize-none focus-visible:ring-primary bg-background/50"
         value={message}
+        onInput={(e) => setMessage((e.target as HTMLTextAreaElement).value)}
         onChange={(e) => setMessage(e.target.value)}
       />
       <p className="text-xs text-muted-foreground text-right">{message.length} caracteres</p>

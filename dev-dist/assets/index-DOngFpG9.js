@@ -24955,29 +24955,42 @@ Label$1.displayName = Root$5.displayName;
 //#endregion
 //#region src/components/dispatch/MessageEditor.tsx
 function MessageEditor({ message, setMessage }) {
+	const textareaRef = (0, import_react.useRef)(null);
 	const insertVariable = (variable) => {
-		setMessage((prev) => prev + `{${variable}}`);
+		const textarea = textareaRef.current;
+		if (!textarea) {
+			setMessage((prev) => prev + `{${variable}}`);
+			return;
+		}
+		const start = textarea.selectionStart;
+		const end = textarea.selectionEnd;
+		const textToInsert = `{${variable}}`;
+		setMessage(message.substring(0, start) + textToInsert + message.substring(end));
+		setTimeout(() => {
+			textarea.focus();
+			textarea.setSelectionRange(start + textToInsert.length, start + textToInsert.length);
+		}, 0);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/dispatch/MessageEditor.tsx:16:5",
+		"data-uid": "src/components/dispatch/MessageEditor.tsx:35:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-3",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/dispatch/MessageEditor.tsx:17:7",
+				"data-uid": "src/components/dispatch/MessageEditor.tsx:36:7",
 				"data-prohibitions": "[]",
 				className: "flex items-center justify-between",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-					"data-uid": "src/components/dispatch/MessageEditor.tsx:18:9",
+					"data-uid": "src/components/dispatch/MessageEditor.tsx:37:9",
 					"data-prohibitions": "[]",
 					className: "font-semibold text-foreground",
 					children: "Template da Mensagem"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/dispatch/MessageEditor.tsx:19:9",
+					"data-uid": "src/components/dispatch/MessageEditor.tsx:38:9",
 					"data-prohibitions": "[]",
 					className: "flex gap-2",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/components/dispatch/MessageEditor.tsx:20:11",
+						"data-uid": "src/components/dispatch/MessageEditor.tsx:39:11",
 						"data-prohibitions": "[]",
 						type: "button",
 						variant: "outline",
@@ -24989,15 +25002,18 @@ function MessageEditor({ message, setMessage }) {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-				"data-uid": "src/components/dispatch/MessageEditor.tsx:31:7",
+				"data-uid": "src/components/dispatch/MessageEditor.tsx:50:7",
 				"data-prohibitions": "[editContent]",
+				id: "template",
+				ref: textareaRef,
 				placeholder: "Olá {primeiro_nome}, segue a atualização...",
 				className: "min-h-[150px] resize-none focus-visible:ring-primary bg-background/50",
 				value: message,
+				onInput: (e) => setMessage(e.target.value),
 				onChange: (e) => setMessage(e.target.value)
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-				"data-uid": "src/components/dispatch/MessageEditor.tsx:37:7",
+				"data-uid": "src/components/dispatch/MessageEditor.tsx:59:7",
 				"data-prohibitions": "[editContent]",
 				className: "text-xs text-muted-foreground text-right",
 				children: [message.length, " caracteres"]
@@ -29101,7 +29117,7 @@ function Index() {
 			status: "idle",
 			data: []
 		});
-	}, [message]);
+	}, [message, selectedContacts.length]);
 	const handleEvent = (ev) => {
 		setEvents((prev) => [...prev, ev]);
 		if (ev.type === "sent") setSelectedContacts(selectedContacts.map((c) => c.id === ev.contactId ? {
@@ -29130,14 +29146,18 @@ function Index() {
 			variant: "destructive"
 		});
 		const payload = {
-			instance_ids: distConfig.selection.map((s) => s.instanceId),
-			instance_distribution: distConfig.selection,
 			source_type: sourceType || "csv",
 			sheet_url: sheetUrl || "",
-			contacts_json: selectedContacts,
+			contacts_json: JSON.stringify(selectedContacts),
 			source_filename: sourceFilename || "",
 			template: message,
-			variations: variations.status === "approved" && variations.data.length > 0 ? variations.data : []
+			instance_ids: distConfig.selection.map((s) => s.instanceId),
+			instance_distribution: distConfig.selection.map((s) => ({
+				instance_id: s.instanceId,
+				percent: s.percentage
+			})),
+			variations: variations.status === "approved" && variations.data.length > 0 ? variations.data : [],
+			...antiBan
 		};
 		if (isScheduled) {
 			if (!scheduleDate) return toast({
@@ -29146,9 +29166,7 @@ function Index() {
 			});
 			await api.scheduleDispatch({
 				...payload,
-				antiBan,
-				date: scheduleDate,
-				distConfig
+				date: scheduleDate
 			});
 			toast({ title: "Disparo Agendado com sucesso!" });
 			return;
@@ -29161,11 +29179,7 @@ function Index() {
 			error: ""
 		})));
 		try {
-			await api.startDispatch({
-				...payload,
-				antiBan,
-				distConfig
-			});
+			await api.startDispatch(payload);
 			await api.getStreamToken();
 			simulateStart(selectedContacts, antiBan, distConfig, instances, handleEvent);
 		} catch {
@@ -29175,52 +29189,52 @@ function Index() {
 	const sentCount = selectedContacts.filter((c) => c.status === "Enviado").length;
 	const errCount = selectedContacts.filter((c) => c.status === "Erro").length;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Index.tsx:125:5",
+		"data-uid": "src/pages/Index.tsx:129:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-24",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/Index.tsx:126:7",
+			"data-uid": "src/pages/Index.tsx:130:7",
 			"data-prohibitions": "[]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-				"data-uid": "src/pages/Index.tsx:127:9",
+				"data-uid": "src/pages/Index.tsx:131:9",
 				"data-prohibitions": "[]",
 				className: "text-3xl font-bold",
 				children: "Novo Disparo"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/pages/Index.tsx:128:9",
+				"data-uid": "src/pages/Index.tsx:132:9",
 				"data-prohibitions": "[]",
 				className: "text-muted-foreground mt-1",
 				children: "Configure e inicie sua campanha em massa."
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/Index.tsx:131:7",
+			"data-uid": "src/pages/Index.tsx:135:7",
 			"data-prohibitions": "[editContent]",
 			className: "grid grid-cols-1 xl:grid-cols-12 gap-6",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Index.tsx:132:9",
+				"data-uid": "src/pages/Index.tsx:136:9",
 				"data-prohibitions": "[editContent]",
 				className: "xl:col-span-7 space-y-6",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Index.tsx:133:11",
+					"data-uid": "src/pages/Index.tsx:137:11",
 					"data-prohibitions": "[editContent]",
 					className: "shadow-lg border-border/50 bg-card",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Index.tsx:134:13",
+						"data-uid": "src/pages/Index.tsx:138:13",
 						"data-prohibitions": "[editContent]",
 						className: "p-6 space-y-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SourceTabs, {
-								"data-uid": "src/pages/Index.tsx:135:15",
+								"data-uid": "src/pages/Index.tsx:139:15",
 								"data-prohibitions": "[editContent]"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageEditor, {
-								"data-uid": "src/pages/Index.tsx:136:15",
+								"data-uid": "src/pages/Index.tsx:140:15",
 								"data-prohibitions": "[editContent]",
 								message,
 								setMessage
 							}),
 							selectedContacts.length > 0 && message.trim() && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageVariations, {
-								"data-uid": "src/pages/Index.tsx:139:17",
+								"data-uid": "src/pages/Index.tsx:143:17",
 								"data-prohibitions": "[editContent]",
 								template: message,
 								contactsCount: selectedContacts.length,
@@ -29228,45 +29242,45 @@ function Index() {
 								onChange: setVariations
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InstanceSelector, {
-								"data-uid": "src/pages/Index.tsx:147:15",
+								"data-uid": "src/pages/Index.tsx:151:15",
 								"data-prohibitions": "[editContent]",
 								instances,
 								totalContacts: selectedContacts.length,
 								onChange: setDistConfig
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AntiBanConfig, {
-								"data-uid": "src/pages/Index.tsx:153:15",
+								"data-uid": "src/pages/Index.tsx:157:15",
 								"data-prohibitions": "[editContent]",
 								config: antiBan,
 								onChange: setAntiBan
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Index.tsx:155:15",
+								"data-uid": "src/pages/Index.tsx:159:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-border gap-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Index.tsx:156:17",
+									"data-uid": "src/pages/Index.tsx:160:17",
 									"data-prohibitions": "[]",
 									className: "flex items-center space-x-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-										"data-uid": "src/pages/Index.tsx:157:19",
+										"data-uid": "src/pages/Index.tsx:161:19",
 										"data-prohibitions": "[editContent]",
 										id: "schedule",
 										checked: isScheduled,
 										onCheckedChange: (c) => setIsScheduled(!!c)
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-										"data-uid": "src/pages/Index.tsx:162:19",
+										"data-uid": "src/pages/Index.tsx:166:19",
 										"data-prohibitions": "[]",
 										htmlFor: "schedule",
 										className: "text-sm font-medium flex items-center gap-2 cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
-											"data-uid": "src/pages/Index.tsx:166:21",
+											"data-uid": "src/pages/Index.tsx:170:21",
 											"data-prohibitions": "[editContent]",
 											className: "h-4 w-4 text-primary"
 										}), " Agendar disparo"]
 									})]
 								}), isScheduled && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Index.tsx:170:19",
+									"data-uid": "src/pages/Index.tsx:174:19",
 									"data-prohibitions": "[editContent]",
 									type: "datetime-local",
 									className: "w-full sm:w-auto h-9 text-sm bg-background",
@@ -29278,11 +29292,11 @@ function Index() {
 					})
 				})
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Index.tsx:182:9",
+				"data-uid": "src/pages/Index.tsx:186:9",
 				"data-prohibitions": "[editContent]",
 				className: "xl:col-span-5 space-y-6 flex flex-col",
 				children: [isSending || events.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressView, {
-					"data-uid": "src/pages/Index.tsx:184:13",
+					"data-uid": "src/pages/Index.tsx:188:13",
 					"data-prohibitions": "[editContent]",
 					total: selectedContacts.length,
 					sent: sentCount,
@@ -29291,32 +29305,32 @@ function Index() {
 					events,
 					isSending
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Index.tsx:193:13",
+					"data-uid": "src/pages/Index.tsx:197:13",
 					"data-prohibitions": "[]",
 					className: "shadow-lg border-border/50",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-						"data-uid": "src/pages/Index.tsx:194:15",
+						"data-uid": "src/pages/Index.tsx:198:15",
 						"data-prohibitions": "[]",
 						className: "p-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ContactTable, {
-							"data-uid": "src/pages/Index.tsx:195:17",
+							"data-uid": "src/pages/Index.tsx:199:17",
 							"data-prohibitions": "[editContent]",
 							config: antiBan
 						})
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/Index.tsx:200:11",
+					"data-uid": "src/pages/Index.tsx:204:11",
 					"data-prohibitions": "[editContent]",
 					className: "mt-auto",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/Index.tsx:201:13",
+						"data-uid": "src/pages/Index.tsx:205:13",
 						"data-prohibitions": "[editContent]",
 						size: "lg",
 						className: "w-full font-bold text-lg hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20 h-14",
 						onClick: handleAction,
 						disabled: isSending || selectedContacts.length === 0,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
-							"data-uid": "src/pages/Index.tsx:207:15",
+							"data-uid": "src/pages/Index.tsx:211:15",
 							"data-prohibitions": "[editContent]",
 							className: "mr-2 h-5 w-5 fill-current"
 						}), isSending ? "Enviando..." : isScheduled ? "Agendar Campanha" : "Iniciar Disparo"]
@@ -34178,4 +34192,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-uuLPBs73.js.map
+//# sourceMappingURL=index-DOngFpG9.js.map

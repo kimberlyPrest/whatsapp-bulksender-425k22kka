@@ -46,10 +46,10 @@ export default function Index() {
     return () => simulateStop()
   }, [simulateStop])
 
-  // Reset variations when base template changes
+  // Reset variations when base template changes or contact list length changes
   useEffect(() => {
     setVariations({ status: 'idle', data: [] })
-  }, [message])
+  }, [message, selectedContacts.length])
 
   const handleEvent = (ev: StreamEvent) => {
     setEvents((prev) => [...prev, ev])
@@ -87,20 +87,24 @@ export default function Index() {
     }
 
     const payload = {
-      instance_ids: distConfig.selection.map((s) => s.instanceId),
-      instance_distribution: distConfig.selection,
       source_type: sourceType || 'csv',
       sheet_url: sheetUrl || '',
-      contacts_json: selectedContacts,
+      contacts_json: JSON.stringify(selectedContacts),
       source_filename: sourceFilename || '',
       template: message,
+      instance_ids: distConfig.selection.map((s) => s.instanceId),
+      instance_distribution: distConfig.selection.map((s) => ({
+        instance_id: s.instanceId,
+        percent: s.percentage,
+      })),
       variations:
         variations.status === 'approved' && variations.data.length > 0 ? variations.data : [],
+      ...antiBan,
     }
 
     if (isScheduled) {
       if (!scheduleDate) return toast({ title: 'Selecione a data', variant: 'destructive' })
-      await api.scheduleDispatch({ ...payload, antiBan, date: scheduleDate, distConfig })
+      await api.scheduleDispatch({ ...payload, date: scheduleDate })
       toast({ title: 'Disparo Agendado com sucesso!' })
       return
     }
@@ -110,7 +114,7 @@ export default function Index() {
     setSelectedContacts(selectedContacts.map((c) => ({ ...c, status: 'Processando', error: '' })))
 
     try {
-      await api.startDispatch({ ...payload, antiBan, distConfig })
+      await api.startDispatch(payload)
       await api.getStreamToken()
       simulateStart(selectedContacts, antiBan, distConfig, instances, handleEvent)
     } catch {
