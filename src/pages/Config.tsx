@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import WhatsAppInstances from '@/components/config/WhatsAppInstances'
 
 export default function Config() {
   const { user } = useAppStore()
@@ -25,9 +26,6 @@ export default function Config() {
   const [mappingModalOpen, setMappingModalOpen] = useState(false)
 
   // API State
-  const [evoUrl, setEvoUrl] = useState('https://evo.adapta.org')
-  const [evoKey, setEvoKey] = useState('sk_live_123456789')
-  const [evoInstance, setEvoInstance] = useState('Adapta_Main_WP')
   const [googleJson, setGoogleJson] = useState('')
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
 
@@ -56,15 +54,11 @@ export default function Config() {
   }
 
   const handleSave = () => {
-    if (!evoUrl || !evoKey || !evoInstance) {
-      setFeedback({ type: 'error', msg: 'Preencha todos os campos da Evolution API.' })
-      return
-    }
     if (googleJson && !isValidJson(googleJson)) {
       setFeedback({ type: 'error', msg: 'JSON do Google Credentials inválido.' })
       return
     }
-    setFeedback({ type: 'success', msg: 'Configurações salvas com sucesso!' })
+    setFeedback({ type: 'success', msg: 'Configurações globais salvas com sucesso!' })
     setTimeout(() => setFeedback(null), 4000)
   }
 
@@ -119,7 +113,7 @@ export default function Config() {
       <Tabs defaultValue="evolution" className="w-full">
         <TabsList className="flex w-full mb-6 bg-secondary/50 p-1">
           <TabsTrigger value="evolution" className="flex-1">
-            Evolution API
+            Números WhatsApp
           </TabsTrigger>
           {canSeeAdvanced && (
             <TabsTrigger value="hubspot" className="flex-1">
@@ -133,43 +127,8 @@ export default function Config() {
           )}
         </TabsList>
 
-        <TabsContent value="evolution">
-          <Card className="shadow-md border-border/50">
-            <CardHeader>
-              <CardTitle>Evolution API Connection</CardTitle>
-              <CardDescription>Connect to your WhatsApp instance</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label>Evolution API URL</Label>
-                <Input
-                  value={evoUrl}
-                  onChange={(e) => setEvoUrl(e.target.value)}
-                  className="font-mono text-sm bg-background"
-                  readOnly={user?.role === 'Geral'}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>API Key</Label>
-                <Input
-                  type="password"
-                  value={evoKey}
-                  onChange={(e) => setEvoKey(e.target.value)}
-                  className="font-mono text-sm bg-background"
-                  readOnly={user?.role === 'Geral'}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Instância</Label>
-                <Input
-                  value={evoInstance}
-                  onChange={(e) => setEvoInstance(e.target.value)}
-                  className="font-mono text-sm bg-background"
-                  readOnly={user?.role === 'Geral'}
-                />
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="evolution" className="mt-0">
+          <WhatsAppInstances />
         </TabsContent>
 
         {user?.role === 'SuperAdmin' && (

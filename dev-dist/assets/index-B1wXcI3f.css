@@ -829,6 +829,10 @@ body {
   margin-right: 0.5rem;
 }
 
+.mt-0{
+  margin-top: 0px;
+}
+
 .mt-1{
   margin-top: 0.25rem;
 }
@@ -1771,6 +1775,11 @@ body {
   border-color: rgb(100 116 139 / 0.3);
 }
 
+.border-slate-700{
+  --tw-border-opacity: 1;
+  border-color: rgb(51 65 85 / var(--tw-border-opacity, 1));
+}
+
 .border-transparent{
   border-color: transparent;
 }
@@ -2205,6 +2214,10 @@ body {
   padding-top: 1rem;
 }
 
+.pt-6{
+  padding-top: 1.5rem;
+}
+
 .text-left{
   text-align: left;
 }
@@ -2435,6 +2448,11 @@ body {
 
 .text-sidebar-foreground\/70{
   color: hsl(var(--sidebar-foreground) / 0.7);
+}
+
+.text-slate-300{
+  --tw-text-opacity: 1;
+  color: rgb(203 213 225 / var(--tw-text-opacity, 1));
 }
 
 .text-slate-500{
@@ -2693,6 +2711,10 @@ body {
 
 .zoom-in-95{
   --tw-enter-scale: .95;
+}
+
+.slide-in-from-bottom-2{
+  --tw-enter-translate-y: 0.5rem;
 }
 
 .slide-in-from-top-2{
@@ -2976,6 +2998,10 @@ body {
   background-color: hsl(var(--secondary) / 0.2);
 }
 
+.hover\:bg-secondary\/40:hover{
+  background-color: hsl(var(--secondary) / 0.4);
+}
+
 .hover\:bg-secondary\/80:hover{
   background-color: hsl(var(--secondary) / 0.8);
 }
@@ -2986,6 +3012,11 @@ body {
 
 .hover\:bg-slate-500\/20:hover{
   background-color: rgb(100 116 139 / 0.2);
+}
+
+.hover\:bg-slate-800:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-yellow-500\/20:hover{

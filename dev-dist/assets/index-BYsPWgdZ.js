@@ -19323,6 +19323,13 @@ var Plus = createLucideIcon("plus", [["path", {
 	d: "M12 5v14",
 	key: "s699le"
 }]]);
+var Power = createLucideIcon("power", [["path", {
+	d: "M12 2v10",
+	key: "mnfbl"
+}], ["path", {
+	d: "M18.4 6.6a9 9 0 1 1-12.77.04",
+	key: "obofu9"
+}]]);
 var RefreshCw = createLucideIcon("refresh-cw", [
 	["path", {
 		d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8",
@@ -19404,6 +19411,18 @@ var ShieldAlert = createLucideIcon("shield-alert", [
 var Shield = createLucideIcon("shield", [["path", {
 	d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
 	key: "oel41y"
+}]]);
+var Smartphone = createLucideIcon("smartphone", [["rect", {
+	width: "14",
+	height: "20",
+	x: "5",
+	y: "2",
+	rx: "2",
+	ry: "2",
+	key: "1yt0o3"
+}], ["path", {
+	d: "M12 18h.01",
+	key: "mhygvu"
 }]]);
 var Trash2 = createLucideIcon("trash-2", [
 	["path", {
@@ -31947,15 +31966,426 @@ function History() {
 	});
 }
 //#endregion
+//#region src/components/config/WhatsAppInstances.tsx
+var MOCK_INSTANCES = [{
+	id: "1",
+	displayName: "Número Principal",
+	apiUrl: "https://api.bulksender.adapta.org",
+	apiKey: "sk_live_123",
+	instanceName: "main-instance",
+	active: true
+}];
+function WhatsAppInstances() {
+	const [instances, setInstances] = (0, import_react.useState)([]);
+	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
+	const [isModalOpen, setIsModalOpen] = (0, import_react.useState)(false);
+	const [editingId, setEditingId] = (0, import_react.useState)(null);
+	const [isDeleting, setIsDeleting] = (0, import_react.useState)(false);
+	const [error, setError] = (0, import_react.useState)(null);
+	const [formData, setFormData] = (0, import_react.useState)({
+		displayName: "",
+		apiUrl: "",
+		apiKey: "",
+		instanceName: ""
+	});
+	(0, import_react.useEffect)(() => {
+		const timer = setTimeout(() => {
+			setInstances(MOCK_INSTANCES);
+			setIsLoading(false);
+		}, 800);
+		return () => clearTimeout(timer);
+	}, []);
+	const openModal = (inst) => {
+		setEditingId(inst?.id || null);
+		setFormData({
+			displayName: inst?.displayName || "",
+			apiUrl: inst?.apiUrl || "",
+			apiKey: "",
+			instanceName: inst?.instanceName || ""
+		});
+		setError(null);
+		setIsDeleting(false);
+		setIsModalOpen(true);
+	};
+	const handleSave = () => {
+		if (!formData.displayName || !formData.apiUrl || !formData.instanceName) {
+			setError("Por favor, preencha todos os campos obrigatórios.");
+			return;
+		}
+		if (!editingId && !formData.apiKey) {
+			setError("A API Key é obrigatória para novos números.");
+			return;
+		}
+		if (editingId) setInstances((prev) => prev.map((i) => i.id === editingId ? {
+			...i,
+			...formData,
+			apiKey: formData.apiKey || i.apiKey
+		} : i));
+		else setInstances([...instances, {
+			...formData,
+			id: Date.now().toString(),
+			active: true
+		}]);
+		setIsModalOpen(false);
+	};
+	const handleDelete = () => {
+		setInstances((prev) => prev.filter((i) => i.id !== editingId));
+		setIsModalOpen(false);
+	};
+	const handleToggleActive = () => {
+		setInstances((prev) => prev.map((i) => i.id === editingId ? {
+			...i,
+			active: !i.active
+		} : i));
+		setIsModalOpen(false);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+		"data-uid": "src/components/config/WhatsAppInstances.tsx:100:5",
+		"data-prohibitions": "[editContent]",
+		className: "shadow-md border-border/50 bg-background",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:101:7",
+				"data-prohibitions": "[]",
+				className: "flex flex-row items-center justify-between pb-4 border-b border-border/50",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:102:9",
+					"data-prohibitions": "[]",
+					className: "flex items-center gap-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:103:11",
+						"data-prohibitions": "[editContent]",
+						className: "w-2.5 h-2.5 rounded-full bg-primary animate-pulse"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:104:11",
+						"data-prohibitions": "[]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:105:13",
+							"data-prohibitions": "[]",
+							className: "text-xl font-bold",
+							children: "Números WhatsApp"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:106:13",
+							"data-prohibitions": "[]",
+							className: "text-sm text-muted-foreground",
+							children: "Gerencie suas instâncias de envio"
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:109:9",
+					"data-prohibitions": "[]",
+					onClick: () => openModal(),
+					size: "sm",
+					className: "gap-2 bg-primary hover:bg-primary/90",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:114:11",
+						"data-prohibitions": "[editContent]",
+						className: "w-4 h-4"
+					}), " Adicionar número"]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:117:7",
+				"data-prohibitions": "[editContent]",
+				className: "pt-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:118:9",
+					"data-prohibitions": "[editContent]",
+					id: "instances-list",
+					className: "space-y-4",
+					children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:120:13",
+						"data-prohibitions": "[]",
+						className: "text-center py-8 text-muted-foreground animate-pulse",
+						children: "Carregando..."
+					}) : instances.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:124:13",
+						"data-prohibitions": "[]",
+						className: "text-center py-8 text-muted-foreground",
+						children: "Nenhum número configurado."
+					}) : instances.map((inst) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:127:15",
+						"data-prohibitions": "[editContent]",
+						className: "flex items-center justify-between p-4 rounded-lg border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:131:17",
+							"data-prohibitions": "[editContent]",
+							className: "flex items-center gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:132:19",
+								"data-prohibitions": "[editContent]",
+								className: cn$1("p-2 rounded-full", inst.active ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"),
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Smartphone, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:138:21",
+									"data-prohibitions": "[editContent]",
+									className: "w-5 h-5"
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:140:19",
+								"data-prohibitions": "[editContent]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:141:21",
+									"data-prohibitions": "[editContent]",
+									className: "font-semibold text-sm flex items-center gap-2",
+									children: [inst.displayName, !inst.active && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:144:25",
+										"data-prohibitions": "[]",
+										variant: "secondary",
+										className: "text-[10px] h-4",
+										children: "Desativado"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:149:21",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs text-muted-foreground font-mono mt-1",
+									children: inst.instanceName
+								})]
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:154:17",
+							"data-prohibitions": "[]",
+							variant: "ghost",
+							size: "sm",
+							onClick: () => openModal(inst),
+							children: "Editar"
+						})]
+					}, inst.id))
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:163:7",
+				"data-prohibitions": "[editContent]",
+				open: isModalOpen,
+				onOpenChange: setIsModalOpen,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:164:9",
+					"data-prohibitions": "[editContent]",
+					className: "backdrop-blur-sm sm:max-w-md bg-background border-border shadow-2xl z-50",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:165:11",
+							"data-prohibitions": "[editContent]",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:166:13",
+								"data-prohibitions": "[editContent]",
+								id: "instance-modal-title",
+								children: editingId ? "Editar Número" : "Adicionar Número"
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:171:11",
+							"data-prohibitions": "[editContent]",
+							type: "hidden",
+							id: "inst-editing-id",
+							value: editingId || ""
+						}),
+						error && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:174:13",
+							"data-prohibitions": "[editContent]",
+							id: "instance-modal-error",
+							className: "flex items-center gap-2 p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:178:15",
+								"data-prohibitions": "[editContent]",
+								className: "w-4 h-4 shrink-0"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:179:15",
+								"data-prohibitions": "[editContent]",
+								children: error
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:183:11",
+							"data-prohibitions": "[editContent]",
+							className: "space-y-4 py-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:184:13",
+									"data-prohibitions": "[]",
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:185:15",
+										"data-prohibitions": "[]",
+										children: "Nome de exibição"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:186:15",
+										"data-prohibitions": "[editContent]",
+										placeholder: "Ex: Número Principal",
+										value: formData.displayName,
+										onChange: (e) => setFormData({
+											...formData,
+											displayName: e.target.value
+										}),
+										className: "bg-secondary/30"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:193:13",
+									"data-prohibitions": "[]",
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:194:15",
+										"data-prohibitions": "[]",
+										children: "URL da API"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:195:15",
+										"data-prohibitions": "[editContent]",
+										placeholder: "https://sua-instancia.exemplo.com",
+										value: formData.apiUrl,
+										onChange: (e) => setFormData({
+											...formData,
+											apiUrl: e.target.value
+										}),
+										className: "bg-secondary/30"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:202:13",
+									"data-prohibitions": "[editContent]",
+									className: "space-y-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:203:15",
+											"data-prohibitions": "[]",
+											children: "API Key"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:204:15",
+											"data-prohibitions": "[editContent]",
+											type: "password",
+											placeholder: "••••••••••••••••",
+											value: formData.apiKey,
+											onChange: (e) => setFormData({
+												...formData,
+												apiKey: e.target.value
+											}),
+											className: "bg-secondary/30"
+										}),
+										editingId && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:212:17",
+											"data-prohibitions": "[]",
+											className: "text-xs text-muted-foreground",
+											children: "Deixe em branco para manter a chave atual."
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:217:13",
+									"data-prohibitions": "[]",
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:218:15",
+										"data-prohibitions": "[]",
+										children: "Nome da Instância"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:219:15",
+										"data-prohibitions": "[editContent]",
+										placeholder: "minha-instancia",
+										value: formData.instanceName,
+										onChange: (e) => setFormData({
+											...formData,
+											instanceName: e.target.value
+										}),
+										className: "bg-secondary/30"
+									})]
+								})
+							]
+						}),
+						isDeleting ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:229:13",
+							"data-prohibitions": "[]",
+							id: "instance-delete-confirm",
+							className: "p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-3 mt-4 animate-in slide-in-from-bottom-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:233:15",
+								"data-prohibitions": "[]",
+								className: "text-sm font-medium text-red-500 text-center",
+								children: "Apagar definitivamente? Esta ação não pode ser desfeita."
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:236:15",
+								"data-prohibitions": "[]",
+								className: "flex gap-2 justify-center",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:237:17",
+									"data-prohibitions": "[]",
+									variant: "outline",
+									className: "text-slate-300 border-slate-700 hover:bg-slate-800",
+									onClick: () => setIsDeleting(false),
+									children: "Cancelar"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:244:17",
+									"data-prohibitions": "[]",
+									variant: "destructive",
+									onClick: handleDelete,
+									children: "Confirmar apagar"
+								})]
+							})]
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:250:13",
+							"data-prohibitions": "[editContent]",
+							className: "flex justify-between mt-4 items-center",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:251:15",
+								"data-prohibitions": "[editContent]",
+								className: "flex gap-2",
+								children: editingId && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:254:21",
+									"data-prohibitions": "[]",
+									variant: "ghost",
+									size: "icon",
+									onClick: handleToggleActive,
+									title: "Ativar/Desativar",
+									className: "text-muted-foreground hover:text-foreground",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Power, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:261:23",
+										"data-prohibitions": "[editContent]",
+										className: "w-4 h-4"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:263:21",
+									"data-prohibitions": "[]",
+									variant: "ghost",
+									size: "icon",
+									onClick: () => setIsDeleting(true),
+									className: "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:269:23",
+										"data-prohibitions": "[editContent]",
+										className: "w-4 h-4"
+									})
+								})] })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:274:15",
+								"data-prohibitions": "[]",
+								className: "flex gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:275:17",
+									"data-prohibitions": "[]",
+									variant: "outline",
+									onClick: () => setIsModalOpen(false),
+									children: "Cancelar"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:278:17",
+									"data-prohibitions": "[]",
+									onClick: handleSave,
+									className: "bg-primary hover:bg-primary/90 text-primary-foreground",
+									children: "Salvar"
+								})]
+							})]
+						})
+					]
+				})
+			})
+		]
+	});
+}
+//#endregion
 //#region src/pages/Config.tsx
 function Config() {
 	const { user } = useAppStore();
 	const { toast } = useToast();
 	const [copied, setCopied] = (0, import_react.useState)(false);
 	const [mappingModalOpen, setMappingModalOpen] = (0, import_react.useState)(false);
-	const [evoUrl, setEvoUrl] = (0, import_react.useState)("https://evo.adapta.org");
-	const [evoKey, setEvoKey] = (0, import_react.useState)("sk_live_123456789");
-	const [evoInstance, setEvoInstance] = (0, import_react.useState)("Adapta_Main_WP");
 	const [googleJson, setGoogleJson] = (0, import_react.useState)("");
 	const [feedback, setFeedback] = (0, import_react.useState)(null);
 	const [mappings, setMappings] = (0, import_react.useState)([{
@@ -31984,13 +32414,6 @@ function Config() {
 		setTimeout(() => setCopied(false), 2e3);
 	};
 	const handleSave = () => {
-		if (!evoUrl || !evoKey || !evoInstance) {
-			setFeedback({
-				type: "error",
-				msg: "Preencha todos os campos da Evolution API."
-			});
-			return;
-		}
 		if (googleJson && !isValidJson(googleJson)) {
 			setFeedback({
 				type: "error",
@@ -32000,7 +32423,7 @@ function Config() {
 		}
 		setFeedback({
 			type: "success",
-			msg: "Configurações salvas com sucesso!"
+			msg: "Configurações globais salvas com sucesso!"
 		});
 		setTimeout(() => setFeedback(null), 4e3);
 	};
@@ -32028,73 +32451,73 @@ function Config() {
 	};
 	const canSeeAdvanced = user?.role === "SuperAdmin" || user?.role === "Elite";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Config.tsx:95:5",
+		"data-uid": "src/pages/Config.tsx:89:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-12",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Config.tsx:96:7",
+				"data-uid": "src/pages/Config.tsx:90:7",
 				"data-prohibitions": "[]",
 				className: "flex justify-between items-center",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Config.tsx:97:9",
+					"data-uid": "src/pages/Config.tsx:91:9",
 					"data-prohibitions": "[]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-						"data-uid": "src/pages/Config.tsx:98:11",
+						"data-uid": "src/pages/Config.tsx:92:11",
 						"data-prohibitions": "[]",
 						className: "text-3xl font-bold",
 						children: "Configuração"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/Config.tsx:99:11",
+						"data-uid": "src/pages/Config.tsx:93:11",
 						"data-prohibitions": "[]",
 						className: "text-muted-foreground mt-1",
 						children: "Gerencie integrações e credenciais da API."
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					"data-uid": "src/pages/Config.tsx:101:9",
+					"data-uid": "src/pages/Config.tsx:95:9",
 					"data-prohibitions": "[]",
 					onClick: handleSave,
 					className: "gap-2 font-bold shadow-lg shadow-primary/20",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, {
-						"data-uid": "src/pages/Config.tsx:102:11",
+						"data-uid": "src/pages/Config.tsx:96:11",
 						"data-prohibitions": "[editContent]",
 						className: "w-4 h-4"
 					}), " Salvar Alterações"]
 				})]
 			}),
 			feedback && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Config.tsx:107:9",
+				"data-uid": "src/pages/Config.tsx:101:9",
 				"data-prohibitions": "[editContent]",
 				className: cn$1("p-4 rounded-md font-medium text-sm border animate-in slide-in-from-top-2", feedback.type === "success" ? "bg-green-500/10 text-green-600 border-green-500/20" : "bg-red-500/10 text-red-600 border-red-500/20"),
 				children: feedback.msg
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
-				"data-uid": "src/pages/Config.tsx:119:7",
+				"data-uid": "src/pages/Config.tsx:113:7",
 				"data-prohibitions": "[editContent]",
 				defaultValue: "evolution",
 				className: "w-full",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
-						"data-uid": "src/pages/Config.tsx:120:9",
+						"data-uid": "src/pages/Config.tsx:114:9",
 						"data-prohibitions": "[editContent]",
 						className: "flex w-full mb-6 bg-secondary/50 p-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-								"data-uid": "src/pages/Config.tsx:121:11",
+								"data-uid": "src/pages/Config.tsx:115:11",
 								"data-prohibitions": "[]",
 								value: "evolution",
 								className: "flex-1",
-								children: "Evolution API"
+								children: "Números WhatsApp"
 							}),
 							canSeeAdvanced && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-								"data-uid": "src/pages/Config.tsx:125:13",
+								"data-uid": "src/pages/Config.tsx:119:13",
 								"data-prohibitions": "[]",
 								value: "hubspot",
 								className: "flex-1",
 								children: "HubSpot"
 							}),
 							user?.role === "SuperAdmin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-								"data-uid": "src/pages/Config.tsx:130:13",
+								"data-uid": "src/pages/Config.tsx:124:13",
 								"data-prohibitions": "[]",
 								value: "google",
 								className: "flex-1",
@@ -32103,122 +32526,51 @@ function Config() {
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-						"data-uid": "src/pages/Config.tsx:136:9",
+						"data-uid": "src/pages/Config.tsx:130:9",
 						"data-prohibitions": "[]",
 						value: "evolution",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:137:11",
-							"data-prohibitions": "[]",
-							className: "shadow-md border-border/50",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:138:13",
-								"data-prohibitions": "[]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/Config.tsx:139:15",
-									"data-prohibitions": "[]",
-									children: "Evolution API Connection"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-									"data-uid": "src/pages/Config.tsx:140:15",
-									"data-prohibitions": "[]",
-									children: "Connect to your WhatsApp instance"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:142:13",
-								"data-prohibitions": "[]",
-								className: "space-y-4",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Config.tsx:143:15",
-										"data-prohibitions": "[]",
-										className: "space-y-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-											"data-uid": "src/pages/Config.tsx:144:17",
-											"data-prohibitions": "[]",
-											children: "Evolution API URL"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											"data-uid": "src/pages/Config.tsx:145:17",
-											"data-prohibitions": "[editContent]",
-											value: evoUrl,
-											onChange: (e) => setEvoUrl(e.target.value),
-											className: "font-mono text-sm bg-background",
-											readOnly: user?.role === "Geral"
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Config.tsx:152:15",
-										"data-prohibitions": "[]",
-										className: "space-y-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-											"data-uid": "src/pages/Config.tsx:153:17",
-											"data-prohibitions": "[]",
-											children: "API Key"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											"data-uid": "src/pages/Config.tsx:154:17",
-											"data-prohibitions": "[editContent]",
-											type: "password",
-											value: evoKey,
-											onChange: (e) => setEvoKey(e.target.value),
-											className: "font-mono text-sm bg-background",
-											readOnly: user?.role === "Geral"
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Config.tsx:162:15",
-										"data-prohibitions": "[]",
-										className: "space-y-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-											"data-uid": "src/pages/Config.tsx:163:17",
-											"data-prohibitions": "[]",
-											children: "Instância"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											"data-uid": "src/pages/Config.tsx:164:17",
-											"data-prohibitions": "[editContent]",
-											value: evoInstance,
-											onChange: (e) => setEvoInstance(e.target.value),
-											className: "font-mono text-sm bg-background",
-											readOnly: user?.role === "Geral"
-										})]
-									})
-								]
-							})]
+						className: "mt-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WhatsAppInstances, {
+							"data-uid": "src/pages/Config.tsx:131:11",
+							"data-prohibitions": "[editContent]"
 						})
 					}),
 					user?.role === "SuperAdmin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-						"data-uid": "src/pages/Config.tsx:176:11",
+						"data-uid": "src/pages/Config.tsx:135:11",
 						"data-prohibitions": "[editContent]",
 						value: "google",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:177:13",
+							"data-uid": "src/pages/Config.tsx:136:13",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-md border-border/50",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:178:15",
+								"data-uid": "src/pages/Config.tsx:137:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-row items-center justify-between",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:179:17",
+									"data-uid": "src/pages/Config.tsx:138:17",
 									"data-prohibitions": "[]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-										"data-uid": "src/pages/Config.tsx:180:19",
+										"data-uid": "src/pages/Config.tsx:139:19",
 										"data-prohibitions": "[]",
 										children: "Google Service Account"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-										"data-uid": "src/pages/Config.tsx:181:19",
+										"data-uid": "src/pages/Config.tsx:140:19",
 										"data-prohibitions": "[]",
 										className: "mt-1",
 										children: "Cole o JSON de credenciais para leitura de planilhas"
 									})]
 								}), isGoogleConfigured && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-									"data-uid": "src/pages/Config.tsx:186:19",
+									"data-uid": "src/pages/Config.tsx:145:19",
 									"data-prohibitions": "[]",
 									className: "bg-green-500/20 text-green-600 border-green-500/30 font-medium",
 									children: "Credenciais Google configuradas"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:191:15",
+								"data-uid": "src/pages/Config.tsx:150:15",
 								"data-prohibitions": "[]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-									"data-uid": "src/pages/Config.tsx:192:17",
+									"data-uid": "src/pages/Config.tsx:151:17",
 									"data-prohibitions": "[editContent]",
 									value: googleJson,
 									onChange: (e) => setGoogleJson(e.target.value),
@@ -32229,51 +32581,51 @@ function Config() {
 						})
 					}),
 					canSeeAdvanced && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsContent, {
-						"data-uid": "src/pages/Config.tsx:204:11",
+						"data-uid": "src/pages/Config.tsx:163:11",
 						"data-prohibitions": "[editContent]",
 						value: "hubspot",
 						className: "space-y-6",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:205:13",
+							"data-uid": "src/pages/Config.tsx:164:13",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-md border-border/50",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:206:15",
+								"data-uid": "src/pages/Config.tsx:165:15",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/Config.tsx:207:17",
+									"data-uid": "src/pages/Config.tsx:166:17",
 									"data-prohibitions": "[]",
 									children: "Webhook Setup"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-									"data-uid": "src/pages/Config.tsx:208:17",
+									"data-uid": "src/pages/Config.tsx:167:17",
 									"data-prohibitions": "[]",
 									children: "Use this URL in your HubSpot workflows to trigger dispatches"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:212:15",
+								"data-uid": "src/pages/Config.tsx:171:15",
 								"data-prohibitions": "[editContent]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:213:17",
+									"data-uid": "src/pages/Config.tsx:172:17",
 									"data-prohibitions": "[editContent]",
 									className: "flex gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/pages/Config.tsx:214:19",
+										"data-uid": "src/pages/Config.tsx:173:19",
 										"data-prohibitions": "[editContent]",
 										readOnly: true,
 										value: "https://api.bulksender.adapta.org/webhook/hs-xyz123",
 										className: "font-mono text-sm bg-secondary/30 text-muted-foreground"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-										"data-uid": "src/pages/Config.tsx:219:19",
+										"data-uid": "src/pages/Config.tsx:178:19",
 										"data-prohibitions": "[editContent]",
 										variant: "outline",
 										onClick: handleCopy,
 										className: "w-24 border-primary/30 text-primary hover:bg-primary/10",
 										children: copied ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
-											"data-uid": "src/pages/Config.tsx:224:31",
+											"data-uid": "src/pages/Config.tsx:183:31",
 											"data-prohibitions": "[editContent]",
 											className: "w-4 h-4"
 										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, {
-											"data-uid": "src/pages/Config.tsx:224:63",
+											"data-uid": "src/pages/Config.tsx:183:63",
 											"data-prohibitions": "[editContent]",
 											className: "w-4 h-4"
 										})
@@ -32281,98 +32633,98 @@ function Config() {
 								})
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:230:13",
+							"data-uid": "src/pages/Config.tsx:189:13",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-md border-border/50",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:231:15",
+								"data-uid": "src/pages/Config.tsx:190:15",
 								"data-prohibitions": "[]",
 								className: "flex flex-row items-center justify-between",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:232:17",
+									"data-uid": "src/pages/Config.tsx:191:17",
 									"data-prohibitions": "[]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-										"data-uid": "src/pages/Config.tsx:233:19",
+										"data-uid": "src/pages/Config.tsx:192:19",
 										"data-prohibitions": "[]",
 										children: "Mapeamento de Proprietários"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-										"data-uid": "src/pages/Config.tsx:234:19",
+										"data-uid": "src/pages/Config.tsx:193:19",
 										"data-prohibitions": "[]",
 										className: "mt-1",
 										children: "Vincule os IDs do HubSpot com os emails do sistema"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-									"data-uid": "src/pages/Config.tsx:238:17",
+									"data-uid": "src/pages/Config.tsx:197:17",
 									"data-prohibitions": "[]",
 									onClick: () => setMappingModalOpen(true),
 									size: "sm",
 									className: "gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
-										"data-uid": "src/pages/Config.tsx:239:19",
+										"data-uid": "src/pages/Config.tsx:198:19",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4"
 									}), " Novo Mapeamento"]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:242:15",
+								"data-uid": "src/pages/Config.tsx:201:15",
 								"data-prohibitions": "[editContent]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:243:17",
+									"data-uid": "src/pages/Config.tsx:202:17",
 									"data-prohibitions": "[editContent]",
 									className: "space-y-3",
 									children: [mappings.map((mapping, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Config.tsx:245:21",
+										"data-uid": "src/pages/Config.tsx:204:21",
 										"data-prohibitions": "[editContent]",
 										className: "flex items-center gap-4 p-3 bg-secondary/20 rounded-md border border-border",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/Config.tsx:249:23",
+												"data-uid": "src/pages/Config.tsx:208:23",
 												"data-prohibitions": "[editContent]",
 												className: "flex-1 space-y-1",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:250:25",
+													"data-uid": "src/pages/Config.tsx:209:25",
 													"data-prohibitions": "[]",
 													className: "text-xs text-muted-foreground",
 													children: "HubSpot ID"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:251:25",
+													"data-uid": "src/pages/Config.tsx:210:25",
 													"data-prohibitions": "[editContent]",
 													className: "font-mono text-sm",
 													children: mapping.id
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/Config.tsx:253:23",
+												"data-uid": "src/pages/Config.tsx:212:23",
 												"data-prohibitions": "[editContent]",
 												className: "flex-1 space-y-1",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:254:25",
+													"data-uid": "src/pages/Config.tsx:213:25",
 													"data-prohibitions": "[]",
 													className: "text-xs text-muted-foreground",
 													children: "Email Interno"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:255:25",
+													"data-uid": "src/pages/Config.tsx:214:25",
 													"data-prohibitions": "[editContent]",
 													className: "font-medium text-sm",
 													children: mapping.email
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-												"data-uid": "src/pages/Config.tsx:257:23",
+												"data-uid": "src/pages/Config.tsx:216:23",
 												"data-prohibitions": "[]",
 												variant: "ghost",
 												size: "icon",
 												onClick: () => removeMapping(idx),
 												className: "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
-													"data-uid": "src/pages/Config.tsx:263:25",
+													"data-uid": "src/pages/Config.tsx:222:25",
 													"data-prohibitions": "[editContent]",
 													className: "w-4 h-4"
 												})
 											})
 										]
 									}, idx)), mappings.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										"data-uid": "src/pages/Config.tsx:268:21",
+										"data-uid": "src/pages/Config.tsx:227:21",
 										"data-prohibitions": "[]",
 										className: "text-center text-sm text-muted-foreground py-4",
 										children: "Nenhum mapeamento configurado."
@@ -32384,38 +32736,38 @@ function Config() {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-				"data-uid": "src/pages/Config.tsx:279:7",
+				"data-uid": "src/pages/Config.tsx:238:7",
 				"data-prohibitions": "[]",
 				open: mappingModalOpen,
 				onOpenChange: setMappingModalOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-					"data-uid": "src/pages/Config.tsx:280:9",
+					"data-uid": "src/pages/Config.tsx:239:9",
 					"data-prohibitions": "[]",
 					className: "backdrop-blur-sm sm:max-w-md",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-							"data-uid": "src/pages/Config.tsx:281:11",
+							"data-uid": "src/pages/Config.tsx:240:11",
 							"data-prohibitions": "[]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
-								"data-uid": "src/pages/Config.tsx:282:13",
+								"data-uid": "src/pages/Config.tsx:241:13",
 								"data-prohibitions": "[]",
 								children: "Novo Mapeamento"
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Config.tsx:284:11",
+							"data-uid": "src/pages/Config.tsx:243:11",
 							"data-prohibitions": "[]",
 							className: "space-y-4 py-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Config.tsx:285:13",
+								"data-uid": "src/pages/Config.tsx:244:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-									"data-uid": "src/pages/Config.tsx:286:15",
+									"data-uid": "src/pages/Config.tsx:245:15",
 									"data-prohibitions": "[]",
 									children: "ID do Proprietário no HubSpot"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Config.tsx:287:15",
+									"data-uid": "src/pages/Config.tsx:246:15",
 									"data-prohibitions": "[editContent]",
 									placeholder: "ex: 81963654",
 									value: newMapping.id,
@@ -32425,15 +32777,15 @@ function Config() {
 									})
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Config.tsx:293:13",
+								"data-uid": "src/pages/Config.tsx:252:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-									"data-uid": "src/pages/Config.tsx:294:15",
+									"data-uid": "src/pages/Config.tsx:253:15",
 									"data-prohibitions": "[]",
 									children: "Email no sistema"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Config.tsx:295:15",
+									"data-uid": "src/pages/Config.tsx:254:15",
 									"data-prohibitions": "[editContent]",
 									placeholder: "ex: kimberly@adapta.org",
 									type: "email",
@@ -32446,16 +32798,16 @@ function Config() {
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, {
-							"data-uid": "src/pages/Config.tsx:303:11",
+							"data-uid": "src/pages/Config.tsx:262:11",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Config.tsx:304:13",
+								"data-uid": "src/pages/Config.tsx:263:13",
 								"data-prohibitions": "[]",
 								variant: "outline",
 								onClick: () => setMappingModalOpen(false),
 								children: "Cancelar"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Config.tsx:307:13",
+								"data-uid": "src/pages/Config.tsx:266:13",
 								"data-prohibitions": "[]",
 								onClick: handleAddMapping,
 								disabled: !newMapping.id || !newMapping.email,
@@ -32974,4 +33326,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-CoXVhkGm.js.map
+//# sourceMappingURL=index-BYsPWgdZ.js.map
