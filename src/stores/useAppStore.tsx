@@ -7,11 +7,20 @@ export interface Contact {
   product: string
   stage: string
   days: number
+  owner?: string
+}
+
+export type UserRole = 'SuperAdmin' | 'Elite' | 'Geral'
+
+export interface User {
+  email: string
+  name: string
+  role: UserRole
 }
 
 interface AppState {
-  user: string | null
-  login: (email: string) => void
+  user: User | null
+  login: (user: User) => void
   logout: () => void
   selectedContacts: Contact[]
   setSelectedContacts: (contacts: Contact[]) => void
@@ -20,7 +29,7 @@ interface AppState {
 const AppContext = createContext<AppState | null>(null)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([])
 
   return (

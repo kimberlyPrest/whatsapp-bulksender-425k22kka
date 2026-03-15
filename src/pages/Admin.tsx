@@ -1,7 +1,45 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Activity, Users, Zap, Database } from 'lucide-react'
+import { Navigate, Link } from 'react-router-dom'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Activity, Users, Zap, Database, RefreshCw, Shield, ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import useAppStore from '@/stores/useAppStore'
+
+const MOCK_USERS = [
+  {
+    id: 1,
+    name: 'Admin Principal',
+    email: 'admin@adapta.org',
+    role: 'SuperAdmin',
+    lastActive: 'Há 5 mins',
+  },
+  { id: 2, name: 'Kimberly', email: 'kimberly@adapta.org', role: 'Elite', lastActive: 'Há 1 hora' },
+  { id: 3, name: 'Matheus', email: 'matheus@adapta.org', role: 'Elite', lastActive: 'Há 2 horas' },
+  { id: 4, name: 'Leticia User', email: 'user@adapta.org', role: 'Geral', lastActive: 'Ontem' },
+  {
+    id: 5,
+    name: 'Copy Dev',
+    email: 'dev@copyexperts.com.br',
+    role: 'Geral',
+    lastActive: 'Há 3 dias',
+  },
+]
 
 export default function Admin() {
+  const { user } = useAppStore()
+
+  if (user?.role !== 'SuperAdmin') {
+    return <Navigate to="/" replace />
+  }
+
   const stats = [
     { title: 'Total Messages Sent', value: '1.2M', icon: SendIcon, color: 'text-primary' },
     { title: 'Active Instances', value: '4', icon: Activity, color: 'text-blue-500' },
@@ -10,15 +48,36 @@ export default function Admin() {
   ]
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-muted-foreground mt-1">System-level metrics and controls.</p>
+    <div className="space-y-6 animate-fade-in pb-12">
+      <div className="flex flex-col gap-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          asChild
+          className="w-fit text-muted-foreground hover:text-foreground"
+        >
+          <Link to="/config">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Configuração
+          </Link>
+        </Button>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold">Administração</h1>
+            <div
+              className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse mt-1"
+              title="Live Admin Mode"
+            />
+          </div>
+        </div>
+        <p className="text-muted-foreground">
+          Gerenciamento de usuários, papéis e controle do sistema.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <Card key={i} className="shadow-md">
+          <Card key={i} className="shadow-md border-border/50 bg-secondary/10">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.title}
@@ -32,6 +91,64 @@ export default function Admin() {
         ))}
       </div>
 
+      <Card className="shadow-lg border-border/60 mt-8">
+        <CardHeader className="flex flex-row items-center justify-between bg-secondary/20 border-b border-border pb-4">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-primary" />
+              Usuários e Papéis
+            </CardTitle>
+            <CardDescription className="mt-1">
+              Gerencie quem tem acesso e os níveis de permissão.
+            </CardDescription>
+          </div>
+          <Button variant="outline" size="sm" className="bg-background">
+            <RefreshCw className="w-4 h-4 mr-2" /> Atualizar
+          </Button>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-secondary/10 hover:bg-secondary/10">
+                <TableHead>Nome</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Papel</TableHead>
+                <TableHead className="text-right">Último Acesso</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {MOCK_USERS.map((u) => (
+                <TableRow key={u.id}>
+                  <TableCell className="font-medium">{u.name}</TableCell>
+                  <TableCell className="text-muted-foreground">{u.email}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        u.role === 'SuperAdmin'
+                          ? 'default'
+                          : u.role === 'Elite'
+                            ? 'secondary'
+                            : 'outline'
+                      }
+                      className={
+                        u.role === 'SuperAdmin'
+                          ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border-red-500/20'
+                          : ''
+                      }
+                    >
+                      {u.role}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right text-sm text-muted-foreground">
+                    {u.lastActive}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
       <Card className="shadow-md border-destructive/20 mt-8">
         <CardHeader>
           <CardTitle className="text-destructive flex items-center gap-2">
@@ -39,14 +156,14 @@ export default function Admin() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex justify-between items-center p-4 border border-border rounded-lg bg-secondary/20">
+          <div className="flex justify-between items-center p-4 border border-destructive/20 rounded-lg bg-destructive/5">
             <div>
-              <h4 className="font-bold text-sm">Restart Evolution API</h4>
-              <p className="text-xs text-muted-foreground">
-                Force restart all connection instances.
+              <h4 className="font-bold text-sm text-destructive">Restart Evolution API</h4>
+              <p className="text-xs text-muted-foreground mt-1">
+                Force restart all connection instances. This might disrupt ongoing dispatches.
               </p>
             </div>
-            <button className="bg-destructive text-destructive-foreground px-4 py-2 rounded-md text-sm font-bold hover:bg-destructive/90 transition-colors">
+            <button className="bg-destructive text-destructive-foreground px-4 py-2 rounded-md text-sm font-bold hover:bg-destructive/90 transition-colors shadow-sm">
               Restart Now
             </button>
           </div>

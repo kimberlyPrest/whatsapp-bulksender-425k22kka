@@ -5,23 +5,65 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { AlertCircle, Loader2 } from 'lucide-react'
-import useAppStore from '@/stores/useAppStore'
+import useAppStore, { UserRole } from '@/stores/useAppStore'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+
+const VALID_DOMAINS = ['@adapta.org', '@copyexperts.com.br']
 
 export default function Auth() {
   const { login } = useAppStore()
   const [isLoading, setIsLoading] = useState(false)
+  const [isFetchingName, setIsFetchingName] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [error, setError] = useState('')
 
-  const isAdaptaDomain = email.endsWith('@adapta.org')
-  const showSignupWarning = email.length > 0 && email.includes('@') && !isAdaptaDomain
+  const isValidDomain = VALID_DOMAINS.some((domain) => email.endsWith(domain))
+  const showSignupWarning = email.length > 0 && email.includes('@') && !isValidDomain
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleEmailBlur = () => {
+    if (isValidDomain && email) {
+      setIsFetchingName(true)
+      // Mocking /api/auth/owner-name
+      setTimeout(() => {
+        setName(email.split('@')[0].replace('.', ' '))
+        setIsFetchingName(false)
+      }, 600)
+    }
+  }
+
+  const handleAuth = (e: React.FormEvent, isLogin: boolean) => {
     e.preventDefault()
+    setError('')
+
+    if (!isValidDomain) {
+      setError('Domínio de email não autorizado.')
+      return
+    }
+
+    if (isLogin && password !== 'senha123') {
+      // Mock validation
+      setError('Email ou senha incorretos')
+      // Let it pass for testing purposes if it's admin/elite
+      if (!email.includes('admin') && !email.includes('elite')) {
+        return
+      }
+    }
+
     setIsLoading(true)
+
+    // Mock role assignment based on email for testing
+    let role: UserRole = 'Geral'
+    if (email.includes('admin')) role = 'SuperAdmin'
+    if (email.includes('elite')) role = 'Elite'
+
     setTimeout(() => {
-      login(email)
+      login({
+        email,
+        name: name || email.split('@')[0],
+        role,
+      })
       setIsLoading(false)
     }, 1000)
   }
@@ -42,13 +84,20 @@ export default function Auth() {
           <CardDescription>Evolution API Control Center</CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
             <TabsContent value="login" className="space-y-4">
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={(e) => handleAuth(e, true)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -72,6 +121,9 @@ export default function Auth() {
                     className="focus-visible:ring-primary"
                   />
                 </div>
+                <p className="text-xs text-muted-foreground text-center">
+                  Tip: Use admin@adapta.org, elite@adapta.org, or user@adapta.org to test roles.
+                </p>
                 <Button
                   type="submit"
                   className="w-full font-bold hover:scale-[1.02] transition-transform"
@@ -82,18 +134,24 @@ export default function Auth() {
               </form>
             </TabsContent>
             <TabsContent value="signup" className="space-y-4">
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={(e) => handleAuth(e, false)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Work Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="name@adapta.org"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="focus-visible:ring-primary"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="name@adapta.org"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onBlur={handleEmailBlur}
+                      className="focus-visible:ring-primary pr-10"
+                    />
+                    {isFetchingName && (
+                      <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin text-muted-foreground" />
+                    )}
+                  </div>
                 </div>
                 {showSignupWarning && (
                   <Alert
@@ -102,15 +160,21 @@ export default function Auth() {
                   >
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      Only @adapta.org emails are allowed to register.
+                      Domínio de email não autorizado para registro.
                     </AlertDescription>
                   </Alert>
                 )}
-                {isAdaptaDomain && (
+                {isValidDomain && (
                   <div className="space-y-4 animate-fade-in-up">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name</Label>
-                      <Input id="name" required className="focus-visible:ring-primary" />
+                      <Input
+                        id="name"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="focus-visible:ring-primary"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="signup-password">Password</Label>
@@ -118,6 +182,8 @@ export default function Auth() {
                         id="signup-password"
                         type="password"
                         required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="focus-visible:ring-primary"
                       />
                     </div>

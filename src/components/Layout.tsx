@@ -12,9 +12,10 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Send, Users, HistoryIcon, Settings, ShieldAlert, LogOut, Menu } from 'lucide-react'
-import useAppStore from '@/stores/useAppStore'
+import useAppStore, { UserRole } from '@/stores/useAppStore'
 import Auth from '@/pages/Auth'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 const MobileTopBar = () => {
   const { toggleSidebar } = useSidebar()
@@ -39,13 +40,25 @@ export default function Layout() {
     return <Auth />
   }
 
-  const navItems = [
-    { name: 'New Dispatch', path: '/', icon: Send },
-    { name: 'Clients', path: '/clients', icon: Users },
-    { name: 'History', path: '/history', icon: HistoryIcon },
-    { name: 'Configuration', path: '/config', icon: Settings },
-    { name: 'Admin', path: '/admin', icon: ShieldAlert },
+  const allNavItems = [
+    { name: 'Novo Disparo', path: '/', icon: Send, roles: ['SuperAdmin', 'Elite', 'Geral'] },
+    { name: 'Clientes', path: '/clients', icon: Users, roles: ['SuperAdmin', 'Elite'] },
+    {
+      name: 'Histórico',
+      path: '/history',
+      icon: HistoryIcon,
+      roles: ['SuperAdmin', 'Elite', 'Geral'],
+    },
+    {
+      name: 'Configuração',
+      path: '/config',
+      icon: Settings,
+      roles: ['SuperAdmin', 'Elite', 'Geral'],
+    },
+    { name: 'Admin', path: '/admin', icon: ShieldAlert, roles: ['SuperAdmin'] },
   ]
+
+  const navItems = allNavItems.filter((item) => item.roles.includes(user.role))
 
   return (
     <SidebarProvider>
@@ -84,8 +97,17 @@ export default function Layout() {
           </SidebarContent>
           <SidebarFooter className="p-4 border-t border-border">
             <div className="mb-4 px-2">
-              <p className="text-xs text-muted-foreground mb-1">Logged in as</p>
-              <p className="text-sm font-medium truncate">{user}</p>
+              <div className="flex justify-between items-center mb-1">
+                <p className="text-xs text-muted-foreground">Logged in as</p>
+                <Badge
+                  variant="outline"
+                  className="text-[10px] h-4 py-0 px-1.5 font-mono bg-secondary/50"
+                >
+                  {user.role}
+                </Badge>
+              </div>
+              <p className="text-sm font-medium truncate">{user.name}</p>
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
             </div>
             <Button
               variant="destructive"
