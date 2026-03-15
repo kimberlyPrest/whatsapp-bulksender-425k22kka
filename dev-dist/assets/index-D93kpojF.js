@@ -30884,7 +30884,7 @@ function Clients() {
 	const [isScheduled, setIsScheduled] = (0, import_react.useState)(false);
 	const [isSendingCsat, setIsSendingCsat] = (0, import_react.useState)(false);
 	if (user?.role === "Geral") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, {
-		"data-uid": "src/pages/Clients.tsx:98:38",
+		"data-uid": "src/pages/Clients.tsx:99:38",
 		"data-prohibitions": "[editContent]",
 		to: "/",
 		replace: true
@@ -30895,10 +30895,14 @@ function Clients() {
 		const matchesOwner = selectedOwner === "ALL" || c.owner === selectedOwner;
 		return matchesSearch && matchesProduct && matchesOwner;
 	});
-	const handleSelectAll = (checked) => checked ? setSelectedIds(new Set(filtered.map((c) => c.id))) : setSelectedIds(/* @__PURE__ */ new Set());
+	const handleSelectAll = (checked) => {
+		if (checked) setSelectedIds(new Set(filtered.map((c) => c.id)));
+		else setSelectedIds(/* @__PURE__ */ new Set());
+	};
 	const handleSelectOne = (id, checked) => {
 		const next = new Set(selectedIds);
-		checked ? next.add(id) : next.delete(id);
+		if (checked) next.add(id);
+		else next.delete(id);
 		setSelectedIds(next);
 	};
 	const handleAddToDispatch = () => {
@@ -30926,43 +30930,43 @@ function Clients() {
 		}, 1500);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Clients.tsx:140:5",
+		"data-uid": "src/pages/Clients.tsx:151:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-24",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Clients.tsx:141:7",
+				"data-uid": "src/pages/Clients.tsx:152:7",
 				"data-prohibitions": "[]",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/Clients.tsx:142:9",
+					"data-uid": "src/pages/Clients.tsx:153:9",
 					"data-prohibitions": "[]",
 					className: "text-3xl font-bold",
 					children: "Clientes CRM"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					"data-uid": "src/pages/Clients.tsx:143:9",
+					"data-uid": "src/pages/Clients.tsx:154:9",
 					"data-prohibitions": "[]",
 					className: "text-muted-foreground mt-1",
 					children: "Selecione clientes do Hubspot para campanhas."
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				"data-uid": "src/pages/Clients.tsx:146:7",
+				"data-uid": "src/pages/Clients.tsx:157:7",
 				"data-prohibitions": "[editContent]",
 				className: "shadow-lg border-border/50 bg-card",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-					"data-uid": "src/pages/Clients.tsx:147:9",
+					"data-uid": "src/pages/Clients.tsx:158:9",
 					"data-prohibitions": "[]",
 					className: "p-4 border-b border-border flex flex-col md:flex-row gap-4 bg-secondary/20",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Clients.tsx:148:11",
+						"data-uid": "src/pages/Clients.tsx:159:11",
 						"data-prohibitions": "[]",
 						className: "relative flex-1",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
-							"data-uid": "src/pages/Clients.tsx:149:13",
+							"data-uid": "src/pages/Clients.tsx:160:13",
 							"data-prohibitions": "[editContent]",
 							className: "absolute left-3 top-3 h-4 w-4 text-muted-foreground"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/pages/Clients.tsx:150:13",
+							"data-uid": "src/pages/Clients.tsx:161:13",
 							"data-prohibitions": "[editContent]",
 							placeholder: "Buscar nome ou telefone...",
 							className: "pl-9 bg-background",
@@ -30970,51 +30974,51 @@ function Clients() {
 							onChange: (e) => setSearchTerm(e.target.value)
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/pages/Clients.tsx:157:11",
+						"data-uid": "src/pages/Clients.tsx:168:11",
 						"data-prohibitions": "[]",
 						className: "flex gap-4 flex-wrap",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-							"data-uid": "src/pages/Clients.tsx:158:13",
+							"data-uid": "src/pages/Clients.tsx:169:13",
 							"data-prohibitions": "[]",
 							value: selectedProduct,
 							onValueChange: setSelectedProduct,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectTrigger, {
-								"data-uid": "src/pages/Clients.tsx:159:15",
+								"data-uid": "src/pages/Clients.tsx:170:15",
 								"data-prohibitions": "[]",
 								className: "w-[150px] bg-background",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Funnel, {
-									"data-uid": "src/pages/Clients.tsx:160:17",
+									"data-uid": "src/pages/Clients.tsx:171:17",
 									"data-prohibitions": "[editContent]",
 									className: "w-4 h-4 mr-2 text-muted-foreground"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {
-									"data-uid": "src/pages/Clients.tsx:161:17",
+									"data-uid": "src/pages/Clients.tsx:172:17",
 									"data-prohibitions": "[editContent]",
 									placeholder: "Produto"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, {
-								"data-uid": "src/pages/Clients.tsx:163:15",
+								"data-uid": "src/pages/Clients.tsx:174:15",
 								"data-prohibitions": "[]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										"data-uid": "src/pages/Clients.tsx:164:17",
+										"data-uid": "src/pages/Clients.tsx:175:17",
 										"data-prohibitions": "[]",
 										value: "ALL",
 										children: "Todos Produtos"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										"data-uid": "src/pages/Clients.tsx:165:17",
+										"data-uid": "src/pages/Clients.tsx:176:17",
 										"data-prohibitions": "[]",
 										value: "ELITE",
 										children: "ELITE"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										"data-uid": "src/pages/Clients.tsx:166:17",
+										"data-uid": "src/pages/Clients.tsx:177:17",
 										"data-prohibitions": "[]",
 										value: "LABS",
 										children: "LABS"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										"data-uid": "src/pages/Clients.tsx:167:17",
+										"data-uid": "src/pages/Clients.tsx:178:17",
 										"data-prohibitions": "[]",
 										value: "SCALE",
 										children: "SCALE"
@@ -31024,53 +31028,53 @@ function Clients() {
 						})
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-					"data-uid": "src/pages/Clients.tsx:172:9",
+					"data-uid": "src/pages/Clients.tsx:183:9",
 					"data-prohibitions": "[editContent]",
 					className: "p-0",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, {
-						"data-uid": "src/pages/Clients.tsx:173:11",
+						"data-uid": "src/pages/Clients.tsx:184:11",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
-							"data-uid": "src/pages/Clients.tsx:174:13",
+							"data-uid": "src/pages/Clients.tsx:185:13",
 							"data-prohibitions": "[]",
 							className: "bg-secondary/40",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/pages/Clients.tsx:175:15",
+								"data-uid": "src/pages/Clients.tsx:186:15",
 								"data-prohibitions": "[]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/Clients.tsx:176:17",
+										"data-uid": "src/pages/Clients.tsx:187:17",
 										"data-prohibitions": "[]",
 										className: "w-[50px] text-center",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-											"data-uid": "src/pages/Clients.tsx:177:19",
+											"data-uid": "src/pages/Clients.tsx:188:19",
 											"data-prohibitions": "[editContent]",
 											checked: selectedIds.size === filtered.length && filtered.length > 0,
 											onCheckedChange: handleSelectAll
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/Clients.tsx:182:17",
+										"data-uid": "src/pages/Clients.tsx:193:17",
 										"data-prohibitions": "[]",
 										children: "Nome"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/Clients.tsx:183:17",
+										"data-uid": "src/pages/Clients.tsx:194:17",
 										"data-prohibitions": "[]",
 										children: "Telefone"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/Clients.tsx:184:17",
+										"data-uid": "src/pages/Clients.tsx:195:17",
 										"data-prohibitions": "[]",
 										children: "Produto"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/Clients.tsx:185:17",
+										"data-uid": "src/pages/Clients.tsx:196:17",
 										"data-prohibitions": "[]",
 										children: "Estágio"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/Clients.tsx:186:17",
+										"data-uid": "src/pages/Clients.tsx:197:17",
 										"data-prohibitions": "[]",
 										className: "text-right",
 										children: "Dias"
@@ -31078,44 +31082,44 @@ function Clients() {
 								]
 							})
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, {
-							"data-uid": "src/pages/Clients.tsx:189:13",
+							"data-uid": "src/pages/Clients.tsx:200:13",
 							"data-prohibitions": "[editContent]",
 							children: filtered.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/pages/Clients.tsx:191:17",
+								"data-uid": "src/pages/Clients.tsx:202:17",
 								"data-prohibitions": "[editContent]",
 								className: "hover:bg-secondary/20 transition-colors cursor-pointer data-[state=selected]:bg-primary/10",
 								"data-state": selectedIds.has(c.id) ? "selected" : void 0,
 								onClick: () => handleSelectOne(c.id, !selectedIds.has(c.id)),
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/Clients.tsx:197:19",
+										"data-uid": "src/pages/Clients.tsx:208:19",
 										"data-prohibitions": "[]",
 										className: "text-center",
 										onClick: (e) => e.stopPropagation(),
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-											"data-uid": "src/pages/Clients.tsx:198:21",
+											"data-uid": "src/pages/Clients.tsx:209:21",
 											"data-prohibitions": "[editContent]",
 											checked: selectedIds.has(c.id),
 											onCheckedChange: (ch) => handleSelectOne(c.id, !!ch)
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/Clients.tsx:203:19",
+										"data-uid": "src/pages/Clients.tsx:214:19",
 										"data-prohibitions": "[editContent]",
 										className: "font-medium",
 										children: c.name
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/Clients.tsx:204:19",
+										"data-uid": "src/pages/Clients.tsx:215:19",
 										"data-prohibitions": "[editContent]",
 										className: "font-mono text-xs",
 										children: c.phone
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/Clients.tsx:205:19",
+										"data-uid": "src/pages/Clients.tsx:216:19",
 										"data-prohibitions": "[editContent]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-											"data-uid": "src/pages/Clients.tsx:206:21",
+											"data-uid": "src/pages/Clients.tsx:217:21",
 											"data-prohibitions": "[editContent]",
 											variant: "outline",
 											className: "bg-background",
@@ -31123,12 +31127,12 @@ function Clients() {
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/Clients.tsx:210:19",
+										"data-uid": "src/pages/Clients.tsx:221:19",
 										"data-prohibitions": "[editContent]",
 										children: c.stage
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
-										"data-uid": "src/pages/Clients.tsx:211:19",
+										"data-uid": "src/pages/Clients.tsx:222:19",
 										"data-prohibitions": "[editContent]",
 										className: "text-right text-muted-foreground",
 										children: [c.days, " d"]
@@ -31140,45 +31144,45 @@ function Clients() {
 				})]
 			}),
 			selectedIds.size > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Clients.tsx:220:9",
+				"data-uid": "src/pages/Clients.tsx:231:9",
 				"data-prohibitions": "[editContent]",
 				className: "fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-6 bg-secondary/90 backdrop-blur-xl border border-border py-3 px-6 rounded-full shadow-2xl animate-slide-up z-50 transition-all",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Clients.tsx:221:11",
+					"data-uid": "src/pages/Clients.tsx:232:11",
 					"data-prohibitions": "[editContent]",
 					className: "flex items-center gap-2 border-r border-border pr-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/pages/Clients.tsx:222:13",
+						"data-uid": "src/pages/Clients.tsx:233:13",
 						"data-prohibitions": "[editContent]",
 						className: "flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold",
 						children: selectedIds.size
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/pages/Clients.tsx:225:13",
+						"data-uid": "src/pages/Clients.tsx:236:13",
 						"data-prohibitions": "[]",
 						className: "font-medium text-sm",
 						children: "selecionados"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Clients.tsx:227:11",
+					"data-uid": "src/pages/Clients.tsx:238:11",
 					"data-prohibitions": "[]",
 					className: "flex gap-3",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/Clients.tsx:228:13",
+						"data-uid": "src/pages/Clients.tsx:239:13",
 						"data-prohibitions": "[]",
 						onClick: handleAddToDispatch,
 						variant: "outline",
 						className: "bg-background",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Send, {
-							"data-uid": "src/pages/Clients.tsx:229:15",
+							"data-uid": "src/pages/Clients.tsx:240:15",
 							"data-prohibitions": "[editContent]",
 							className: "w-4 h-4 mr-2"
 						}), " Disparo"]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/Clients.tsx:231:13",
+						"data-uid": "src/pages/Clients.tsx:242:13",
 						"data-prohibitions": "[]",
 						onClick: () => setCsatModalOpen(true),
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageCircle, {
-							"data-uid": "src/pages/Clients.tsx:232:15",
+							"data-uid": "src/pages/Clients.tsx:243:15",
 							"data-prohibitions": "[editContent]",
 							className: "w-4 h-4 mr-2"
 						}), " CSAT"]
@@ -31186,46 +31190,46 @@ function Clients() {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-				"data-uid": "src/pages/Clients.tsx:238:7",
+				"data-uid": "src/pages/Clients.tsx:249:7",
 				"data-prohibitions": "[editContent]",
 				open: csatModalOpen,
 				onOpenChange: setCsatModalOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-					"data-uid": "src/pages/Clients.tsx:239:9",
+					"data-uid": "src/pages/Clients.tsx:250:9",
 					"data-prohibitions": "[editContent]",
 					className: "sm:max-w-md",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-							"data-uid": "src/pages/Clients.tsx:240:11",
+							"data-uid": "src/pages/Clients.tsx:251:11",
 							"data-prohibitions": "[]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
-								"data-uid": "src/pages/Clients.tsx:241:13",
+								"data-uid": "src/pages/Clients.tsx:252:13",
 								"data-prohibitions": "[]",
 								children: "Disparo CSAT"
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Clients.tsx:243:11",
+							"data-uid": "src/pages/Clients.tsx:254:11",
 							"data-prohibitions": "[editContent]",
 							className: "space-y-4 py-4",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-									"data-uid": "src/pages/Clients.tsx:244:13",
+									"data-uid": "src/pages/Clients.tsx:255:13",
 									"data-prohibitions": "[editContent]",
 									defaultValue: "Olá {primeiro_nome}! Responda nossa pesquisa: {link_csat}",
 									rows: 4
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Clients.tsx:248:13",
+									"data-uid": "src/pages/Clients.tsx:259:13",
 									"data-prohibitions": "[]",
 									className: "flex items-center justify-between border-t border-border pt-4",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/pages/Clients.tsx:249:15",
+										"data-uid": "src/pages/Clients.tsx:260:15",
 										"data-prohibitions": "[]",
 										htmlFor: "schedule-csat",
 										children: "Agendar envio"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-										"data-uid": "src/pages/Clients.tsx:250:15",
+										"data-uid": "src/pages/Clients.tsx:261:15",
 										"data-prohibitions": "[editContent]",
 										id: "schedule-csat",
 										checked: isScheduled,
@@ -31233,16 +31237,16 @@ function Clients() {
 									})]
 								}),
 								isScheduled && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Clients.tsx:253:15",
+									"data-uid": "src/pages/Clients.tsx:264:15",
 									"data-prohibitions": "[]",
 									className: "flex gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/pages/Clients.tsx:254:17",
+										"data-uid": "src/pages/Clients.tsx:265:17",
 										"data-prohibitions": "[editContent]",
 										type: "date",
 										className: "flex-1"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/pages/Clients.tsx:255:17",
+										"data-uid": "src/pages/Clients.tsx:266:17",
 										"data-prohibitions": "[editContent]",
 										type: "time",
 										className: "w-[120px]"
@@ -31251,21 +31255,21 @@ function Clients() {
 							]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, {
-							"data-uid": "src/pages/Clients.tsx:259:11",
+							"data-uid": "src/pages/Clients.tsx:270:11",
 							"data-prohibitions": "[editContent]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Clients.tsx:260:13",
+								"data-uid": "src/pages/Clients.tsx:271:13",
 								"data-prohibitions": "[]",
 								variant: "ghost",
 								onClick: () => setCsatModalOpen(false),
 								children: "Cancelar"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Clients.tsx:263:13",
+								"data-uid": "src/pages/Clients.tsx:274:13",
 								"data-prohibitions": "[editContent]",
 								onClick: handleSendCsat,
 								disabled: isSendingCsat,
 								children: isSendingCsat ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-									"data-uid": "src/pages/Clients.tsx:264:32",
+									"data-uid": "src/pages/Clients.tsx:275:32",
 									"data-prohibitions": "[editContent]",
 									className: "animate-spin w-4 h-4"
 								}) : "Enviar"
@@ -32659,4 +32663,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-UWovHrkm.js.map
+//# sourceMappingURL=index-D93kpojF.js.map

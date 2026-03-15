@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
-import { Search, Filter, Send, MessageCircle, CalendarClock, Loader2 } from 'lucide-react'
+import { Search, Filter, Send, MessageCircle, Loader2 } from 'lucide-react'
 import useAppStore, { Contact } from '@/stores/useAppStore'
 import { useToast } from '@/hooks/use-toast'
 import {
@@ -88,6 +88,7 @@ export default function Clients() {
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedProduct, setSelectedProduct] = useState('ALL')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedOwner, setSelectedOwner] = useState('ALL')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
@@ -105,11 +106,21 @@ export default function Clients() {
     return matchesSearch && matchesProduct && matchesOwner
   })
 
-  const handleSelectAll = (checked: boolean) =>
-    checked ? setSelectedIds(new Set(filtered.map((c) => c.id))) : setSelectedIds(new Set())
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(new Set(filtered.map((c) => c.id)))
+    } else {
+      setSelectedIds(new Set())
+    }
+  }
+
   const handleSelectOne = (id: string, checked: boolean) => {
     const next = new Set(selectedIds)
-    checked ? next.add(id) : next.delete(id)
+    if (checked) {
+      next.add(id)
+    } else {
+      next.delete(id)
+    }
     setSelectedIds(next)
   }
 
