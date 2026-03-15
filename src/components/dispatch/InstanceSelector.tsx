@@ -69,7 +69,10 @@ export function InstanceSelector({ instances, onChange }: Props) {
   }
 
   return (
-    <div className="bg-sidebarBg rounded-xl p-6 border border-slate-700 shadow-xl space-y-4">
+    <div
+      id="instance-selector-section"
+      className="bg-sidebarBg rounded-xl p-6 border border-slate-700 shadow-xl space-y-4"
+    >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-300">Números de Envio</h3>
         <div className="flex items-center gap-1 bg-slate-800/50 p-1 rounded-lg border border-slate-700/50">
@@ -77,10 +80,8 @@ export function InstanceSelector({ instances, onChange }: Props) {
             id="dist-mode-equal"
             onClick={() => setMode('equal')}
             className={cn(
-              'px-3 py-1 rounded-md font-semibold transition-colors text-xs',
-              mode === 'equal'
-                ? 'bg-primary text-primary-foreground dist-mode-btn active'
-                : 'text-slate-400 hover:text-slate-200',
+              'px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn',
+              mode === 'equal' ? 'active' : 'text-slate-400 hover:text-slate-200',
             )}
           >
             Igual
@@ -89,10 +90,8 @@ export function InstanceSelector({ instances, onChange }: Props) {
             id="dist-mode-custom"
             onClick={() => setMode('custom')}
             className={cn(
-              'px-3 py-1 rounded-md font-semibold transition-colors text-xs',
-              mode === 'custom'
-                ? 'bg-primary text-primary-foreground dist-mode-btn active'
-                : 'text-slate-400 hover:text-slate-200',
+              'px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn',
+              mode === 'custom' ? 'active' : 'text-slate-400 hover:text-slate-200',
             )}
           >
             Personalizado
@@ -108,7 +107,14 @@ export function InstanceSelector({ instances, onChange }: Props) {
               key={inst.id}
               className="flex items-center justify-between p-3 rounded-lg border border-slate-700/50 bg-slate-800/20 transition-all hover:bg-slate-800/40"
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 relative">
+                <input
+                  type="checkbox"
+                  value={inst.id}
+                  className="inst-selector-check absolute opacity-0 w-0 h-0"
+                  checked={isSelected}
+                  readOnly
+                />
                 <Checkbox
                   id={`inst-${inst.id}`}
                   checked={isSelected}
@@ -127,6 +133,7 @@ export function InstanceSelector({ instances, onChange }: Props) {
                 {mode === 'custom' ? (
                   <div className="flex items-center gap-1">
                     <Input
+                      id={`inst-pct-${inst.id}`}
                       type="number"
                       min="0"
                       max="100"

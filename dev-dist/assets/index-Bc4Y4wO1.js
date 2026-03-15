@@ -26306,6 +26306,9 @@ var AppContext = (0, import_react.createContext)(null);
 var AppProvider = ({ children }) => {
 	const [user, setUser] = (0, import_react.useState)(null);
 	const [selectedContacts, setSelectedContacts] = (0, import_react.useState)([]);
+	const [sourceType, setSourceType] = (0, import_react.useState)("");
+	const [sourceFilename, setSourceFilename] = (0, import_react.useState)("");
+	const [sheetUrl, setSheetUrl] = (0, import_react.useState)("");
 	const [instances, setInstances] = (0, import_react.useState)([
 		{
 			id: "1",
@@ -26327,7 +26330,7 @@ var AppProvider = ({ children }) => {
 		}
 	]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/stores/useAppStore.tsx:59:5",
+		"data-uid": "src/stores/useAppStore.tsx:69:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			user,
@@ -26336,7 +26339,13 @@ var AppProvider = ({ children }) => {
 			selectedContacts,
 			setSelectedContacts,
 			instances,
-			setInstances
+			setInstances,
+			sourceType,
+			setSourceType,
+			sourceFilename,
+			setSourceFilename,
+			sheetUrl,
+			setSheetUrl
 		},
 		children
 	});
@@ -26349,16 +26358,17 @@ function useAppStore() {
 //#endregion
 //#region src/components/dispatch/SourceTabs.tsx
 function SourceTabs() {
-	const { setSelectedContacts } = useAppStore();
+	const { setSelectedContacts, setSourceType, setSourceFilename, sheetUrl, setSheetUrl } = useAppStore();
 	const { toast } = useToast();
 	const [loading, setLoading] = (0, import_react.useState)(false);
-	const [sheetUrl, setSheetUrl] = (0, import_react.useState)("");
 	const [fileName, setFileName] = (0, import_react.useState)("");
 	const handleSheetLoad = async () => {
 		if (!sheetUrl) return;
 		setLoading(true);
 		const res = await api.loadFromSheets(sheetUrl);
 		setSelectedContacts(res.contacts);
+		setSourceType("sheets");
+		setSourceFilename("Google Sheets");
 		toast({
 			title: "Planilha Carregada",
 			description: `${res.contacts.length} contatos prontos.`
@@ -26372,6 +26382,8 @@ function SourceTabs() {
 		const res = await api.uploadCsv(file);
 		setFileName(res.filename);
 		setSelectedContacts(res.contacts);
+		setSourceType("csv");
+		setSourceFilename(res.filename);
 		toast({
 			title: "CSV Carregado",
 			description: `${res.contacts.length} contatos lidos.`
@@ -26379,38 +26391,38 @@ function SourceTabs() {
 		setLoading(false);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
-		"data-uid": "src/components/dispatch/SourceTabs.tsx:38:5",
+		"data-uid": "src/components/dispatch/SourceTabs.tsx:42:5",
 		"data-prohibitions": "[editContent]",
 		defaultValue: "csv",
 		className: "w-full",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
-				"data-uid": "src/components/dispatch/SourceTabs.tsx:39:7",
+				"data-uid": "src/components/dispatch/SourceTabs.tsx:43:7",
 				"data-prohibitions": "[]",
 				className: "grid w-full grid-cols-2 mb-4 bg-secondary/40",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-					"data-uid": "src/components/dispatch/SourceTabs.tsx:40:9",
+					"data-uid": "src/components/dispatch/SourceTabs.tsx:44:9",
 					"data-prohibitions": "[]",
 					value: "csv",
 					children: "Upload CSV"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-					"data-uid": "src/components/dispatch/SourceTabs.tsx:41:9",
+					"data-uid": "src/components/dispatch/SourceTabs.tsx:45:9",
 					"data-prohibitions": "[]",
 					value: "sheets",
 					children: "Google Sheets"
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-				"data-uid": "src/components/dispatch/SourceTabs.tsx:43:7",
+				"data-uid": "src/components/dispatch/SourceTabs.tsx:47:7",
 				"data-prohibitions": "[editContent]",
 				value: "csv",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/dispatch/SourceTabs.tsx:44:9",
+					"data-uid": "src/components/dispatch/SourceTabs.tsx:48:9",
 					"data-prohibitions": "[editContent]",
 					className: "relative border-2 border-dashed border-border rounded-lg p-8 text-center hover:bg-secondary/20 transition-colors cursor-pointer group",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:45:11",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:49:11",
 							"data-prohibitions": "[editContent]",
 							type: "file",
 							accept: ".csv",
@@ -26419,20 +26431,20 @@ function SourceTabs() {
 							disabled: loading
 						}),
 						loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:53:13",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:57:13",
 							"data-prohibitions": "[editContent]",
 							className: "h-8 w-8 mx-auto mb-3 animate-spin text-primary"
 						}) : fileName ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:55:13",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:59:13",
 							"data-prohibitions": "[editContent]",
 							className: "h-8 w-8 mx-auto mb-3 text-primary"
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Upload, {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:57:13",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:61:13",
 							"data-prohibitions": "[editContent]",
 							className: "h-8 w-8 mx-auto mb-3 text-muted-foreground group-hover:text-primary transition-colors"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:59:11",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:63:11",
 							"data-prohibitions": "[editContent]",
 							className: "text-sm font-medium",
 							children: fileName ? `✓ ${fileName}` : "Arraste ou clique para enviar CSV"
@@ -26441,24 +26453,24 @@ function SourceTabs() {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-				"data-uid": "src/components/dispatch/SourceTabs.tsx:64:7",
+				"data-uid": "src/components/dispatch/SourceTabs.tsx:68:7",
 				"data-prohibitions": "[editContent]",
 				value: "sheets",
 				className: "space-y-4",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/dispatch/SourceTabs.tsx:65:9",
+					"data-uid": "src/components/dispatch/SourceTabs.tsx:69:9",
 					"data-prohibitions": "[editContent]",
 					className: "flex gap-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/dispatch/SourceTabs.tsx:66:11",
+						"data-uid": "src/components/dispatch/SourceTabs.tsx:70:11",
 						"data-prohibitions": "[]",
 						className: "relative flex-1",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:67:13",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:71:13",
 							"data-prohibitions": "[editContent]",
 							className: "absolute left-3 top-3 h-4 w-4 text-muted-foreground"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:68:13",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:72:13",
 							"data-prohibitions": "[editContent]",
 							placeholder: "Cole a URL da planilha aqui...",
 							className: "bg-background pl-9",
@@ -26466,13 +26478,13 @@ function SourceTabs() {
 							onChange: (e) => setSheetUrl(e.target.value)
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						"data-uid": "src/components/dispatch/SourceTabs.tsx:75:11",
+						"data-uid": "src/components/dispatch/SourceTabs.tsx:79:11",
 						"data-prohibitions": "[editContent]",
 						variant: "secondary",
 						onClick: handleSheetLoad,
 						disabled: loading || !sheetUrl,
 						children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-							"data-uid": "src/components/dispatch/SourceTabs.tsx:76:24",
+							"data-uid": "src/components/dispatch/SourceTabs.tsx:80:24",
 							"data-prohibitions": "[editContent]",
 							className: "h-4 w-4 animate-spin"
 						}) : "Carregar"
@@ -26816,83 +26828,97 @@ function InstanceSelector({ instances, onChange }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		"data-uid": "src/components/dispatch/InstanceSelector.tsx:72:5",
 		"data-prohibitions": "[editContent]",
+		id: "instance-selector-section",
 		className: "bg-sidebarBg rounded-xl p-6 border border-slate-700 shadow-xl space-y-4",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/dispatch/InstanceSelector.tsx:73:7",
+				"data-uid": "src/components/dispatch/InstanceSelector.tsx:76:7",
 				"data-prohibitions": "[editContent]",
 				className: "flex items-center justify-between",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/components/dispatch/InstanceSelector.tsx:74:9",
+					"data-uid": "src/components/dispatch/InstanceSelector.tsx:77:9",
 					"data-prohibitions": "[]",
 					className: "text-sm font-semibold text-slate-300",
 					children: "Números de Envio"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/dispatch/InstanceSelector.tsx:75:9",
+					"data-uid": "src/components/dispatch/InstanceSelector.tsx:78:9",
 					"data-prohibitions": "[editContent]",
 					className: "flex items-center gap-1 bg-slate-800/50 p-1 rounded-lg border border-slate-700/50",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						"data-uid": "src/components/dispatch/InstanceSelector.tsx:76:11",
+						"data-uid": "src/components/dispatch/InstanceSelector.tsx:79:11",
 						"data-prohibitions": "[editContent]",
 						id: "dist-mode-equal",
 						onClick: () => setMode("equal"),
-						className: cn$1("px-3 py-1 rounded-md font-semibold transition-colors text-xs", mode === "equal" ? "bg-primary text-primary-foreground dist-mode-btn active" : "text-slate-400 hover:text-slate-200"),
+						className: cn$1("px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn", mode === "equal" ? "active" : "text-slate-400 hover:text-slate-200"),
 						children: "Igual"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						"data-uid": "src/components/dispatch/InstanceSelector.tsx:88:11",
+						"data-uid": "src/components/dispatch/InstanceSelector.tsx:89:11",
 						"data-prohibitions": "[editContent]",
 						id: "dist-mode-custom",
 						onClick: () => setMode("custom"),
-						className: cn$1("px-3 py-1 rounded-md font-semibold transition-colors text-xs", mode === "custom" ? "bg-primary text-primary-foreground dist-mode-btn active" : "text-slate-400 hover:text-slate-200"),
+						className: cn$1("px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn", mode === "custom" ? "active" : "text-slate-400 hover:text-slate-200"),
 						children: "Personalizado"
 					})]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/dispatch/InstanceSelector.tsx:103:7",
+				"data-uid": "src/components/dispatch/InstanceSelector.tsx:102:7",
 				"data-prohibitions": "[editContent]",
 				id: "instance-selector-list",
 				className: "space-y-3 mt-4",
 				children: activeInstances.map((inst) => {
 					const isSelected = selectedIds.includes(inst.id);
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/dispatch/InstanceSelector.tsx:107:13",
+						"data-uid": "src/components/dispatch/InstanceSelector.tsx:106:13",
 						"data-prohibitions": "[editContent]",
 						className: "flex items-center justify-between p-3 rounded-lg border border-slate-700/50 bg-slate-800/20 transition-all hover:bg-slate-800/40",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/dispatch/InstanceSelector.tsx:111:15",
+							"data-uid": "src/components/dispatch/InstanceSelector.tsx:110:15",
 							"data-prohibitions": "[editContent]",
-							className: "flex items-center space-x-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-								"data-uid": "src/components/dispatch/InstanceSelector.tsx:112:17",
-								"data-prohibitions": "[editContent]",
-								id: `inst-${inst.id}`,
-								checked: isSelected,
-								onCheckedChange: (c) => toggleInstance(inst.id, !!c),
-								className: "border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-								"data-uid": "src/components/dispatch/InstanceSelector.tsx:118:17",
-								"data-prohibitions": "[editContent]",
-								htmlFor: `inst-${inst.id}`,
-								className: "text-sm font-medium text-slate-200 cursor-pointer flex flex-col",
-								children: [inst.name, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:123:19",
+							className: "flex items-center space-x-3 relative",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:111:17",
 									"data-prohibitions": "[editContent]",
-									className: "text-xs text-slate-500",
-									children: inst.phone
-								})]
-							})]
+									type: "checkbox",
+									value: inst.id,
+									className: "inst-selector-check absolute opacity-0 w-0 h-0",
+									checked: isSelected,
+									readOnly: true
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:118:17",
+									"data-prohibitions": "[editContent]",
+									id: `inst-${inst.id}`,
+									checked: isSelected,
+									onCheckedChange: (c) => toggleInstance(inst.id, !!c),
+									className: "border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:124:17",
+									"data-prohibitions": "[editContent]",
+									htmlFor: `inst-${inst.id}`,
+									className: "text-sm font-medium text-slate-200 cursor-pointer flex flex-col",
+									children: [inst.name, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										"data-uid": "src/components/dispatch/InstanceSelector.tsx:129:19",
+										"data-prohibitions": "[editContent]",
+										className: "text-xs text-slate-500",
+										children: inst.phone
+									})]
+								})
+							]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/components/dispatch/InstanceSelector.tsx:126:15",
+							"data-uid": "src/components/dispatch/InstanceSelector.tsx:132:15",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-2",
 							children: mode === "custom" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/dispatch/InstanceSelector.tsx:128:19",
+								"data-uid": "src/components/dispatch/InstanceSelector.tsx:134:19",
 								"data-prohibitions": "[]",
 								className: "flex items-center gap-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:129:21",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:135:21",
 									"data-prohibitions": "[editContent]",
+									id: `inst-pct-${inst.id}`,
 									type: "number",
 									min: "0",
 									max: "100",
@@ -26901,13 +26927,13 @@ function InstanceSelector({ instances, onChange }) {
 									onChange: (e) => handlePercentageChange(inst.id, e.target.value),
 									className: "w-20 h-8 text-right bg-slate-900 border-slate-700 text-slate-200"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:138:21",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:145:21",
 									"data-prohibitions": "[]",
 									className: "text-slate-400 text-sm",
 									children: "%"
 								})]
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/components/dispatch/InstanceSelector.tsx:141:19",
+								"data-uid": "src/components/dispatch/InstanceSelector.tsx:148:19",
 								"data-prohibitions": "[editContent]",
 								className: "text-sm text-slate-400 w-24 text-right",
 								children: isSelected ? `${(100 / (selectedIds.length || 1)).toFixed(1)}%` : "0%"
@@ -26917,7 +26943,7 @@ function InstanceSelector({ instances, onChange }) {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/components/dispatch/InstanceSelector.tsx:151:7",
+				"data-uid": "src/components/dispatch/InstanceSelector.tsx:158:7",
 				"data-prohibitions": "[editContent]",
 				id: "dist-sum-error",
 				className: cn$1("text-xs text-red-400 font-medium", isError ? "block" : "hidden"),
@@ -26982,7 +27008,7 @@ function useDispatchSimulation() {
 //#endregion
 //#region src/pages/Index.tsx
 function Index() {
-	const { selectedContacts, setSelectedContacts, instances } = useAppStore();
+	const { selectedContacts, setSelectedContacts, instances, sourceType, sourceFilename, sheetUrl } = useAppStore();
 	const { toast } = useToast();
 	const { start: simulateStart, stop: simulateStop } = useDispatchSimulation();
 	const [message, setMessage] = (0, import_react.useState)("");
@@ -27033,24 +27059,56 @@ function Index() {
 			title: "Escreva uma mensagem",
 			variant: "destructive"
 		});
-		if (instances.filter((i) => i.status === "connected").length >= 2) {
-			if (distConfig.selection.length === 0) return toast({
+		const activeInstances = instances.filter((i) => i.status === "connected");
+		const selectorSection = document.getElementById("instance-selector-section");
+		let instance_ids = [];
+		let instance_distribution = [];
+		if (selectorSection && activeInstances.length >= 2) {
+			const checkedInputs = selectorSection.querySelectorAll(".inst-selector-check:checked");
+			if (checkedInputs.length === 0) return toast({
 				title: "Selecione pelo menos um número de envio",
 				variant: "destructive"
 			});
-			if (!distConfig.isValid) return toast({
-				title: "Distribuição inválida",
-				description: "A soma das porcentagens deve ser 100%.",
-				variant: "destructive"
+			checkedInputs.forEach((input) => {
+				instance_ids.push(input.value);
 			});
-		}
+			if (distConfig.mode === "custom") {
+				let sum = 0;
+				instance_ids.forEach((id) => {
+					const pctInput = document.getElementById(`inst-pct-${id}`);
+					const val = parseFloat(pctInput?.value || "0");
+					sum += val;
+					instance_distribution.push({
+						instance_id: id,
+						percent: val
+					});
+				});
+				if (Math.abs(sum - 100) > .5) {
+					alert("A soma das porcentagens deve ser 100%.");
+					return;
+				}
+			}
+		} else if (activeInstances.length > 0) instance_ids = [activeInstances[0].id];
+		else return toast({
+			title: "Nenhum número de envio conectado",
+			variant: "destructive"
+		});
+		const payload = {
+			instance_ids,
+			...distConfig.mode === "custom" ? { instance_distribution } : {},
+			source_type: sourceType || "csv",
+			sheet_url: sheetUrl || "",
+			contacts_json: selectedContacts,
+			source_filename: sourceFilename || "",
+			template: message
+		};
 		if (isScheduled) {
 			if (!scheduleDate) return toast({
 				title: "Selecione a data",
 				variant: "destructive"
 			});
 			await api.scheduleDispatch({
-				message,
+				...payload,
 				antiBan,
 				date: scheduleDate,
 				distConfig
@@ -27067,7 +27125,7 @@ function Index() {
 		})));
 		try {
 			await api.startDispatch({
-				message,
+				...payload,
 				antiBan,
 				distConfig
 			});
@@ -27080,89 +27138,89 @@ function Index() {
 	const sentCount = selectedContacts.filter((c) => c.status === "Enviado").length;
 	const errCount = selectedContacts.filter((c) => c.status === "Erro").length;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Index.tsx:105:5",
+		"data-uid": "src/pages/Index.tsx:140:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-24",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/Index.tsx:106:7",
+			"data-uid": "src/pages/Index.tsx:141:7",
 			"data-prohibitions": "[]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-				"data-uid": "src/pages/Index.tsx:107:9",
+				"data-uid": "src/pages/Index.tsx:142:9",
 				"data-prohibitions": "[]",
 				className: "text-3xl font-bold",
 				children: "Novo Disparo"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/pages/Index.tsx:108:9",
+				"data-uid": "src/pages/Index.tsx:143:9",
 				"data-prohibitions": "[]",
 				className: "text-muted-foreground mt-1",
 				children: "Configure e inicie sua campanha em massa."
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/Index.tsx:111:7",
+			"data-uid": "src/pages/Index.tsx:146:7",
 			"data-prohibitions": "[editContent]",
 			className: "grid grid-cols-1 xl:grid-cols-12 gap-6",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Index.tsx:112:9",
+				"data-uid": "src/pages/Index.tsx:147:9",
 				"data-prohibitions": "[editContent]",
 				className: "xl:col-span-7 space-y-6",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Index.tsx:113:11",
+					"data-uid": "src/pages/Index.tsx:148:11",
 					"data-prohibitions": "[editContent]",
 					className: "shadow-lg border-border/50 bg-card",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Index.tsx:114:13",
+						"data-uid": "src/pages/Index.tsx:149:13",
 						"data-prohibitions": "[editContent]",
 						className: "p-6 space-y-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SourceTabs, {
-								"data-uid": "src/pages/Index.tsx:115:15",
+								"data-uid": "src/pages/Index.tsx:150:15",
 								"data-prohibitions": "[editContent]"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageEditor, {
-								"data-uid": "src/pages/Index.tsx:116:15",
+								"data-uid": "src/pages/Index.tsx:151:15",
 								"data-prohibitions": "[editContent]",
 								message,
 								setMessage
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InstanceSelector, {
-								"data-uid": "src/pages/Index.tsx:118:15",
+								"data-uid": "src/pages/Index.tsx:153:15",
 								"data-prohibitions": "[editContent]",
 								instances,
 								onChange: setDistConfig
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AntiBanConfig, {
-								"data-uid": "src/pages/Index.tsx:120:15",
+								"data-uid": "src/pages/Index.tsx:155:15",
 								"data-prohibitions": "[editContent]",
 								config: antiBan,
 								onChange: setAntiBan
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Index.tsx:122:15",
+								"data-uid": "src/pages/Index.tsx:157:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-border gap-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Index.tsx:123:17",
+									"data-uid": "src/pages/Index.tsx:158:17",
 									"data-prohibitions": "[]",
 									className: "flex items-center space-x-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-										"data-uid": "src/pages/Index.tsx:124:19",
+										"data-uid": "src/pages/Index.tsx:159:19",
 										"data-prohibitions": "[editContent]",
 										id: "schedule",
 										checked: isScheduled,
 										onCheckedChange: (c) => setIsScheduled(!!c)
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-										"data-uid": "src/pages/Index.tsx:129:19",
+										"data-uid": "src/pages/Index.tsx:164:19",
 										"data-prohibitions": "[]",
 										htmlFor: "schedule",
 										className: "text-sm font-medium flex items-center gap-2 cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
-											"data-uid": "src/pages/Index.tsx:133:21",
+											"data-uid": "src/pages/Index.tsx:168:21",
 											"data-prohibitions": "[editContent]",
 											className: "h-4 w-4 text-primary"
 										}), " Agendar disparo"]
 									})]
 								}), isScheduled && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Index.tsx:137:19",
+									"data-uid": "src/pages/Index.tsx:172:19",
 									"data-prohibitions": "[editContent]",
 									type: "datetime-local",
 									className: "w-full sm:w-auto h-9 text-sm bg-background",
@@ -27174,11 +27232,11 @@ function Index() {
 					})
 				})
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Index.tsx:149:9",
+				"data-uid": "src/pages/Index.tsx:184:9",
 				"data-prohibitions": "[editContent]",
 				className: "xl:col-span-5 space-y-6 flex flex-col",
 				children: [isSending || events.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressView, {
-					"data-uid": "src/pages/Index.tsx:151:13",
+					"data-uid": "src/pages/Index.tsx:186:13",
 					"data-prohibitions": "[editContent]",
 					total: selectedContacts.length,
 					sent: sentCount,
@@ -27187,32 +27245,32 @@ function Index() {
 					events,
 					isSending
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Index.tsx:160:13",
+					"data-uid": "src/pages/Index.tsx:195:13",
 					"data-prohibitions": "[]",
 					className: "shadow-lg border-border/50",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-						"data-uid": "src/pages/Index.tsx:161:15",
+						"data-uid": "src/pages/Index.tsx:196:15",
 						"data-prohibitions": "[]",
 						className: "p-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ContactTable, {
-							"data-uid": "src/pages/Index.tsx:162:17",
+							"data-uid": "src/pages/Index.tsx:197:17",
 							"data-prohibitions": "[editContent]",
 							config: antiBan
 						})
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/Index.tsx:167:11",
+					"data-uid": "src/pages/Index.tsx:202:11",
 					"data-prohibitions": "[editContent]",
 					className: "mt-auto",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/Index.tsx:168:13",
+						"data-uid": "src/pages/Index.tsx:203:13",
 						"data-prohibitions": "[editContent]",
 						size: "lg",
 						className: "w-full font-bold text-lg hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20 h-14",
 						onClick: handleAction,
 						disabled: isSending || selectedContacts.length === 0,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
-							"data-uid": "src/pages/Index.tsx:174:15",
+							"data-uid": "src/pages/Index.tsx:209:15",
 							"data-prohibitions": "[editContent]",
 							className: "mr-2 h-5 w-5 fill-current"
 						}), isSending ? "Enviando..." : isScheduled ? "Agendar Campanha" : "Iniciar Disparo"]
@@ -31742,38 +31800,38 @@ function HistoryLogModal({ dispatchId, campaignName, onClose }) {
 		}, 500);
 	}, [dispatchId]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-		"data-uid": "src/components/history/HistoryLogModal.tsx:55:5",
+		"data-uid": "src/components/history/HistoryLogModal.tsx:54:5",
 		"data-prohibitions": "[editContent]",
 		open: !!dispatchId,
 		onOpenChange: (o) => !o && onClose(),
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-			"data-uid": "src/components/history/HistoryLogModal.tsx:56:7",
+			"data-uid": "src/components/history/HistoryLogModal.tsx:55:7",
 			"data-prohibitions": "[editContent]",
 			className: "max-w-4xl border-primary/20 bg-card p-0 overflow-hidden flex flex-col max-h-[85vh]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-				"data-uid": "src/components/history/HistoryLogModal.tsx:57:9",
+				"data-uid": "src/components/history/HistoryLogModal.tsx:56:9",
 				"data-prohibitions": "[editContent]",
 				className: "p-6 pb-4 border-b border-border bg-secondary/30",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/history/HistoryLogModal.tsx:58:11",
+					"data-uid": "src/components/history/HistoryLogModal.tsx:57:11",
 					"data-prohibitions": "[editContent]",
 					className: "flex justify-between items-start pr-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/history/HistoryLogModal.tsx:59:13",
+						"data-uid": "src/components/history/HistoryLogModal.tsx:58:13",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogTitle, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:60:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:59:15",
 							"data-prohibitions": "[editContent]",
 							className: "text-xl",
 							children: [campaignName, " — Logs"]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:61:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:60:15",
 							"data-prohibitions": "[]",
 							className: "mt-1",
 							children: "Relatório detalhado de entrega"
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/components/history/HistoryLogModal.tsx:63:13",
+						"data-uid": "src/components/history/HistoryLogModal.tsx:62:13",
 						"data-prohibitions": "[]",
 						variant: "outline",
 						size: "sm",
@@ -31781,62 +31839,59 @@ function HistoryLogModal({ dispatchId, campaignName, onClose }) {
 						onClick: () => downloadCsv(`logs_${campaignName}.csv`, logs),
 						disabled: loading || logs.length === 0,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Download, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:70:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:69:15",
 							"data-prohibitions": "[editContent]",
 							className: "w-4 h-4"
 						}), " Exportar CSV"]
 					})]
 				})
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/history/HistoryLogModal.tsx:74:9",
+				"data-uid": "src/components/history/HistoryLogModal.tsx:73:9",
 				"data-prohibitions": "[editContent]",
 				className: "flex-1 overflow-auto custom-scrollbar p-4",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/history/HistoryLogModal.tsx:75:11",
+					"data-uid": "src/components/history/HistoryLogModal.tsx:74:11",
 					"data-prohibitions": "[editContent]",
 					className: "border rounded-md border-border bg-background",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, {
-						"data-uid": "src/components/history/HistoryLogModal.tsx:76:13",
+						"data-uid": "src/components/history/HistoryLogModal.tsx:75:13",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:77:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:76:15",
 							"data-prohibitions": "[]",
 							className: "bg-secondary/40 sticky top-0 z-10 backdrop-blur-sm",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/components/history/HistoryLogModal.tsx:78:17",
+								"data-uid": "src/components/history/HistoryLogModal.tsx:77:17",
 								"data-prohibitions": "[]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:79:19",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:78:19",
 										"data-prohibitions": "[]",
 										className: "w-12",
 										children: "#"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+										"data-uid": "src/components/history/HistoryLogModal.tsx:79:19",
+										"data-prohibitions": "[]",
+										children: "Destinatário"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 										"data-uid": "src/components/history/HistoryLogModal.tsx:80:19",
 										"data-prohibitions": "[]",
-										children: "Nome"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:81:19",
-										"data-prohibitions": "[]",
-										children: "Telefone"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:82:19",
-										"data-prohibitions": "[]",
-										children: "Status"
+										id: "log-th-numero",
+										className: "hidden",
+										children: "Número"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 										"data-uid": "src/components/history/HistoryLogModal.tsx:83:19",
 										"data-prohibitions": "[]",
-										children: "Erro"
+										children: "Status"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 										"data-uid": "src/components/history/HistoryLogModal.tsx:84:19",
 										"data-prohibitions": "[]",
 										className: "text-right",
-										children: "Horário"
+										children: "Hora"
 									})
 								]
 							})
@@ -31849,7 +31904,7 @@ function HistoryLogModal({ dispatchId, campaignName, onClose }) {
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 									"data-uid": "src/components/history/HistoryLogModal.tsx:90:21",
 									"data-prohibitions": "[]",
-									colSpan: 6,
+									colSpan: 5,
 									className: "text-center py-8 text-muted-foreground",
 									children: "Carregando logs..."
 								})
@@ -31863,37 +31918,50 @@ function HistoryLogModal({ dispatchId, campaignName, onClose }) {
 										className: "text-muted-foreground text-xs",
 										children: log.index
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
 										"data-uid": "src/components/history/HistoryLogModal.tsx:98:23",
 										"data-prohibitions": "[editContent]",
-										className: "font-medium",
-										children: log.name
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:99:23",
-										"data-prohibitions": "[editContent]",
-										className: "font-mono text-xs",
-										children: log.phone
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:100:23",
-										"data-prohibitions": "[editContent]",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-											"data-uid": "src/components/history/HistoryLogModal.tsx:101:25",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/components/history/HistoryLogModal.tsx:99:25",
 											"data-prohibitions": "[editContent]",
-											variant: "outline",
-											className: log.status === "Enviado" ? "text-green-500 border-green-500/30 bg-green-500/10" : "text-red-500 border-red-500/30 bg-red-500/10",
-											children: log.status
+											className: "font-medium",
+											children: log.name
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/components/history/HistoryLogModal.tsx:100:25",
+											"data-prohibitions": "[editContent]",
+											className: "font-mono text-xs text-muted-foreground",
+											children: log.phone
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/components/history/HistoryLogModal.tsx:102:23",
+										"data-prohibitions": "[]",
+										className: "hidden",
+										children: "-"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/components/history/HistoryLogModal.tsx:103:23",
+										"data-prohibitions": "[editContent]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/components/history/HistoryLogModal.tsx:104:25",
+											"data-prohibitions": "[editContent]",
+											className: "flex items-center flex-wrap gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+												"data-uid": "src/components/history/HistoryLogModal.tsx:105:27",
+												"data-prohibitions": "[editContent]",
+												variant: "outline",
+												className: log.status === "Enviado" ? "text-green-500 border-green-500/30 bg-green-500/10" : "text-red-500 border-red-500/30 bg-red-500/10",
+												children: log.status
+											}), log.error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"data-uid": "src/components/history/HistoryLogModal.tsx:115:41",
+												"data-prohibitions": "[editContent]",
+												className: "text-xs text-red-400",
+												children: log.error
+											})]
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:112:23",
-										"data-prohibitions": "[editContent]",
-										className: "text-xs text-red-400",
-										children: log.error || "-"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:113:23",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:118:23",
 										"data-prohibitions": "[editContent]",
 										className: "text-right text-xs text-muted-foreground",
 										children: log.time
@@ -32603,6 +32671,7 @@ function Config() {
 	const [copied, setCopied] = (0, import_react.useState)(false);
 	const [mappingModalOpen, setMappingModalOpen] = (0, import_react.useState)(false);
 	const [googleJson, setGoogleJson] = (0, import_react.useState)("");
+	const [hasGoogleCredentials, setHasGoogleCredentials] = (0, import_react.useState)(false);
 	const [feedback, setFeedback] = (0, import_react.useState)(null);
 	const [mappings, setMappings] = (0, import_react.useState)([{
 		id: "81963654",
@@ -32615,7 +32684,6 @@ function Config() {
 		id: "",
 		email: ""
 	});
-	const isGoogleConfigured = googleJson && isValidJson(googleJson);
 	function isValidJson(str) {
 		try {
 			JSON.parse(str);
@@ -32624,24 +32692,63 @@ function Config() {
 			return false;
 		}
 	}
+	const loadInstances = () => {};
+	const loadConfig = async () => {
+		try {
+			if ((await fetch("/api/credentials").then((r) => r.json())).has_google_credentials) setHasGoogleCredentials(true);
+		} catch {}
+		loadInstances();
+	};
+	(0, import_react.useEffect)(() => {
+		loadConfig();
+	}, []);
 	const handleCopy = () => {
 		navigator.clipboard.writeText("https://api.bulksender.adapta.org/webhook/hs-xyz123");
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2e3);
 	};
-	const handleSave = () => {
-		if (googleJson && !isValidJson(googleJson)) {
+	const saveConfig = async () => {
+		if (googleJson) {
+			if (!isValidJson(googleJson)) {
+				setFeedback({
+					type: "error",
+					msg: "JSON do Google Credentials inválido."
+				});
+				return;
+			}
+			try {
+				const existing = await fetch("/api/credentials").then((r) => r.json()).catch(() => ({}));
+				const merged = {
+					evolution_api_url: existing.evolution_api_url,
+					evolution_api_key: existing.evolution_api_key,
+					instance_name: existing.instance_name,
+					google_credentials: JSON.parse(googleJson)
+				};
+				await fetch("/api/credentials", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(merged)
+				});
+				setGoogleJson("");
+				setHasGoogleCredentials(true);
+				setFeedback({
+					type: "success",
+					msg: "Credenciais Google salvas com sucesso!"
+				});
+				setTimeout(() => setFeedback(null), 4e3);
+			} catch (e) {
+				setFeedback({
+					type: "error",
+					msg: "Erro ao salvar."
+				});
+			}
+		} else {
 			setFeedback({
-				type: "error",
-				msg: "JSON do Google Credentials inválido."
+				type: "success",
+				msg: "Configurações globais salvas com sucesso!"
 			});
-			return;
+			setTimeout(() => setFeedback(null), 4e3);
 		}
-		setFeedback({
-			type: "success",
-			msg: "Configurações globais salvas com sucesso!"
-		});
-		setTimeout(() => setFeedback(null), 4e3);
 	};
 	const handleAddMapping = () => {
 		if (!/^\d+$/.test(newMapping.id)) {
@@ -32667,73 +32774,73 @@ function Config() {
 	};
 	const canSeeAdvanced = user?.role === "SuperAdmin" || user?.role === "Elite";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Config.tsx:89:5",
+		"data-uid": "src/pages/Config.tsx:138:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-12",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Config.tsx:90:7",
+				"data-uid": "src/pages/Config.tsx:139:7",
 				"data-prohibitions": "[]",
 				className: "flex justify-between items-center",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Config.tsx:91:9",
+					"data-uid": "src/pages/Config.tsx:140:9",
 					"data-prohibitions": "[]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-						"data-uid": "src/pages/Config.tsx:92:11",
+						"data-uid": "src/pages/Config.tsx:141:11",
 						"data-prohibitions": "[]",
 						className: "text-3xl font-bold",
 						children: "Configuração"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/Config.tsx:93:11",
+						"data-uid": "src/pages/Config.tsx:142:11",
 						"data-prohibitions": "[]",
 						className: "text-muted-foreground mt-1",
 						children: "Gerencie integrações e credenciais da API."
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					"data-uid": "src/pages/Config.tsx:95:9",
+					"data-uid": "src/pages/Config.tsx:144:9",
 					"data-prohibitions": "[]",
-					onClick: handleSave,
+					onClick: saveConfig,
 					className: "gap-2 font-bold shadow-lg shadow-primary/20",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, {
-						"data-uid": "src/pages/Config.tsx:96:11",
+						"data-uid": "src/pages/Config.tsx:145:11",
 						"data-prohibitions": "[editContent]",
 						className: "w-4 h-4"
 					}), " Salvar Alterações"]
 				})]
 			}),
 			feedback && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Config.tsx:101:9",
+				"data-uid": "src/pages/Config.tsx:150:9",
 				"data-prohibitions": "[editContent]",
 				className: cn$1("p-4 rounded-md font-medium text-sm border animate-in slide-in-from-top-2", feedback.type === "success" ? "bg-green-500/10 text-green-600 border-green-500/20" : "bg-red-500/10 text-red-600 border-red-500/20"),
 				children: feedback.msg
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
-				"data-uid": "src/pages/Config.tsx:113:7",
+				"data-uid": "src/pages/Config.tsx:162:7",
 				"data-prohibitions": "[editContent]",
 				defaultValue: "evolution",
 				className: "w-full",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
-						"data-uid": "src/pages/Config.tsx:114:9",
+						"data-uid": "src/pages/Config.tsx:163:9",
 						"data-prohibitions": "[editContent]",
 						className: "flex w-full mb-6 bg-secondary/50 p-1",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-								"data-uid": "src/pages/Config.tsx:115:11",
+								"data-uid": "src/pages/Config.tsx:164:11",
 								"data-prohibitions": "[]",
 								value: "evolution",
 								className: "flex-1",
 								children: "Números WhatsApp"
 							}),
 							canSeeAdvanced && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-								"data-uid": "src/pages/Config.tsx:119:13",
+								"data-uid": "src/pages/Config.tsx:168:13",
 								"data-prohibitions": "[]",
 								value: "hubspot",
 								className: "flex-1",
 								children: "HubSpot"
 							}),
 							user?.role === "SuperAdmin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-								"data-uid": "src/pages/Config.tsx:124:13",
+								"data-uid": "src/pages/Config.tsx:173:13",
 								"data-prohibitions": "[]",
 								value: "google",
 								className: "flex-1",
@@ -32742,51 +32849,52 @@ function Config() {
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-						"data-uid": "src/pages/Config.tsx:130:9",
+						"data-uid": "src/pages/Config.tsx:179:9",
 						"data-prohibitions": "[]",
 						value: "evolution",
 						className: "mt-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WhatsAppInstances, {
-							"data-uid": "src/pages/Config.tsx:131:11",
+							"data-uid": "src/pages/Config.tsx:180:11",
 							"data-prohibitions": "[editContent]"
 						})
 					}),
 					user?.role === "SuperAdmin" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-						"data-uid": "src/pages/Config.tsx:135:11",
+						"data-uid": "src/pages/Config.tsx:184:11",
 						"data-prohibitions": "[editContent]",
 						value: "google",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:136:13",
+							"data-uid": "src/pages/Config.tsx:185:13",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-md border-border/50",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:137:15",
+								"data-uid": "src/pages/Config.tsx:186:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-row items-center justify-between",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:138:17",
+									"data-uid": "src/pages/Config.tsx:187:17",
 									"data-prohibitions": "[]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-										"data-uid": "src/pages/Config.tsx:139:19",
+										"data-uid": "src/pages/Config.tsx:188:19",
 										"data-prohibitions": "[]",
 										children: "Google Service Account"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-										"data-uid": "src/pages/Config.tsx:140:19",
+										"data-uid": "src/pages/Config.tsx:189:19",
 										"data-prohibitions": "[]",
 										className: "mt-1",
 										children: "Cole o JSON de credenciais para leitura de planilhas"
 									})]
-								}), isGoogleConfigured && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-									"data-uid": "src/pages/Config.tsx:145:19",
+								}), hasGoogleCredentials && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									"data-uid": "src/pages/Config.tsx:194:19",
 									"data-prohibitions": "[]",
+									id: "google-creds-badge",
 									className: "bg-green-500/20 text-green-600 border-green-500/30 font-medium",
 									children: "Credenciais Google configuradas"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:150:15",
+								"data-uid": "src/pages/Config.tsx:202:15",
 								"data-prohibitions": "[]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-									"data-uid": "src/pages/Config.tsx:151:17",
+									"data-uid": "src/pages/Config.tsx:203:17",
 									"data-prohibitions": "[editContent]",
 									value: googleJson,
 									onChange: (e) => setGoogleJson(e.target.value),
@@ -32797,51 +32905,51 @@ function Config() {
 						})
 					}),
 					canSeeAdvanced && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsContent, {
-						"data-uid": "src/pages/Config.tsx:163:11",
+						"data-uid": "src/pages/Config.tsx:215:11",
 						"data-prohibitions": "[editContent]",
 						value: "hubspot",
 						className: "space-y-6",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:164:13",
+							"data-uid": "src/pages/Config.tsx:216:13",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-md border-border/50",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:165:15",
+								"data-uid": "src/pages/Config.tsx:217:15",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/Config.tsx:166:17",
+									"data-uid": "src/pages/Config.tsx:218:17",
 									"data-prohibitions": "[]",
 									children: "Webhook Setup"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-									"data-uid": "src/pages/Config.tsx:167:17",
+									"data-uid": "src/pages/Config.tsx:219:17",
 									"data-prohibitions": "[]",
 									children: "Use this URL in your HubSpot workflows to trigger dispatches"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:171:15",
+								"data-uid": "src/pages/Config.tsx:223:15",
 								"data-prohibitions": "[editContent]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:172:17",
+									"data-uid": "src/pages/Config.tsx:224:17",
 									"data-prohibitions": "[editContent]",
 									className: "flex gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/pages/Config.tsx:173:19",
+										"data-uid": "src/pages/Config.tsx:225:19",
 										"data-prohibitions": "[editContent]",
 										readOnly: true,
 										value: "https://api.bulksender.adapta.org/webhook/hs-xyz123",
 										className: "font-mono text-sm bg-secondary/30 text-muted-foreground"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-										"data-uid": "src/pages/Config.tsx:178:19",
+										"data-uid": "src/pages/Config.tsx:230:19",
 										"data-prohibitions": "[editContent]",
 										variant: "outline",
 										onClick: handleCopy,
 										className: "w-24 border-primary/30 text-primary hover:bg-primary/10",
 										children: copied ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
-											"data-uid": "src/pages/Config.tsx:183:31",
+											"data-uid": "src/pages/Config.tsx:235:31",
 											"data-prohibitions": "[editContent]",
 											className: "w-4 h-4"
 										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, {
-											"data-uid": "src/pages/Config.tsx:183:63",
+											"data-uid": "src/pages/Config.tsx:235:63",
 											"data-prohibitions": "[editContent]",
 											className: "w-4 h-4"
 										})
@@ -32849,98 +32957,98 @@ function Config() {
 								})
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/Config.tsx:189:13",
+							"data-uid": "src/pages/Config.tsx:241:13",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-md border-border/50",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/Config.tsx:190:15",
+								"data-uid": "src/pages/Config.tsx:242:15",
 								"data-prohibitions": "[]",
 								className: "flex flex-row items-center justify-between",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:191:17",
+									"data-uid": "src/pages/Config.tsx:243:17",
 									"data-prohibitions": "[]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-										"data-uid": "src/pages/Config.tsx:192:19",
+										"data-uid": "src/pages/Config.tsx:244:19",
 										"data-prohibitions": "[]",
 										children: "Mapeamento de Proprietários"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-										"data-uid": "src/pages/Config.tsx:193:19",
+										"data-uid": "src/pages/Config.tsx:245:19",
 										"data-prohibitions": "[]",
 										className: "mt-1",
 										children: "Vincule os IDs do HubSpot com os emails do sistema"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-									"data-uid": "src/pages/Config.tsx:197:17",
+									"data-uid": "src/pages/Config.tsx:249:17",
 									"data-prohibitions": "[]",
 									onClick: () => setMappingModalOpen(true),
 									size: "sm",
 									className: "gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
-										"data-uid": "src/pages/Config.tsx:198:19",
+										"data-uid": "src/pages/Config.tsx:250:19",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4"
 									}), " Novo Mapeamento"]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-								"data-uid": "src/pages/Config.tsx:201:15",
+								"data-uid": "src/pages/Config.tsx:253:15",
 								"data-prohibitions": "[editContent]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Config.tsx:202:17",
+									"data-uid": "src/pages/Config.tsx:254:17",
 									"data-prohibitions": "[editContent]",
 									className: "space-y-3",
 									children: [mappings.map((mapping, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Config.tsx:204:21",
+										"data-uid": "src/pages/Config.tsx:256:21",
 										"data-prohibitions": "[editContent]",
 										className: "flex items-center gap-4 p-3 bg-secondary/20 rounded-md border border-border",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/Config.tsx:208:23",
+												"data-uid": "src/pages/Config.tsx:260:23",
 												"data-prohibitions": "[editContent]",
 												className: "flex-1 space-y-1",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:209:25",
+													"data-uid": "src/pages/Config.tsx:261:25",
 													"data-prohibitions": "[]",
 													className: "text-xs text-muted-foreground",
 													children: "HubSpot ID"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:210:25",
+													"data-uid": "src/pages/Config.tsx:262:25",
 													"data-prohibitions": "[editContent]",
 													className: "font-mono text-sm",
 													children: mapping.id
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/Config.tsx:212:23",
+												"data-uid": "src/pages/Config.tsx:264:23",
 												"data-prohibitions": "[editContent]",
 												className: "flex-1 space-y-1",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:213:25",
+													"data-uid": "src/pages/Config.tsx:265:25",
 													"data-prohibitions": "[]",
 													className: "text-xs text-muted-foreground",
 													children: "Email Interno"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													"data-uid": "src/pages/Config.tsx:214:25",
+													"data-uid": "src/pages/Config.tsx:266:25",
 													"data-prohibitions": "[editContent]",
 													className: "font-medium text-sm",
 													children: mapping.email
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-												"data-uid": "src/pages/Config.tsx:216:23",
+												"data-uid": "src/pages/Config.tsx:268:23",
 												"data-prohibitions": "[]",
 												variant: "ghost",
 												size: "icon",
 												onClick: () => removeMapping(idx),
 												className: "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
-													"data-uid": "src/pages/Config.tsx:222:25",
+													"data-uid": "src/pages/Config.tsx:274:25",
 													"data-prohibitions": "[editContent]",
 													className: "w-4 h-4"
 												})
 											})
 										]
 									}, idx)), mappings.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										"data-uid": "src/pages/Config.tsx:227:21",
+										"data-uid": "src/pages/Config.tsx:279:21",
 										"data-prohibitions": "[]",
 										className: "text-center text-sm text-muted-foreground py-4",
 										children: "Nenhum mapeamento configurado."
@@ -32952,38 +33060,38 @@ function Config() {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-				"data-uid": "src/pages/Config.tsx:238:7",
+				"data-uid": "src/pages/Config.tsx:290:7",
 				"data-prohibitions": "[]",
 				open: mappingModalOpen,
 				onOpenChange: setMappingModalOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-					"data-uid": "src/pages/Config.tsx:239:9",
+					"data-uid": "src/pages/Config.tsx:291:9",
 					"data-prohibitions": "[]",
 					className: "backdrop-blur-sm sm:max-w-md",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-							"data-uid": "src/pages/Config.tsx:240:11",
+							"data-uid": "src/pages/Config.tsx:292:11",
 							"data-prohibitions": "[]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
-								"data-uid": "src/pages/Config.tsx:241:13",
+								"data-uid": "src/pages/Config.tsx:293:13",
 								"data-prohibitions": "[]",
 								children: "Novo Mapeamento"
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Config.tsx:243:11",
+							"data-uid": "src/pages/Config.tsx:295:11",
 							"data-prohibitions": "[]",
 							className: "space-y-4 py-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Config.tsx:244:13",
+								"data-uid": "src/pages/Config.tsx:296:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-									"data-uid": "src/pages/Config.tsx:245:15",
+									"data-uid": "src/pages/Config.tsx:297:15",
 									"data-prohibitions": "[]",
 									children: "ID do Proprietário no HubSpot"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Config.tsx:246:15",
+									"data-uid": "src/pages/Config.tsx:298:15",
 									"data-prohibitions": "[editContent]",
 									placeholder: "ex: 81963654",
 									value: newMapping.id,
@@ -32993,15 +33101,15 @@ function Config() {
 									})
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Config.tsx:252:13",
+								"data-uid": "src/pages/Config.tsx:304:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-									"data-uid": "src/pages/Config.tsx:253:15",
+									"data-uid": "src/pages/Config.tsx:305:15",
 									"data-prohibitions": "[]",
 									children: "Email no sistema"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Config.tsx:254:15",
+									"data-uid": "src/pages/Config.tsx:306:15",
 									"data-prohibitions": "[editContent]",
 									placeholder: "ex: kimberly@adapta.org",
 									type: "email",
@@ -33014,16 +33122,16 @@ function Config() {
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, {
-							"data-uid": "src/pages/Config.tsx:262:11",
+							"data-uid": "src/pages/Config.tsx:314:11",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Config.tsx:263:13",
+								"data-uid": "src/pages/Config.tsx:315:13",
 								"data-prohibitions": "[]",
 								variant: "outline",
 								onClick: () => setMappingModalOpen(false),
 								children: "Cancelar"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Config.tsx:266:13",
+								"data-uid": "src/pages/Config.tsx:318:13",
 								"data-prohibitions": "[]",
 								onClick: handleAddMapping,
 								disabled: !newMapping.id || !newMapping.email,
@@ -33542,4 +33650,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-BALlAEDX.js.map
+//# sourceMappingURL=index-Bc4Y4wO1.js.map

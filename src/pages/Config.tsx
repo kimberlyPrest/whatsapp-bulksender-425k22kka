@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -27,6 +27,7 @@ export default function Config() {
 
   // API State
   const [googleJson, setGoogleJson] = useState('')
+  const [hasGoogleCredentials, setHasGoogleCredentials] = useState(false)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
 
   // Mock mappings
@@ -35,8 +36,6 @@ export default function Config() {
     { id: '81963655', email: 'matheus@adapta.org' },
   ])
   const [newMapping, setNewMapping] = useState({ id: '', email: '' })
-
-  const isGoogleConfigured = googleJson && isValidJson(googleJson)
 
   function isValidJson(str: string) {
     try {
@@ -47,19 +46,69 @@ export default function Config() {
     }
   }
 
+  const loadInstances = () => {
+    // Logic to load instances could go here if needed per AC
+  }
+
+  const loadConfig = async () => {
+    try {
+      const res = await fetch('/api/credentials').then((r) => r.json())
+      if (res.has_google_credentials) {
+        setHasGoogleCredentials(true)
+      }
+    } catch {
+      // Ignore if fetch fails
+    }
+    loadInstances()
+  }
+
+  useEffect(() => {
+    loadConfig()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleCopy = () => {
     navigator.clipboard.writeText('https://api.bulksender.adapta.org/webhook/hs-xyz123')
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleSave = () => {
-    if (googleJson && !isValidJson(googleJson)) {
-      setFeedback({ type: 'error', msg: 'JSON do Google Credentials inválido.' })
-      return
+  const saveConfig = async () => {
+    if (googleJson) {
+      if (!isValidJson(googleJson)) {
+        setFeedback({ type: 'error', msg: 'JSON do Google Credentials inválido.' })
+        return
+      }
+
+      try {
+        const existing = await fetch('/api/credentials')
+          .then((r) => r.json())
+          .catch(() => ({}))
+
+        const merged = {
+          evolution_api_url: existing.evolution_api_url,
+          evolution_api_key: existing.evolution_api_key,
+          instance_name: existing.instance_name,
+          google_credentials: JSON.parse(googleJson),
+        }
+
+        await fetch('/api/credentials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(merged),
+        })
+
+        setGoogleJson('')
+        setHasGoogleCredentials(true)
+        setFeedback({ type: 'success', msg: 'Credenciais Google salvas com sucesso!' })
+        setTimeout(() => setFeedback(null), 4000)
+      } catch (e) {
+        setFeedback({ type: 'error', msg: 'Erro ao salvar.' })
+      }
+    } else {
+      setFeedback({ type: 'success', msg: 'Configurações globais salvas com sucesso!' })
+      setTimeout(() => setFeedback(null), 4000)
     }
-    setFeedback({ type: 'success', msg: 'Configurações globais salvas com sucesso!' })
-    setTimeout(() => setFeedback(null), 4000)
   }
 
   const handleAddMapping = () => {
@@ -92,7 +141,7 @@ export default function Config() {
           <h1 className="text-3xl font-bold">Configuração</h1>
           <p className="text-muted-foreground mt-1">Gerencie integrações e credenciais da API.</p>
         </div>
-        <Button onClick={handleSave} className="gap-2 font-bold shadow-lg shadow-primary/20">
+        <Button onClick={saveConfig} className="gap-2 font-bold shadow-lg shadow-primary/20">
           <Save className="w-4 h-4" /> Salvar Alterações
         </Button>
       </div>
@@ -141,8 +190,11 @@ export default function Config() {
                     Cole o JSON de credenciais para leitura de planilhas
                   </CardDescription>
                 </div>
-                {isGoogleConfigured && (
-                  <Badge className="bg-green-500/20 text-green-600 border-green-500/30 font-medium">
+                {hasGoogleCredentials && (
+                  <Badge
+                    id="google-creds-badge"
+                    className="bg-green-500/20 text-green-600 border-green-500/30 font-medium"
+                  >
                     Credenciais Google configuradas
                   </Badge>
                 )}

@@ -16,7 +16,8 @@ import { api } from '@/lib/api'
 import { useDispatchSimulation } from '@/hooks/useDispatchSimulation'
 
 export default function Index() {
-  const { selectedContacts, setSelectedContacts, instances } = useAppStore()
+  const { selectedContacts, setSelectedContacts, instances, sourceType, sourceFilename, sheetUrl } =
+    useAppStore()
   const { toast } = useToast()
   const { start: simulateStart, stop: simulateStop } = useDispatchSimulation()
 
@@ -63,22 +64,56 @@ export default function Index() {
     if (!message) return toast({ title: 'Escreva uma mensagem', variant: 'destructive' })
 
     const activeInstances = instances.filter((i) => i.status === 'connected')
-    if (activeInstances.length >= 2) {
-      if (distConfig.selection.length === 0) {
+
+    const selectorSection = document.getElementById('instance-selector-section')
+    let instance_ids: string[] = []
+    let instance_distribution: { instance_id: string; percent: number }[] = []
+
+    if (selectorSection && activeInstances.length >= 2) {
+      const checkedInputs = selectorSection.querySelectorAll(
+        '.inst-selector-check:checked',
+      ) as NodeListOf<HTMLInputElement>
+      if (checkedInputs.length === 0) {
         return toast({ title: 'Selecione pelo menos um número de envio', variant: 'destructive' })
       }
-      if (!distConfig.isValid) {
-        return toast({
-          title: 'Distribuição inválida',
-          description: 'A soma das porcentagens deve ser 100%.',
-          variant: 'destructive',
+
+      checkedInputs.forEach((input) => {
+        instance_ids.push(input.value)
+      })
+
+      if (distConfig.mode === 'custom') {
+        let sum = 0
+        instance_ids.forEach((id) => {
+          const pctInput = document.getElementById(`inst-pct-${id}`) as HTMLInputElement
+          const val = parseFloat(pctInput?.value || '0')
+          sum += val
+          instance_distribution.push({ instance_id: id, percent: val })
         })
+
+        if (Math.abs(sum - 100) > 0.5) {
+          alert('A soma das porcentagens deve ser 100%.')
+          return
+        }
       }
+    } else if (activeInstances.length > 0) {
+      instance_ids = [activeInstances[0].id]
+    } else {
+      return toast({ title: 'Nenhum número de envio conectado', variant: 'destructive' })
+    }
+
+    const payload = {
+      instance_ids,
+      ...(distConfig.mode === 'custom' ? { instance_distribution } : {}),
+      source_type: sourceType || 'csv',
+      sheet_url: sheetUrl || '',
+      contacts_json: selectedContacts,
+      source_filename: sourceFilename || '',
+      template: message,
     }
 
     if (isScheduled) {
       if (!scheduleDate) return toast({ title: 'Selecione a data', variant: 'destructive' })
-      await api.scheduleDispatch({ message, antiBan, date: scheduleDate, distConfig })
+      await api.scheduleDispatch({ ...payload, antiBan, date: scheduleDate, distConfig })
       toast({ title: 'Disparo Agendado com sucesso!' })
       return
     }
@@ -89,7 +124,7 @@ export default function Index() {
     setSelectedContacts(selectedContacts.map((c) => ({ ...c, status: 'Processando', error: '' })))
 
     try {
-      await api.startDispatch({ message, antiBan, distConfig })
+      await api.startDispatch({ ...payload, antiBan, distConfig })
       const { token } = await api.getStreamToken()
       // Simulate EventSource fallback
       simulateStart(selectedContacts, antiBan, handleEvent)

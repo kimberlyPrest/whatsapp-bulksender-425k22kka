@@ -903,6 +903,10 @@ body {
   height: var(--cell-size);
 }
 
+.h-0{
+  height: 0px;
+}
+
 .h-1{
   height: 0.25rem;
 }
@@ -2873,6 +2877,16 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+.dist-mode-btn.active {
+    background-color: #25d466;
+    color: #0f172a;
+  }
+
+.dist-mode-btn.\!active {
+    background-color: #25d466 !important;
+    color: #0f172a !important;
   }
 
 .\[--cell-size\:2rem\]{

@@ -8,10 +8,10 @@ import useAppStore from '@/stores/useAppStore'
 import { useToast } from '@/hooks/use-toast'
 
 export function SourceTabs() {
-  const { setSelectedContacts } = useAppStore()
+  const { setSelectedContacts, setSourceType, setSourceFilename, sheetUrl, setSheetUrl } =
+    useAppStore()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-  const [sheetUrl, setSheetUrl] = useState('')
   const [fileName, setFileName] = useState('')
 
   const handleSheetLoad = async () => {
@@ -19,6 +19,8 @@ export function SourceTabs() {
     setLoading(true)
     const res = await api.loadFromSheets(sheetUrl)
     setSelectedContacts(res.contacts)
+    setSourceType('sheets')
+    setSourceFilename('Google Sheets')
     toast({ title: 'Planilha Carregada', description: `${res.contacts.length} contatos prontos.` })
     setLoading(false)
   }
@@ -30,6 +32,8 @@ export function SourceTabs() {
     const res = await api.uploadCsv(file)
     setFileName(res.filename)
     setSelectedContacts(res.contacts)
+    setSourceType('csv')
+    setSourceFilename(res.filename)
     toast({ title: 'CSV Carregado', description: `${res.contacts.length} contatos lidos.` })
     setLoading(false)
   }

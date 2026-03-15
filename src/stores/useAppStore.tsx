@@ -40,6 +40,12 @@ interface AppState {
   setSelectedContacts: (contacts: Contact[]) => void
   instances: WhatsAppInstance[]
   setInstances: (instances: WhatsAppInstance[]) => void
+  sourceType: 'csv' | 'sheets' | ''
+  setSourceType: (type: 'csv' | 'sheets' | '') => void
+  sourceFilename: string
+  setSourceFilename: (name: string) => void
+  sheetUrl: string
+  setSheetUrl: (url: string) => void
 }
 
 const AppContext = createContext<AppState | null>(null)
@@ -47,6 +53,10 @@ const AppContext = createContext<AppState | null>(null)
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([])
+
+  const [sourceType, setSourceType] = useState<'csv' | 'sheets' | ''>('')
+  const [sourceFilename, setSourceFilename] = useState('')
+  const [sheetUrl, setSheetUrl] = useState('')
 
   // Mock instances to enable Instance Selection testing
   const [instances, setInstances] = useState<WhatsAppInstance[]>([
@@ -65,6 +75,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setSelectedContacts,
         instances,
         setInstances,
+        sourceType,
+        setSourceType,
+        sourceFilename,
+        setSourceFilename,
+        sheetUrl,
+        setSheetUrl,
       }}
     >
       {children}

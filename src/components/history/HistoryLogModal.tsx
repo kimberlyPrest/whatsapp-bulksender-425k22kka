@@ -18,7 +18,6 @@ import { Download } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { downloadCsv } from '@/lib/export'
 import { useEffect, useState } from 'react'
-import { api } from '@/lib/api'
 import { Contact } from '@/stores/useAppStore'
 
 interface Props {
@@ -77,17 +76,18 @@ export function HistoryLogModal({ dispatchId, campaignName, onClose }: Props) {
               <TableHeader className="bg-secondary/40 sticky top-0 z-10 backdrop-blur-sm">
                 <TableRow>
                   <TableHead className="w-12">#</TableHead>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Telefone</TableHead>
+                  <TableHead>Destinatário</TableHead>
+                  <TableHead id="log-th-numero" className="hidden">
+                    Número
+                  </TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Erro</TableHead>
-                  <TableHead className="text-right">Horário</TableHead>
+                  <TableHead className="text-right">Hora</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                       Carregando logs...
                     </TableCell>
                   </TableRow>
@@ -95,21 +95,26 @@ export function HistoryLogModal({ dispatchId, campaignName, onClose }: Props) {
                   logs.map((log) => (
                     <TableRow key={log.id}>
                       <TableCell className="text-muted-foreground text-xs">{log.index}</TableCell>
-                      <TableCell className="font-medium">{log.name}</TableCell>
-                      <TableCell className="font-mono text-xs">{log.phone}</TableCell>
                       <TableCell>
-                        <Badge
-                          variant="outline"
-                          className={
-                            log.status === 'Enviado'
-                              ? 'text-green-500 border-green-500/30 bg-green-500/10'
-                              : 'text-red-500 border-red-500/30 bg-red-500/10'
-                          }
-                        >
-                          {log.status}
-                        </Badge>
+                        <div className="font-medium">{log.name}</div>
+                        <div className="font-mono text-xs text-muted-foreground">{log.phone}</div>
                       </TableCell>
-                      <TableCell className="text-xs text-red-400">{log.error || '-'}</TableCell>
+                      <TableCell className="hidden">-</TableCell>
+                      <TableCell>
+                        <div className="flex items-center flex-wrap gap-2">
+                          <Badge
+                            variant="outline"
+                            className={
+                              log.status === 'Enviado'
+                                ? 'text-green-500 border-green-500/30 bg-green-500/10'
+                                : 'text-red-500 border-red-500/30 bg-red-500/10'
+                            }
+                          >
+                            {log.status}
+                          </Badge>
+                          {log.error && <span className="text-xs text-red-400">{log.error}</span>}
+                        </div>
+                      </TableCell>
                       <TableCell className="text-right text-xs text-muted-foreground">
                         {log.time}
                       </TableCell>
