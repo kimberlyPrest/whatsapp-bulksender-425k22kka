@@ -2,11 +2,16 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 
 export interface Contact {
   id: string
+  index: number
   name: string
   phone: string
-  product: string
-  stage: string
-  days: number
+  status: 'Pronto' | 'Enviado' | 'Erro' | 'Processando'
+  error?: string
+  time?: string
+  // Legacy fields for clients page
+  product?: string
+  stage?: string
+  days?: number
   owner?: string
 }
 

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,43 +6,44 @@
 
 @layer base {
   :root {
-    --background: 222.2 47.4% 11.2%;
+    /* Refined Dark Theme typical for WhatsApp style tools */
+    --background: 220 13% 13%; /* Very dark grey, almost black */
     --foreground: 210 40% 96.1%;
 
-    --card: 217.2 32.6% 17.5%;
+    --card: 220 13% 15%; /* Slightly lighter than bg */
     --card-foreground: 210 40% 96.1%;
 
-    --popover: 217.2 32.6% 17.5%;
+    --popover: 220 13% 15%;
     --popover-foreground: 210 40% 96.1%;
 
-    --primary: 142.1 70.6% 48.8%;
+    --primary: 142.1 70.6% 48.8%; /* WhatsApp Green #25d466 approx */
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 215 25% 26.7%;
+    --secondary: 220 13% 20%;
     --secondary-foreground: 210 40% 96.1%;
 
-    --muted: 215 25% 26.7%;
+    --muted: 220 13% 20%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 215 25% 26.7%;
+    --accent: 220 13% 20%;
     --accent-foreground: 210 40% 96.1%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 25% 26.7%;
-    --input: 215 25% 26.7%;
+    --border: 220 13% 20%;
+    --input: 220 13% 20%;
     --ring: 142.1 70.6% 48.8%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 217.2 32.6% 17.5%;
+    --sidebar-background: 220 13% 11%;
     --sidebar-foreground: 210 40% 96.1%;
     --sidebar-primary: 142.1 70.6% 48.8%;
     --sidebar-primary-foreground: 222.2 47.4% 11.2%;
-    --sidebar-accent: 215 25% 26.7%;
+    --sidebar-accent: 220 13% 18%;
     --sidebar-accent-foreground: 210 40% 96.1%;
-    --sidebar-border: 215 25% 26.7%;
+    --sidebar-border: 220 13% 18%;
     --sidebar-ring: 142.1 70.6% 48.8%;
   }
 
@@ -57,18 +58,22 @@
   @keyframes accordion-down {
     from {
       height: 0;
+      opacity: 0;
     }
     to {
       height: var(--radix-accordion-content-height);
+      opacity: 1;
     }
   }
 
   @keyframes accordion-up {
     from {
       height: var(--radix-accordion-content-height);
+      opacity: 1;
     }
     to {
       height: 0;
+      opacity: 0;
     }
   }
 
@@ -92,6 +97,17 @@
     }
   }
 
+  @keyframes fade-in-down {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
   .animate-accordion-down {
     animation: accordion-down 0.2s ease-out;
   }
@@ -104,9 +120,29 @@
   .animate-fade-in-up {
     animation: fade-in-up 0.4s ease-out;
   }
+  .animate-fade-in-down {
+    animation: fade-in-down 0.3s ease-out forwards;
+  }
 
   .glass-effect {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(10px);
+    background: rgba(30, 35, 41, 0.8);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Custom Scrollbar for better dark mode looks */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--secondary) / 0.5);
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
   }
 }
