@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Play, CalendarClock } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { MessageEditor } from '@/components/dispatch/MessageEditor'
+import { MessageVariations, VariationsState } from '@/components/dispatch/MessageVariations'
 import { AntiBanConfig, AntiBanSettings } from '@/components/dispatch/AntiBanConfig'
 import { ProgressView, StreamEvent } from '@/components/dispatch/ProgressView'
 import { SourceTabs } from '@/components/dispatch/SourceTabs'
@@ -22,8 +23,10 @@ export default function Index() {
   const { start: simulateStart, stop: simulateStop } = useDispatchSimulation()
 
   const [message, setMessage] = useState('')
+  const [variations, setVariations] = useState<VariationsState>({ status: 'idle', data: [] })
   const [isScheduled, setIsScheduled] = useState(false)
   const [scheduleDate, setScheduleDate] = useState('')
+
   const [distConfig, setDistConfig] = useState<DistributionConfig>({
     mode: 'equal',
     selection: [],
@@ -42,6 +45,11 @@ export default function Index() {
   useEffect(() => {
     return () => simulateStop()
   }, [simulateStop])
+
+  // Reset variations when base template changes
+  useEffect(() => {
+    setVariations({ status: 'idle', data: [] })
+  }, [message])
 
   const handleEvent = (ev: StreamEvent) => {
     setEvents((prev) => [...prev, ev])
@@ -69,7 +77,7 @@ export default function Index() {
 
     const activeInstances = instances.filter((i) => i.status === 'connected' && i.is_active)
     if (activeInstances.length === 0)
-      return toast({ title: 'Nenhum número de envio conectado e ativo', variant: 'destructive' })
+      return toast({ title: 'Nenhum número de envio conectado', variant: 'destructive' })
 
     if (distConfig.mode === 'custom' && !distConfig.isValid) {
       return toast({
@@ -86,6 +94,8 @@ export default function Index() {
       contacts_json: selectedContacts,
       source_filename: sourceFilename || '',
       template: message,
+      variations:
+        variations.status === 'approved' && variations.data.length > 0 ? variations.data : [],
     }
 
     if (isScheduled) {
@@ -124,6 +134,15 @@ export default function Index() {
             <CardContent className="p-6 space-y-6">
               <SourceTabs />
               <MessageEditor message={message} setMessage={setMessage} />
+
+              {selectedContacts.length > 0 && message.trim() && (
+                <MessageVariations
+                  template={message}
+                  contactsCount={selectedContacts.length}
+                  variations={variations}
+                  onChange={setVariations}
+                />
+              )}
 
               <InstanceSelector
                 instances={instances}
