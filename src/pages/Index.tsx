@@ -36,7 +36,6 @@ export default function Index() {
     individual: { minDelay: 1, maxDelay: 3 },
   })
 
-  // Dispatch State
   const [isSending, setIsSending] = useState(false)
   const [events, setEvents] = useState<StreamEvent[]>([])
 
@@ -50,7 +49,12 @@ export default function Index() {
       setSelectedContacts(
         selectedContacts.map((c) =>
           c.id === ev.contactId
-            ? { ...c, status: ev.status, error: ev.error, time: new Date().toLocaleTimeString() }
+            ? {
+                ...c,
+                status: ev.status,
+                error: ev.error,
+                time: new Date().toLocaleTimeString('pt-BR'),
+              }
             : c,
         ),
       )
@@ -63,47 +67,20 @@ export default function Index() {
       return toast({ title: 'Adicione contatos', variant: 'destructive' })
     if (!message) return toast({ title: 'Escreva uma mensagem', variant: 'destructive' })
 
-    const activeInstances = instances.filter((i) => i.status === 'connected')
+    const activeInstances = instances.filter((i) => i.status === 'connected' && i.is_active)
+    if (activeInstances.length === 0)
+      return toast({ title: 'Nenhum número de envio conectado e ativo', variant: 'destructive' })
 
-    const selectorSection = document.getElementById('instance-selector-section')
-    let instance_ids: string[] = []
-    let instance_distribution: { instance_id: string; percent: number }[] = []
-
-    if (selectorSection && activeInstances.length >= 2) {
-      const checkedInputs = selectorSection.querySelectorAll(
-        '.inst-selector-check:checked',
-      ) as NodeListOf<HTMLInputElement>
-      if (checkedInputs.length === 0) {
-        return toast({ title: 'Selecione pelo menos um número de envio', variant: 'destructive' })
-      }
-
-      checkedInputs.forEach((input) => {
-        instance_ids.push(input.value)
+    if (distConfig.mode === 'custom' && !distConfig.isValid) {
+      return toast({
+        title: 'A distribuição personalizada deve somar 100%',
+        variant: 'destructive',
       })
-
-      if (distConfig.mode === 'custom') {
-        let sum = 0
-        instance_ids.forEach((id) => {
-          const pctInput = document.getElementById(`inst-pct-${id}`) as HTMLInputElement
-          const val = parseFloat(pctInput?.value || '0')
-          sum += val
-          instance_distribution.push({ instance_id: id, percent: val })
-        })
-
-        if (Math.abs(sum - 100) > 0.5) {
-          alert('A soma das porcentagens deve ser 100%.')
-          return
-        }
-      }
-    } else if (activeInstances.length > 0) {
-      instance_ids = [activeInstances[0].id]
-    } else {
-      return toast({ title: 'Nenhum número de envio conectado', variant: 'destructive' })
     }
 
     const payload = {
-      instance_ids,
-      ...(distConfig.mode === 'custom' ? { instance_distribution } : {}),
+      instance_ids: distConfig.selection.map((s) => s.instanceId),
+      instance_distribution: distConfig.selection,
       source_type: sourceType || 'csv',
       sheet_url: sheetUrl || '',
       contacts_json: selectedContacts,
@@ -120,16 +97,14 @@ export default function Index() {
 
     setIsSending(true)
     setEvents([])
-    // Reset contacts status
     setSelectedContacts(selectedContacts.map((c) => ({ ...c, status: 'Processando', error: '' })))
 
     try {
       await api.startDispatch({ ...payload, antiBan, distConfig })
-      const { token } = await api.getStreamToken()
-      // Simulate EventSource fallback
-      simulateStart(selectedContacts, antiBan, handleEvent)
+      await api.getStreamToken()
+      simulateStart(selectedContacts, antiBan, distConfig, instances, handleEvent)
     } catch {
-      simulateStart(selectedContacts, antiBan, handleEvent)
+      simulateStart(selectedContacts, antiBan, distConfig, instances, handleEvent)
     }
   }
 
@@ -150,7 +125,11 @@ export default function Index() {
               <SourceTabs />
               <MessageEditor message={message} setMessage={setMessage} />
 
-              <InstanceSelector instances={instances} onChange={setDistConfig} />
+              <InstanceSelector
+                instances={instances}
+                totalContacts={selectedContacts.length}
+                onChange={setDistConfig}
+              />
 
               <AntiBanConfig config={antiBan} onChange={setAntiBan} />
 
@@ -187,7 +166,7 @@ export default function Index() {
               total={selectedContacts.length}
               sent={sentCount}
               errorCount={errCount}
-              logs={selectedContacts.filter((c) => c.status === 'Enviado' || c.status === 'Erro')}
+              logs={selectedContacts}
               events={events}
               isSending={isSending}
             />

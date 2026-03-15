@@ -7,57 +7,30 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-
-interface WhatsAppInstance {
-  id: string
-  displayName: string
-  apiUrl: string
-  apiKey: string
-  instanceName: string
-  active: boolean
-}
-
-const MOCK_INSTANCES: WhatsAppInstance[] = [
-  {
-    id: '1',
-    displayName: 'Número Principal',
-    apiUrl: 'https://api.bulksender.adapta.org',
-    apiKey: 'sk_live_123',
-    instanceName: 'main-instance',
-    active: true,
-  },
-]
+import useAppStore, { WhatsAppInstance } from '@/stores/useAppStore'
 
 export default function WhatsAppInstances() {
-  const [instances, setInstances] = useState<WhatsAppInstance[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { instances, setInstances } = useAppStore()
+  const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
-    displayName: '',
-    apiUrl: '',
-    apiKey: '',
-    instanceName: '',
+    display_name: '',
+    api_url: '',
+    api_key: '',
+    instance_name: '',
   })
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInstances(MOCK_INSTANCES)
-      setIsLoading(false)
-    }, 800)
-    return () => clearTimeout(timer)
-  }, [])
 
   const openModal = (inst?: WhatsAppInstance) => {
     setEditingId(inst?.id || null)
     setFormData({
-      displayName: inst?.displayName || '',
-      apiUrl: inst?.apiUrl || '',
-      apiKey: '', // Don't show existing key
-      instanceName: inst?.instanceName || '',
+      display_name: inst?.display_name || '',
+      api_url: inst?.api_url || '',
+      api_key: '',
+      instance_name: inst?.instance_name || '',
     })
     setError(null)
     setIsDeleting(false)
@@ -65,46 +38,61 @@ export default function WhatsAppInstances() {
   }
 
   const handleSave = () => {
-    if (!formData.displayName || !formData.apiUrl || !formData.instanceName) {
+    if (!formData.display_name || !formData.api_url || !formData.instance_name) {
       setError('Por favor, preencha todos os campos obrigatórios.')
-      return
-    }
-    if (!editingId && !formData.apiKey) {
-      setError('A API Key é obrigatória para novos números.')
       return
     }
 
     if (editingId) {
-      setInstances((prev) =>
-        prev.map((i) =>
-          i.id === editingId ? { ...i, ...formData, apiKey: formData.apiKey || i.apiKey } : i,
+      setInstances(
+        instances.map((i) =>
+          i.id === editingId ? { ...i, ...formData, api_key: formData.api_key || i.api_key } : i,
         ),
       )
     } else {
-      setInstances([...instances, { ...formData, id: Date.now().toString(), active: true }])
+      const newId = Date.now().toString()
+      setInstances([
+        ...instances,
+        {
+          ...formData,
+          id: newId,
+          provider: 'Evolution API',
+          status: 'connected',
+          is_active: true,
+        },
+      ])
     }
     setIsModalOpen(false)
   }
 
-  const handleDelete = () => {
-    setInstances((prev) => prev.filter((i) => i.id !== editingId))
+  const handleDelete = async () => {
+    if (!editingId) return
+    // Mock Hard Delete Request
+    await fetch(`/api/whatsapp/instances/${editingId}/hard`, { method: 'DELETE' }).catch(() => {})
+    setInstances(instances.filter((i) => i.id !== editingId))
     setIsModalOpen(false)
   }
 
-  const handleToggleActive = () => {
-    setInstances((prev) => prev.map((i) => (i.id === editingId ? { ...i, active: !i.active } : i)))
+  const handleToggleActive = async () => {
+    if (!editingId) return
+    // Mock Soft Delete Request
+    await fetch(`/api/whatsapp/instances/${editingId}`, { method: 'DELETE' }).catch(() => {})
+    setInstances(instances.map((i) => (i.id === editingId ? { ...i, is_active: !i.is_active } : i)))
     setIsModalOpen(false)
+  }
+
+  const getStatusDot = (status: string) => {
+    if (status === 'connected') return 'bg-green-500'
+    if (status === 'pending_qr') return 'bg-yellow-500 animate-pulse'
+    return 'bg-slate-500'
   }
 
   return (
     <Card className="shadow-md border-border/50 bg-background">
       <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-border/50">
-        <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-          <div>
-            <h2 className="text-xl font-bold">Números WhatsApp</h2>
-            <p className="text-sm text-muted-foreground">Gerencie suas instâncias de envio</p>
-          </div>
+        <div>
+          <h2 className="text-xl font-bold">Números WhatsApp</h2>
+          <p className="text-sm text-muted-foreground">Gerencie suas instâncias de envio</p>
         </div>
         <Button
           onClick={() => openModal()}
@@ -115,7 +103,7 @@ export default function WhatsAppInstances() {
         </Button>
       </CardHeader>
       <CardContent className="pt-6">
-        <div id="instances-list" className="space-y-4">
+        <div className="space-y-4">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground animate-pulse">
               Carregando...
@@ -129,25 +117,39 @@ export default function WhatsAppInstances() {
                 className="flex items-center justify-between p-4 rounded-lg border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div
-                    className={cn(
-                      'p-2 rounded-full',
-                      inst.active ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground',
-                    )}
-                  >
-                    <Smartphone className="w-5 h-5" />
+                  <div className="relative">
+                    <div
+                      className={cn(
+                        'absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-background z-10',
+                        getStatusDot(inst.status),
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        'p-2 rounded-full',
+                        inst.is_active
+                          ? 'bg-primary/20 text-primary'
+                          : 'bg-muted text-muted-foreground',
+                      )}
+                    >
+                      <Smartphone className="w-5 h-5" />
+                    </div>
                   </div>
                   <div>
                     <h4 className="font-semibold text-sm flex items-center gap-2">
-                      {inst.displayName}
-                      {!inst.active && (
-                        <Badge variant="secondary" className="text-[10px] h-4">
-                          Desativado
+                      {inst.display_name}
+                      {!inst.is_active && (
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] h-4 text-red-500 bg-red-500/10 border-red-500/20"
+                        >
+                          Inativo
                         </Badge>
                       )}
                     </h4>
-                    <p className="text-xs text-muted-foreground font-mono mt-1">
-                      {inst.instanceName}
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {inst.provider || 'Evolution'} •{' '}
+                      <span className="font-mono">{inst.instance_name}</span>
                     </p>
                   </div>
                 </div>
@@ -161,20 +163,13 @@ export default function WhatsAppInstances() {
       </CardContent>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="backdrop-blur-sm sm:max-w-md bg-background border-border shadow-2xl z-50">
+        <DialogContent className="backdrop-blur-sm sm:max-w-md bg-background border-border">
           <DialogHeader>
-            <DialogTitle id="instance-modal-title">
-              {editingId ? 'Editar Número' : 'Adicionar Número'}
-            </DialogTitle>
+            <DialogTitle>{editingId ? 'Editar Número' : 'Adicionar Número'}</DialogTitle>
           </DialogHeader>
 
-          <input type="hidden" id="inst-editing-id" value={editingId || ''} />
-
           {error && (
-            <div
-              id="instance-modal-error"
-              className="flex items-center gap-2 p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md"
-            >
+            <div className="flex items-center gap-2 p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <p>{error}</p>
             </div>
@@ -185,18 +180,16 @@ export default function WhatsAppInstances() {
               <Label>Nome de exibição</Label>
               <Input
                 placeholder="Ex: Número Principal"
-                value={formData.displayName}
-                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                className="bg-secondary/30"
+                value={formData.display_name}
+                onChange={(e) => setFormData({ ...formData, display_name: e.target.value })}
               />
             </div>
             <div className="space-y-2">
               <Label>URL da API</Label>
               <Input
                 placeholder="https://sua-instancia.exemplo.com"
-                value={formData.apiUrl}
-                onChange={(e) => setFormData({ ...formData, apiUrl: e.target.value })}
-                className="bg-secondary/30"
+                value={formData.api_url}
+                onChange={(e) => setFormData({ ...formData, api_url: e.target.value })}
               />
             </div>
             <div className="space-y-2">
@@ -204,9 +197,8 @@ export default function WhatsAppInstances() {
               <Input
                 type="password"
                 placeholder="••••••••••••••••"
-                value={formData.apiKey}
-                onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })}
-                className="bg-secondary/30"
+                value={formData.api_key}
+                onChange={(e) => setFormData({ ...formData, api_key: e.target.value })}
               />
               {editingId && (
                 <p className="text-xs text-muted-foreground">
@@ -218,27 +210,19 @@ export default function WhatsAppInstances() {
               <Label>Nome da Instância</Label>
               <Input
                 placeholder="minha-instancia"
-                value={formData.instanceName}
-                onChange={(e) => setFormData({ ...formData, instanceName: e.target.value })}
-                className="bg-secondary/30"
+                value={formData.instance_name}
+                onChange={(e) => setFormData({ ...formData, instance_name: e.target.value })}
               />
             </div>
           </div>
 
           {isDeleting ? (
-            <div
-              id="instance-delete-confirm"
-              className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-3 mt-4 animate-in slide-in-from-bottom-2"
-            >
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-3 mt-4">
               <p className="text-sm font-medium text-red-500 text-center">
                 Apagar definitivamente? Esta ação não pode ser desfeita.
               </p>
               <div className="flex gap-2 justify-center">
-                <Button
-                  variant="outline"
-                  className="text-slate-300 border-slate-700 hover:bg-slate-800"
-                  onClick={() => setIsDeleting(false)}
-                >
+                <Button variant="outline" onClick={() => setIsDeleting(false)}>
                   Cancelar
                 </Button>
                 <Button variant="destructive" onClick={handleDelete}>
@@ -275,12 +259,7 @@ export default function WhatsAppInstances() {
                 <Button variant="outline" onClick={() => setIsModalOpen(false)}>
                   Cancelar
                 </Button>
-                <Button
-                  onClick={handleSave}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                >
-                  Salvar
-                </Button>
+                <Button onClick={handleSave}>Salvar</Button>
               </div>
             </div>
           )}

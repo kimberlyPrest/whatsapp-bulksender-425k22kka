@@ -8,13 +8,6 @@ export interface Contact {
   status: 'Pronto' | 'Enviado' | 'Erro' | 'Processando'
   error?: string
   time?: string
-  // Legacy fields for clients page
-  email?: string
-  product?: string
-  stage?: string
-  days?: number
-  owner?: string
-  noMeeting?: boolean
 }
 
 export type UserRole = 'SuperAdmin' | 'Elite' | 'Geral'
@@ -27,9 +20,13 @@ export interface User {
 
 export interface WhatsAppInstance {
   id: string
-  name: string
-  phone: string
-  status: 'connected' | 'disconnected'
+  display_name: string
+  provider?: string
+  api_url: string
+  api_key?: string
+  instance_name: string
+  status: 'connected' | 'disconnected' | 'pending_qr'
+  is_active: boolean
 }
 
 interface AppState {
@@ -58,11 +55,34 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [sourceFilename, setSourceFilename] = useState('')
   const [sheetUrl, setSheetUrl] = useState('')
 
-  // Mock instances to enable Instance Selection testing
   const [instances, setInstances] = useState<WhatsAppInstance[]>([
-    { id: '1', name: 'Atendimento Principal', phone: '+55 11 99999-1111', status: 'connected' },
-    { id: '2', name: 'Suporte Secundário', phone: '+55 11 99999-2222', status: 'connected' },
-    { id: '3', name: 'Vendas VIP', phone: '+55 11 99999-3333', status: 'disconnected' },
+    {
+      id: '1',
+      display_name: 'Atendimento Principal',
+      provider: 'Evolution API',
+      api_url: 'https://api.bulksender.adapta.org',
+      instance_name: 'main-instance',
+      status: 'connected',
+      is_active: true,
+    },
+    {
+      id: '2',
+      display_name: 'Suporte Secundário',
+      provider: 'Evolution API',
+      api_url: 'https://api.bulksender.adapta.org',
+      instance_name: 'support-instance',
+      status: 'connected',
+      is_active: true,
+    },
+    {
+      id: '3',
+      display_name: 'Vendas VIP',
+      provider: 'Evolution API',
+      api_url: 'https://api.bulksender.adapta.org',
+      instance_name: 'vip-sales',
+      status: 'pending_qr',
+      is_active: false,
+    },
   ])
 
   return (

@@ -12,11 +12,12 @@ export interface DistributionConfig {
 
 interface Props {
   instances: WhatsAppInstance[]
+  totalContacts: number
   onChange: (config: DistributionConfig) => void
 }
 
-export function InstanceSelector({ instances, onChange }: Props) {
-  const activeInstances = instances.filter((i) => i.status === 'connected')
+export function InstanceSelector({ instances, totalContacts, onChange }: Props) {
+  const activeInstances = instances.filter((i) => i.status === 'connected' && i.is_active)
 
   const [mode, setMode] = useState<'equal' | 'custom'>('equal')
   const [selectedIds, setSelectedIds] = useState<string[]>(activeInstances.map((i) => i.id))
@@ -56,42 +57,47 @@ export function InstanceSelector({ instances, onChange }: Props) {
   const isError = mode === 'custom' && Math.round(sum) !== 100
 
   const toggleInstance = (id: string, checked: boolean) => {
-    if (checked) {
-      setSelectedIds([...selectedIds, id])
-    } else {
-      setSelectedIds(selectedIds.filter((x) => x !== id))
-    }
+    if (checked) setSelectedIds([...selectedIds, id])
+    else setSelectedIds(selectedIds.filter((x) => x !== id))
   }
 
   const handlePercentageChange = (id: string, val: string) => {
     const num = parseFloat(val) || 0
-    setCustomPercentages({ ...customPercentages, [id]: num })
+    setCustomPercentages({ ...customPercentages, [id]: Math.min(100, Math.max(0, num)) })
+  }
+
+  const getAllocatedCount = (instId: string, isSelected: boolean) => {
+    if (!isSelected || totalContacts === 0) return 0
+    const pct = mode === 'equal' ? 100 / (selectedIds.length || 1) : customPercentages[instId] || 0
+    return Math.floor((totalContacts * pct) / 100)
   }
 
   return (
     <div
       id="instance-selector-section"
-      className="bg-sidebarBg rounded-xl p-6 border border-slate-700 shadow-xl space-y-4"
+      className="bg-secondary/10 rounded-xl p-5 border border-border shadow-sm space-y-4"
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-300">Números de Envio</h3>
-        <div className="flex items-center gap-1 bg-slate-800/50 p-1 rounded-lg border border-slate-700/50">
+        <h3 className="text-sm font-semibold">Números de Envio</h3>
+        <div className="flex items-center gap-1 bg-background p-1 rounded-md border border-border">
           <button
-            id="dist-mode-equal"
             onClick={() => setMode('equal')}
             className={cn(
-              'px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn',
-              mode === 'equal' ? 'active' : 'text-slate-400 hover:text-slate-200',
+              'px-3 py-1 rounded text-xs font-semibold transition-colors',
+              mode === 'equal'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-secondary',
             )}
           >
             Igual
           </button>
           <button
-            id="dist-mode-custom"
             onClick={() => setMode('custom')}
             className={cn(
-              'px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn',
-              mode === 'custom' ? 'active' : 'text-slate-400 hover:text-slate-200',
+              'px-3 py-1 rounded text-xs font-semibold transition-colors',
+              mode === 'custom'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-secondary',
             )}
           >
             Personalizado
@@ -99,19 +105,21 @@ export function InstanceSelector({ instances, onChange }: Props) {
         </div>
       </div>
 
-      <div id="instance-selector-list" className="space-y-3 mt-4">
+      <div className="space-y-2 mt-4">
         {activeInstances.map((inst) => {
           const isSelected = selectedIds.includes(inst.id)
+          const allocated = getAllocatedCount(inst.id, isSelected)
+
           return (
             <div
               key={inst.id}
-              className="flex items-center justify-between p-3 rounded-lg border border-slate-700/50 bg-slate-800/20 transition-all hover:bg-slate-800/40"
+              className="flex items-center justify-between p-3 rounded-md border border-border bg-background transition-all hover:bg-secondary/30"
             >
-              <div className="flex items-center space-x-3 relative">
+              <div className="flex items-center space-x-3">
                 <input
                   type="checkbox"
                   value={inst.id}
-                  className="inst-selector-check absolute opacity-0 w-0 h-0"
+                  className="inst-selector-check hidden"
                   checked={isSelected}
                   readOnly
                 />
@@ -119,34 +127,37 @@ export function InstanceSelector({ instances, onChange }: Props) {
                   id={`inst-${inst.id}`}
                   checked={isSelected}
                   onCheckedChange={(c) => toggleInstance(inst.id, !!c)}
-                  className="border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
                 <label
                   htmlFor={`inst-${inst.id}`}
-                  className="text-sm font-medium text-slate-200 cursor-pointer flex flex-col"
+                  className="text-sm font-medium cursor-pointer flex flex-col"
                 >
-                  {inst.name}
-                  <span className="text-xs text-slate-500">{inst.phone}</span>
+                  {inst.display_name}
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {inst.instance_name}
+                  </span>
                 </label>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
+                <span className="text-xs text-muted-foreground w-20 text-right">
+                  ~{allocated} contatos
+                </span>
                 {mode === 'custom' ? (
                   <div className="flex items-center gap-1">
                     <Input
-                      id={`inst-pct-${inst.id}`}
                       type="number"
                       min="0"
                       max="100"
                       disabled={!isSelected}
                       value={customPercentages[inst.id] ?? ''}
                       onChange={(e) => handlePercentageChange(inst.id, e.target.value)}
-                      className="w-20 h-8 text-right bg-slate-900 border-slate-700 text-slate-200"
+                      className="w-16 h-8 text-right bg-secondary/30"
                     />
-                    <span className="text-slate-400 text-sm">%</span>
+                    <span className="text-muted-foreground text-sm">%</span>
                   </div>
                 ) : (
-                  <span className="text-sm text-slate-400 w-24 text-right">
-                    {isSelected ? `${(100 / (selectedIds.length || 1)).toFixed(1)}%` : '0%'}
+                  <span className="text-sm font-medium w-16 text-right">
+                    {isSelected ? `${(100 / (selectedIds.length || 1)).toFixed(0)}%` : '0%'}
                   </span>
                 )}
               </div>
@@ -154,12 +165,11 @@ export function InstanceSelector({ instances, onChange }: Props) {
           )
         })}
       </div>
-
       <p
         id="dist-sum-error"
-        className={cn('text-xs text-red-400 font-medium', isError ? 'block' : 'hidden')}
+        className={cn('text-xs text-red-500 font-medium mt-2', isError ? 'block' : 'hidden')}
       >
-        A soma das porcentagens deve ser 100%.
+        A soma das porcentagens deve ser 100%. (Atual: {Math.round(sum)}%)
       </p>
     </div>
   )

@@ -25669,43 +25669,62 @@ function downloadCsv(filename, logs) {
 }
 //#endregion
 //#region src/components/dispatch/ProgressView.tsx
+var colorPalette = [
+	"text-primary",
+	"text-blue-400",
+	"text-yellow-400",
+	"text-purple-400",
+	"text-orange-400"
+];
 function ProgressView({ total, sent, errorCount, logs, events, isSending }) {
 	const percent = total > 0 ? Math.round((sent + errorCount) / total * 100) : 0;
 	const radius = 80;
 	const circumference = 502.65;
 	const strokeDashoffset = circumference - percent / 100 * circumference;
 	const isDone = percent === 100 || events.some((e) => e.type === "done");
+	const isMultiInstance = (0, import_react.useMemo)(() => events.some((e) => "instance_name" in e && e.instance_name), [events]);
+	const instanceColors = (0, import_react.useMemo)(() => {
+		const map = {};
+		let colorIdx = 0;
+		events.forEach((ev) => {
+			if ("instance_name" in ev && ev.instance_name && !map[ev.instance_name]) {
+				map[ev.instance_name] = colorPalette[colorIdx % colorPalette.length];
+				colorIdx++;
+			}
+		});
+		return map;
+	}, [events]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		"data-uid": "src/components/dispatch/ProgressView.tsx:30:5",
+		"data-uid": "src/components/dispatch/ProgressView.tsx:63:5",
 		"data-prohibitions": "[editContent]",
-		className: "shadow-lg border-primary/30 bg-secondary/5 relative overflow-hidden",
+		className: "shadow-lg border-primary/30 bg-secondary/5 relative overflow-hidden flex flex-col h-full min-h-[500px]",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/dispatch/ProgressView.tsx:31:7",
+				"data-uid": "src/components/dispatch/ProgressView.tsx:64:7",
 				"data-prohibitions": "[]",
 				className: "absolute top-0 left-0 w-full h-1 bg-secondary",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/dispatch/ProgressView.tsx:32:9",
+					"data-uid": "src/components/dispatch/ProgressView.tsx:65:9",
 					"data-prohibitions": "[editContent]",
 					className: "h-full bg-primary transition-all",
 					style: { width: `${percent}%` }
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-				"data-uid": "src/components/dispatch/ProgressView.tsx:34:7",
+				"data-uid": "src/components/dispatch/ProgressView.tsx:67:7",
 				"data-prohibitions": "[editContent]",
-				className: "pb-2 flex flex-row items-center justify-between mt-2",
+				className: "pb-2 flex flex-row items-center justify-between mt-2 shrink-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
-					"data-uid": "src/components/dispatch/ProgressView.tsx:35:9",
+					"data-uid": "src/components/dispatch/ProgressView.tsx:68:9",
 					"data-prohibitions": "[editContent]",
 					className: "text-lg flex items-center gap-2",
-					children: ["Monitoramento em Tempo Real", isSending && !isDone && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/dispatch/ProgressView.tsx:38:13",
+					children: ["Monitoramento", isSending && !isDone && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/components/dispatch/ProgressView.tsx:71:13",
 						"data-prohibitions": "[editContent]",
 						className: "w-2.5 h-2.5 rounded-full bg-primary animate-pulse"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					"data-uid": "src/components/dispatch/ProgressView.tsx:41:9",
+					"data-uid": "src/components/dispatch/ProgressView.tsx:74:9",
 					"data-prohibitions": "[]",
 					variant: "outline",
 					size: "sm",
@@ -25713,29 +25732,30 @@ function ProgressView({ total, sent, errorCount, logs, events, isSending }) {
 					onClick: () => downloadCsv(`dispatch_log_${Date.now()}.csv`, logs),
 					className: "h-8 gap-2 bg-background",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Download, {
-						"data-uid": "src/components/dispatch/ProgressView.tsx:48:11",
+						"data-uid": "src/components/dispatch/ProgressView.tsx:81:11",
 						"data-prohibitions": "[editContent]",
 						className: "w-4 h-4"
 					}), " Baixar Log CSV"]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-				"data-uid": "src/components/dispatch/ProgressView.tsx:51:7",
+				"data-uid": "src/components/dispatch/ProgressView.tsx:85:7",
 				"data-prohibitions": "[editContent]",
+				className: "flex flex-col flex-1 overflow-hidden",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/dispatch/ProgressView.tsx:52:9",
+					"data-uid": "src/components/dispatch/ProgressView.tsx:86:9",
 					"data-prohibitions": "[editContent]",
-					className: "flex flex-col md:flex-row items-center gap-8 mb-6 p-4",
+					className: "flex flex-col md:flex-row items-center gap-8 mb-6 p-4 shrink-0",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/dispatch/ProgressView.tsx:53:11",
+						"data-uid": "src/components/dispatch/ProgressView.tsx:87:11",
 						"data-prohibitions": "[editContent]",
 						className: "relative w-40 h-40 flex items-center justify-center shrink-0",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-							"data-uid": "src/components/dispatch/ProgressView.tsx:54:13",
+							"data-uid": "src/components/dispatch/ProgressView.tsx:88:13",
 							"data-prohibitions": "[]",
 							className: "w-full h-full transform -rotate-90",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:55:15",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:89:15",
 								"data-prohibitions": "[editContent]",
 								cx: "80",
 								cy: "80",
@@ -25745,7 +25765,7 @@ function ProgressView({ total, sent, errorCount, logs, events, isSending }) {
 								fill: "transparent",
 								className: "text-secondary"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:64:15",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:98:15",
 								"data-prohibitions": "[editContent]",
 								cx: "80",
 								cy: "80",
@@ -25759,59 +25779,59 @@ function ProgressView({ total, sent, errorCount, logs, events, isSending }) {
 								strokeLinecap: "round"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							"data-uid": "src/components/dispatch/ProgressView.tsx:77:13",
+							"data-uid": "src/components/dispatch/ProgressView.tsx:111:13",
 							"data-prohibitions": "[editContent]",
 							className: "absolute text-3xl font-bold text-foreground",
 							children: [percent, "%"]
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/dispatch/ProgressView.tsx:79:11",
+						"data-uid": "src/components/dispatch/ProgressView.tsx:113:11",
 						"data-prohibitions": "[editContent]",
 						className: "grid grid-cols-2 gap-4 w-full",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:80:13",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:114:13",
 								"data-prohibitions": "[editContent]",
 								className: "bg-background p-4 rounded-lg border border-border",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:81:15",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:115:15",
 									"data-prohibitions": "[]",
 									className: "text-sm text-muted-foreground font-medium",
 									children: "Enviados"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:82:15",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:116:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-3xl font-bold text-primary",
 									children: sent
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:84:13",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:118:13",
 								"data-prohibitions": "[editContent]",
 								className: "bg-background p-4 rounded-lg border border-border",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:85:15",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:119:15",
 									"data-prohibitions": "[]",
 									className: "text-sm text-muted-foreground font-medium",
 									children: "Restantes"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:86:15",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:120:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-3xl font-bold text-foreground",
 									children: total - sent - errorCount
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:88:13",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:122:13",
 								"data-prohibitions": "[editContent]",
 								className: "bg-background p-4 rounded-lg border border-red-500/20 col-span-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:89:15",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:123:15",
 									"data-prohibitions": "[]",
 									className: "text-sm text-red-500/80 font-medium",
 									children: "Erros"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:90:15",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:124:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-2xl font-bold text-red-500",
 									children: errorCount
@@ -25820,79 +25840,117 @@ function ProgressView({ total, sent, errorCount, logs, events, isSending }) {
 						]
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/dispatch/ProgressView.tsx:95:9",
+					"data-uid": "src/components/dispatch/ProgressView.tsx:129:9",
 					"data-prohibitions": "[editContent]",
-					className: "space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar border border-border/50 rounded-lg bg-background p-2",
-					children: [events.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/components/dispatch/ProgressView.tsx:97:13",
+					className: "flex-1 overflow-y-auto pr-2 custom-scrollbar border border-border/50 rounded-lg bg-background p-2 space-y-2 relative",
+					children: [events.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/components/dispatch/ProgressView.tsx:131:13",
 						"data-prohibitions": "[]",
-						className: "text-sm text-muted-foreground text-center py-8",
+						className: "absolute inset-0 flex items-center justify-center text-sm text-muted-foreground",
 						children: "Aguardando início do disparo..."
 					}), [...events].reverse().map((ev, i) => {
+						if (ev.type === "instance_done") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/dispatch/ProgressView.tsx:138:17",
+							"data-prohibitions": "[editContent]",
+							className: "w-full bg-slate-800/40 p-3 rounded-md text-center text-sm border border-slate-700/50 animate-fade-in-down shadow-sm",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/components/dispatch/ProgressView.tsx:142:19",
+									"data-prohibitions": "[editContent]",
+									className: cn$1("font-bold text-base mr-2", instanceColors[ev.instance_name]),
+									children: ev.instance_name
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/components/dispatch/ProgressView.tsx:147:19",
+									"data-prohibitions": "[]",
+									className: "text-muted-foreground",
+									children: "finalizou sua fila:"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									"data-uid": "src/components/dispatch/ProgressView.tsx:148:19",
+									"data-prohibitions": "[editContent]",
+									className: "ml-2 text-green-500 font-medium",
+									children: [ev.ok, " OK"]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/components/dispatch/ProgressView.tsx:149:19",
+									"data-prohibitions": "[]",
+									className: "text-muted-foreground mx-2",
+									children: "•"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									"data-uid": "src/components/dispatch/ProgressView.tsx:150:19",
+									"data-prohibitions": "[editContent]",
+									className: "text-red-500 font-medium",
+									children: [ev.fail, " Falhas"]
+								})
+							]
+						}, i);
 						if (ev.type === "pause") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/dispatch/ProgressView.tsx:104:17",
+							"data-uid": "src/components/dispatch/ProgressView.tsx:156:17",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-2 text-sm p-3 rounded bg-yellow-500/10 border border-yellow-500/20 text-yellow-600 animate-fade-in-down",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:108:19",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:160:19",
 								"data-prohibitions": "[editContent]",
 								className: "h-4 w-4 shrink-0"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:109:19",
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								"data-uid": "src/components/dispatch/ProgressView.tsx:161:19",
 								"data-prohibitions": "[editContent]",
-								children: ev.message
+								children: [ev.instance_name ? `[${ev.instance_name}] ` : "", ev.message]
 							})]
 						}, i);
 						if (ev.type === "sent") {
 							const log = logs.find((l) => l.id === ev.contactId);
 							if (!log) return null;
 							const isErr = ev.status === "Erro";
+							const formattedTime = (/* @__PURE__ */ new Date()).toLocaleTimeString("pt-BR");
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/dispatch/ProgressView.tsx:118:17",
+								"data-uid": "src/components/dispatch/ProgressView.tsx:175:17",
 								"data-prohibitions": "[editContent]",
-								className: `flex items-center justify-between text-sm p-2 rounded border animate-fade-in-down ${isErr ? "bg-red-500/5 border-red-500/20" : "bg-primary/5 border-primary/20"}`,
+								className: cn$1("flex items-center justify-between text-sm p-2 rounded border animate-fade-in-down", isErr ? "bg-red-500/5 border-red-500/20" : "bg-primary/5 border-primary/20"),
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:124:19",
+									"data-uid": "src/components/dispatch/ProgressView.tsx:182:19",
 									"data-prohibitions": "[editContent]",
-									className: "flex items-center gap-3",
+									className: "flex items-center gap-3 w-1/2",
+									children: [isErr ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleX, {
+										"data-uid": "src/components/dispatch/ProgressView.tsx:184:23",
+										"data-prohibitions": "[editContent]",
+										className: "h-4 w-4 text-red-500 shrink-0"
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, {
+										"data-uid": "src/components/dispatch/ProgressView.tsx:186:23",
+										"data-prohibitions": "[editContent]",
+										className: "h-4 w-4 text-primary shrink-0"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										"data-uid": "src/components/dispatch/ProgressView.tsx:188:21",
+										"data-prohibitions": "[editContent]",
+										className: "font-medium truncate",
+										children: log.name
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/components/dispatch/ProgressView.tsx:190:19",
+									"data-prohibitions": "[editContent]",
+									className: "flex items-center gap-4 w-1/2 justify-end",
 									children: [
-										isErr ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleX, {
-											"data-uid": "src/components/dispatch/ProgressView.tsx:126:23",
+										isMultiInstance && ev.instance_name && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/components/dispatch/ProgressView.tsx:192:23",
 											"data-prohibitions": "[editContent]",
-											className: "h-4 w-4 text-red-500 shrink-0"
-										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, {
-											"data-uid": "src/components/dispatch/ProgressView.tsx:128:23",
+											className: cn$1("font-semibold truncate max-w-[100px] text-xs", instanceColors[ev.instance_name]),
+											children: ev.instance_name
+										}),
+										isErr && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/components/dispatch/ProgressView.tsx:202:23",
 											"data-prohibitions": "[editContent]",
-											className: "h-4 w-4 text-primary shrink-0"
+											className: "text-xs text-red-500 truncate max-w-[100px]",
+											children: ev.error
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/components/dispatch/ProgressView.tsx:130:21",
+											"data-uid": "src/components/dispatch/ProgressView.tsx:206:21",
 											"data-prohibitions": "[editContent]",
-											className: "font-medium min-w-[120px] truncate",
-											children: log.name
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/components/dispatch/ProgressView.tsx:131:21",
-											"data-prohibitions": "[editContent]",
-											className: "font-mono text-xs text-muted-foreground hidden sm:block",
-											children: log.phone
+											className: "text-xs text-muted-foreground font-mono shrink-0",
+											children: formattedTime
 										})
 									]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/dispatch/ProgressView.tsx:135:19",
-									"data-prohibitions": "[editContent]",
-									className: "flex items-center gap-3",
-									children: [isErr && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/dispatch/ProgressView.tsx:137:23",
-										"data-prohibitions": "[editContent]",
-										className: "text-xs text-red-500 max-w-[150px] truncate",
-										children: ev.error
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/dispatch/ProgressView.tsx:141:21",
-										"data-prohibitions": "[editContent]",
-										className: "text-xs text-muted-foreground",
-										children: log.time
-									})]
 								})]
 							}, i);
 						}
@@ -26312,25 +26370,34 @@ var AppProvider = ({ children }) => {
 	const [instances, setInstances] = (0, import_react.useState)([
 		{
 			id: "1",
-			name: "Atendimento Principal",
-			phone: "+55 11 99999-1111",
-			status: "connected"
+			display_name: "Atendimento Principal",
+			provider: "Evolution API",
+			api_url: "https://api.bulksender.adapta.org",
+			instance_name: "main-instance",
+			status: "connected",
+			is_active: true
 		},
 		{
 			id: "2",
-			name: "Suporte Secundário",
-			phone: "+55 11 99999-2222",
-			status: "connected"
+			display_name: "Suporte Secundário",
+			provider: "Evolution API",
+			api_url: "https://api.bulksender.adapta.org",
+			instance_name: "support-instance",
+			status: "connected",
+			is_active: true
 		},
 		{
 			id: "3",
-			name: "Vendas VIP",
-			phone: "+55 11 99999-3333",
-			status: "disconnected"
+			display_name: "Vendas VIP",
+			provider: "Evolution API",
+			api_url: "https://api.bulksender.adapta.org",
+			instance_name: "vip-sales",
+			status: "pending_qr",
+			is_active: false
 		}
 	]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/stores/useAppStore.tsx:69:5",
+		"data-uid": "src/stores/useAppStore.tsx:89:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			user,
@@ -26770,8 +26837,8 @@ function ContactTable({ config }) {
 }
 //#endregion
 //#region src/components/dispatch/InstanceSelector.tsx
-function InstanceSelector({ instances, onChange }) {
-	const activeInstances = instances.filter((i) => i.status === "connected");
+function InstanceSelector({ instances, totalContacts, onChange }) {
+	const activeInstances = instances.filter((i) => i.status === "connected" && i.is_active);
 	const [mode, setMode] = (0, import_react.useState)("equal");
 	const [selectedIds, setSelectedIds] = (0, import_react.useState)(activeInstances.map((i) => i.id));
 	const [customPercentages, setCustomPercentages] = (0, import_react.useState)({});
@@ -26822,132 +26889,146 @@ function InstanceSelector({ instances, onChange }) {
 		const num = parseFloat(val) || 0;
 		setCustomPercentages({
 			...customPercentages,
-			[id]: num
+			[id]: Math.min(100, Math.max(0, num))
 		});
 	};
+	const getAllocatedCount = (instId, isSelected) => {
+		if (!isSelected || totalContacts === 0) return 0;
+		const pct = mode === "equal" ? 100 / (selectedIds.length || 1) : customPercentages[instId] || 0;
+		return Math.floor(totalContacts * pct / 100);
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/dispatch/InstanceSelector.tsx:72:5",
+		"data-uid": "src/components/dispatch/InstanceSelector.tsx:76:5",
 		"data-prohibitions": "[editContent]",
 		id: "instance-selector-section",
-		className: "bg-sidebarBg rounded-xl p-6 border border-slate-700 shadow-xl space-y-4",
+		className: "bg-secondary/10 rounded-xl p-5 border border-border shadow-sm space-y-4",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/dispatch/InstanceSelector.tsx:76:7",
+				"data-uid": "src/components/dispatch/InstanceSelector.tsx:80:7",
 				"data-prohibitions": "[editContent]",
 				className: "flex items-center justify-between",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/components/dispatch/InstanceSelector.tsx:77:9",
+					"data-uid": "src/components/dispatch/InstanceSelector.tsx:81:9",
 					"data-prohibitions": "[]",
-					className: "text-sm font-semibold text-slate-300",
+					className: "text-sm font-semibold",
 					children: "Números de Envio"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/dispatch/InstanceSelector.tsx:78:9",
+					"data-uid": "src/components/dispatch/InstanceSelector.tsx:82:9",
 					"data-prohibitions": "[editContent]",
-					className: "flex items-center gap-1 bg-slate-800/50 p-1 rounded-lg border border-slate-700/50",
+					className: "flex items-center gap-1 bg-background p-1 rounded-md border border-border",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						"data-uid": "src/components/dispatch/InstanceSelector.tsx:79:11",
+						"data-uid": "src/components/dispatch/InstanceSelector.tsx:83:11",
 						"data-prohibitions": "[editContent]",
-						id: "dist-mode-equal",
 						onClick: () => setMode("equal"),
-						className: cn$1("px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn", mode === "equal" ? "active" : "text-slate-400 hover:text-slate-200"),
+						className: cn$1("px-3 py-1 rounded text-xs font-semibold transition-colors", mode === "equal" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"),
 						children: "Igual"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						"data-uid": "src/components/dispatch/InstanceSelector.tsx:89:11",
+						"data-uid": "src/components/dispatch/InstanceSelector.tsx:94:11",
 						"data-prohibitions": "[editContent]",
-						id: "dist-mode-custom",
 						onClick: () => setMode("custom"),
-						className: cn$1("px-3 py-1 rounded-md font-semibold transition-colors text-xs dist-mode-btn", mode === "custom" ? "active" : "text-slate-400 hover:text-slate-200"),
+						className: cn$1("px-3 py-1 rounded text-xs font-semibold transition-colors", mode === "custom" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"),
 						children: "Personalizado"
 					})]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/dispatch/InstanceSelector.tsx:102:7",
+				"data-uid": "src/components/dispatch/InstanceSelector.tsx:108:7",
 				"data-prohibitions": "[editContent]",
-				id: "instance-selector-list",
-				className: "space-y-3 mt-4",
+				className: "space-y-2 mt-4",
 				children: activeInstances.map((inst) => {
 					const isSelected = selectedIds.includes(inst.id);
+					const allocated = getAllocatedCount(inst.id, isSelected);
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/dispatch/InstanceSelector.tsx:106:13",
+						"data-uid": "src/components/dispatch/InstanceSelector.tsx:114:13",
 						"data-prohibitions": "[editContent]",
-						className: "flex items-center justify-between p-3 rounded-lg border border-slate-700/50 bg-slate-800/20 transition-all hover:bg-slate-800/40",
+						className: "flex items-center justify-between p-3 rounded-md border border-border bg-background transition-all hover:bg-secondary/30",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/dispatch/InstanceSelector.tsx:110:15",
+							"data-uid": "src/components/dispatch/InstanceSelector.tsx:118:15",
 							"data-prohibitions": "[editContent]",
-							className: "flex items-center space-x-3 relative",
+							className: "flex items-center space-x-3",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:111:17",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:119:17",
 									"data-prohibitions": "[editContent]",
 									type: "checkbox",
 									value: inst.id,
-									className: "inst-selector-check absolute opacity-0 w-0 h-0",
+									className: "inst-selector-check hidden",
 									checked: isSelected,
 									readOnly: true
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:118:17",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:126:17",
 									"data-prohibitions": "[editContent]",
 									id: `inst-${inst.id}`,
 									checked: isSelected,
-									onCheckedChange: (c) => toggleInstance(inst.id, !!c),
-									className: "border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+									onCheckedChange: (c) => toggleInstance(inst.id, !!c)
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:124:17",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:131:17",
 									"data-prohibitions": "[editContent]",
 									htmlFor: `inst-${inst.id}`,
-									className: "text-sm font-medium text-slate-200 cursor-pointer flex flex-col",
-									children: [inst.name, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/dispatch/InstanceSelector.tsx:129:19",
+									className: "text-sm font-medium cursor-pointer flex flex-col",
+									children: [inst.display_name, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										"data-uid": "src/components/dispatch/InstanceSelector.tsx:136:19",
 										"data-prohibitions": "[editContent]",
-										className: "text-xs text-slate-500",
-										children: inst.phone
+										className: "text-xs text-muted-foreground font-mono",
+										children: inst.instance_name
 									})]
 								})
 							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/components/dispatch/InstanceSelector.tsx:132:15",
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/dispatch/InstanceSelector.tsx:141:15",
 							"data-prohibitions": "[editContent]",
-							className: "flex items-center gap-2",
-							children: mode === "custom" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/dispatch/InstanceSelector.tsx:134:19",
+							className: "flex items-center gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								"data-uid": "src/components/dispatch/InstanceSelector.tsx:142:17",
+								"data-prohibitions": "[editContent]",
+								className: "text-xs text-muted-foreground w-20 text-right",
+								children: [
+									"~",
+									allocated,
+									" contatos"
+								]
+							}), mode === "custom" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/components/dispatch/InstanceSelector.tsx:146:19",
 								"data-prohibitions": "[]",
 								className: "flex items-center gap-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:135:21",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:147:21",
 									"data-prohibitions": "[editContent]",
-									id: `inst-pct-${inst.id}`,
 									type: "number",
 									min: "0",
 									max: "100",
 									disabled: !isSelected,
 									value: customPercentages[inst.id] ?? "",
 									onChange: (e) => handlePercentageChange(inst.id, e.target.value),
-									className: "w-20 h-8 text-right bg-slate-900 border-slate-700 text-slate-200"
+									className: "w-16 h-8 text-right bg-secondary/30"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/components/dispatch/InstanceSelector.tsx:145:21",
+									"data-uid": "src/components/dispatch/InstanceSelector.tsx:156:21",
 									"data-prohibitions": "[]",
-									className: "text-slate-400 text-sm",
+									className: "text-muted-foreground text-sm",
 									children: "%"
 								})]
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/components/dispatch/InstanceSelector.tsx:148:19",
+								"data-uid": "src/components/dispatch/InstanceSelector.tsx:159:19",
 								"data-prohibitions": "[editContent]",
-								className: "text-sm text-slate-400 w-24 text-right",
-								children: isSelected ? `${(100 / (selectedIds.length || 1)).toFixed(1)}%` : "0%"
-							})
+								className: "text-sm font-medium w-16 text-right",
+								children: isSelected ? `${(100 / (selectedIds.length || 1)).toFixed(0)}%` : "0%"
+							})]
 						})]
 					}, inst.id);
 				})
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/components/dispatch/InstanceSelector.tsx:158:7",
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				"data-uid": "src/components/dispatch/InstanceSelector.tsx:168:7",
 				"data-prohibitions": "[editContent]",
 				id: "dist-sum-error",
-				className: cn$1("text-xs text-red-400 font-medium", isError ? "block" : "hidden"),
-				children: "A soma das porcentagens deve ser 100%."
+				className: cn$1("text-xs text-red-500 font-medium mt-2", isError ? "block" : "hidden"),
+				children: [
+					"A soma das porcentagens deve ser 100%. (Atual: ",
+					Math.round(sum),
+					"%)"
+				]
 			})
 		]
 	});
@@ -26960,22 +27041,49 @@ function useDispatchSimulation() {
 		if (timerRef.current) clearTimeout(timerRef.current);
 	}, []);
 	return {
-		start: (0, import_react.useCallback)((contacts, config, onEvent) => {
+		start: (0, import_react.useCallback)((contacts, config, distConfig, instances, onEvent) => {
 			stop();
 			let currentIndex = 0;
 			let msgCount = 0;
+			const activeInstances = instances.filter((i) => distConfig.selection.find((s) => s.instanceId === i.id));
+			const instanceStats = {};
+			activeInstances.forEach((i) => instanceStats[i.display_name] = {
+				ok: 0,
+				fail: 0
+			});
+			const getInstanceNameForContact = (idx) => {
+				if (activeInstances.length === 0) return void 0;
+				if (activeInstances.length === 1) return activeInstances[0].display_name;
+				let cumulative = 0;
+				const randomVal = idx % 100;
+				for (const selection of distConfig.selection) {
+					cumulative += selection.percentage;
+					if (randomVal < cumulative) return instances.find((i) => i.id === selection.instanceId)?.display_name;
+				}
+				return activeInstances[0].display_name;
+			};
 			const processNext = () => {
 				if (currentIndex >= contacts.length) {
-					onEvent({ type: "done" });
+					activeInstances.forEach((inst) => {
+						onEvent({
+							type: "instance_done",
+							instance_name: inst.display_name,
+							ok: instanceStats[inst.display_name].ok,
+							fail: instanceStats[inst.display_name].fail
+						});
+					});
+					setTimeout(() => onEvent({ type: "done" }), 500);
 					return;
 				}
 				const contact = contacts[currentIndex];
+				const assignedInstance = getInstanceNameForContact(currentIndex);
 				msgCount++;
 				if (msgCount % config.mainBatch.interval === 0) {
 					const delay = config.mainBatch.minDelay * 1e3;
 					onEvent({
 						type: "pause",
-						message: `⏸ Lote concluído, aguardando ${delay / 1e3}s`
+						message: `⏸ Lote concluído, aguardando ${delay / 1e3}s`,
+						instance_name: assignedInstance
 					});
 					timerRef.current = setTimeout(processNext, delay);
 					return;
@@ -26984,17 +27092,21 @@ function useDispatchSimulation() {
 					const delay = config.subBatch.minDelay * 1e3;
 					onEvent({
 						type: "pause",
-						message: `⏸ Sublote concluído, aguardando ${delay / 1e3}s`
+						message: `⏸ Sublote concluído, aguardando ${delay / 1e3}s`,
+						instance_name: assignedInstance
 					});
 					timerRef.current = setTimeout(processNext, delay);
 					return;
 				}
 				const isError = Math.random() > .9;
+				if (assignedInstance) if (isError) instanceStats[assignedInstance].fail++;
+				else instanceStats[assignedInstance].ok++;
 				onEvent({
 					type: "sent",
 					contactId: contact.id,
 					status: isError ? "Erro" : "Enviado",
-					error: isError ? "Número inválido" : void 0
+					error: isError ? "Número inválido" : void 0,
+					instance_name: assignedInstance
 				});
 				currentIndex++;
 				const indDelay = Math.max(1e3, config.individual.minDelay * 1e3);
@@ -27046,7 +27158,7 @@ function Index() {
 			...c,
 			status: ev.status,
 			error: ev.error,
-			time: (/* @__PURE__ */ new Date()).toLocaleTimeString()
+			time: (/* @__PURE__ */ new Date()).toLocaleTimeString("pt-BR")
 		} : c));
 		if (ev.type === "done") setIsSending(false);
 	};
@@ -27059,43 +27171,17 @@ function Index() {
 			title: "Escreva uma mensagem",
 			variant: "destructive"
 		});
-		const activeInstances = instances.filter((i) => i.status === "connected");
-		const selectorSection = document.getElementById("instance-selector-section");
-		let instance_ids = [];
-		let instance_distribution = [];
-		if (selectorSection && activeInstances.length >= 2) {
-			const checkedInputs = selectorSection.querySelectorAll(".inst-selector-check:checked");
-			if (checkedInputs.length === 0) return toast({
-				title: "Selecione pelo menos um número de envio",
-				variant: "destructive"
-			});
-			checkedInputs.forEach((input) => {
-				instance_ids.push(input.value);
-			});
-			if (distConfig.mode === "custom") {
-				let sum = 0;
-				instance_ids.forEach((id) => {
-					const pctInput = document.getElementById(`inst-pct-${id}`);
-					const val = parseFloat(pctInput?.value || "0");
-					sum += val;
-					instance_distribution.push({
-						instance_id: id,
-						percent: val
-					});
-				});
-				if (Math.abs(sum - 100) > .5) {
-					alert("A soma das porcentagens deve ser 100%.");
-					return;
-				}
-			}
-		} else if (activeInstances.length > 0) instance_ids = [activeInstances[0].id];
-		else return toast({
-			title: "Nenhum número de envio conectado",
+		if (instances.filter((i) => i.status === "connected" && i.is_active).length === 0) return toast({
+			title: "Nenhum número de envio conectado e ativo",
+			variant: "destructive"
+		});
+		if (distConfig.mode === "custom" && !distConfig.isValid) return toast({
+			title: "A distribuição personalizada deve somar 100%",
 			variant: "destructive"
 		});
 		const payload = {
-			instance_ids,
-			...distConfig.mode === "custom" ? { instance_distribution } : {},
+			instance_ids: distConfig.selection.map((s) => s.instanceId),
+			instance_distribution: distConfig.selection,
 			source_type: sourceType || "csv",
 			sheet_url: sheetUrl || "",
 			contacts_json: selectedContacts,
@@ -27129,98 +27215,99 @@ function Index() {
 				antiBan,
 				distConfig
 			});
-			const { token } = await api.getStreamToken();
-			simulateStart(selectedContacts, antiBan, handleEvent);
+			await api.getStreamToken();
+			simulateStart(selectedContacts, antiBan, distConfig, instances, handleEvent);
 		} catch {
-			simulateStart(selectedContacts, antiBan, handleEvent);
+			simulateStart(selectedContacts, antiBan, distConfig, instances, handleEvent);
 		}
 	};
 	const sentCount = selectedContacts.filter((c) => c.status === "Enviado").length;
 	const errCount = selectedContacts.filter((c) => c.status === "Erro").length;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Index.tsx:140:5",
+		"data-uid": "src/pages/Index.tsx:115:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-24",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/Index.tsx:141:7",
+			"data-uid": "src/pages/Index.tsx:116:7",
 			"data-prohibitions": "[]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-				"data-uid": "src/pages/Index.tsx:142:9",
+				"data-uid": "src/pages/Index.tsx:117:9",
 				"data-prohibitions": "[]",
 				className: "text-3xl font-bold",
 				children: "Novo Disparo"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/pages/Index.tsx:143:9",
+				"data-uid": "src/pages/Index.tsx:118:9",
 				"data-prohibitions": "[]",
 				className: "text-muted-foreground mt-1",
 				children: "Configure e inicie sua campanha em massa."
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/Index.tsx:146:7",
+			"data-uid": "src/pages/Index.tsx:121:7",
 			"data-prohibitions": "[editContent]",
 			className: "grid grid-cols-1 xl:grid-cols-12 gap-6",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Index.tsx:147:9",
+				"data-uid": "src/pages/Index.tsx:122:9",
 				"data-prohibitions": "[editContent]",
 				className: "xl:col-span-7 space-y-6",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Index.tsx:148:11",
+					"data-uid": "src/pages/Index.tsx:123:11",
 					"data-prohibitions": "[editContent]",
 					className: "shadow-lg border-border/50 bg-card",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Index.tsx:149:13",
+						"data-uid": "src/pages/Index.tsx:124:13",
 						"data-prohibitions": "[editContent]",
 						className: "p-6 space-y-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SourceTabs, {
-								"data-uid": "src/pages/Index.tsx:150:15",
+								"data-uid": "src/pages/Index.tsx:125:15",
 								"data-prohibitions": "[editContent]"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageEditor, {
-								"data-uid": "src/pages/Index.tsx:151:15",
+								"data-uid": "src/pages/Index.tsx:126:15",
 								"data-prohibitions": "[editContent]",
 								message,
 								setMessage
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InstanceSelector, {
-								"data-uid": "src/pages/Index.tsx:153:15",
+								"data-uid": "src/pages/Index.tsx:128:15",
 								"data-prohibitions": "[editContent]",
 								instances,
+								totalContacts: selectedContacts.length,
 								onChange: setDistConfig
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AntiBanConfig, {
-								"data-uid": "src/pages/Index.tsx:155:15",
+								"data-uid": "src/pages/Index.tsx:134:15",
 								"data-prohibitions": "[editContent]",
 								config: antiBan,
 								onChange: setAntiBan
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Index.tsx:157:15",
+								"data-uid": "src/pages/Index.tsx:136:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-border gap-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Index.tsx:158:17",
+									"data-uid": "src/pages/Index.tsx:137:17",
 									"data-prohibitions": "[]",
 									className: "flex items-center space-x-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
-										"data-uid": "src/pages/Index.tsx:159:19",
+										"data-uid": "src/pages/Index.tsx:138:19",
 										"data-prohibitions": "[editContent]",
 										id: "schedule",
 										checked: isScheduled,
 										onCheckedChange: (c) => setIsScheduled(!!c)
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-										"data-uid": "src/pages/Index.tsx:164:19",
+										"data-uid": "src/pages/Index.tsx:143:19",
 										"data-prohibitions": "[]",
 										htmlFor: "schedule",
 										className: "text-sm font-medium flex items-center gap-2 cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
-											"data-uid": "src/pages/Index.tsx:168:21",
+											"data-uid": "src/pages/Index.tsx:147:21",
 											"data-prohibitions": "[editContent]",
 											className: "h-4 w-4 text-primary"
 										}), " Agendar disparo"]
 									})]
 								}), isScheduled && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Index.tsx:172:19",
+									"data-uid": "src/pages/Index.tsx:151:19",
 									"data-prohibitions": "[editContent]",
 									type: "datetime-local",
 									className: "w-full sm:w-auto h-9 text-sm bg-background",
@@ -27232,45 +27319,45 @@ function Index() {
 					})
 				})
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Index.tsx:184:9",
+				"data-uid": "src/pages/Index.tsx:163:9",
 				"data-prohibitions": "[editContent]",
 				className: "xl:col-span-5 space-y-6 flex flex-col",
 				children: [isSending || events.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressView, {
-					"data-uid": "src/pages/Index.tsx:186:13",
+					"data-uid": "src/pages/Index.tsx:165:13",
 					"data-prohibitions": "[editContent]",
 					total: selectedContacts.length,
 					sent: sentCount,
 					errorCount: errCount,
-					logs: selectedContacts.filter((c) => c.status === "Enviado" || c.status === "Erro"),
+					logs: selectedContacts,
 					events,
 					isSending
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Index.tsx:195:13",
+					"data-uid": "src/pages/Index.tsx:174:13",
 					"data-prohibitions": "[]",
 					className: "shadow-lg border-border/50",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-						"data-uid": "src/pages/Index.tsx:196:15",
+						"data-uid": "src/pages/Index.tsx:175:15",
 						"data-prohibitions": "[]",
 						className: "p-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ContactTable, {
-							"data-uid": "src/pages/Index.tsx:197:17",
+							"data-uid": "src/pages/Index.tsx:176:17",
 							"data-prohibitions": "[editContent]",
 							config: antiBan
 						})
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/Index.tsx:202:11",
+					"data-uid": "src/pages/Index.tsx:181:11",
 					"data-prohibitions": "[editContent]",
 					className: "mt-auto",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/Index.tsx:203:13",
+						"data-uid": "src/pages/Index.tsx:182:13",
 						"data-prohibitions": "[editContent]",
 						size: "lg",
 						className: "w-full font-bold text-lg hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20 h-14",
 						onClick: handleAction,
 						disabled: isSending || selectedContacts.length === 0,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
-							"data-uid": "src/pages/Index.tsx:209:15",
+							"data-uid": "src/pages/Index.tsx:188:15",
 							"data-prohibitions": "[editContent]",
 							className: "mr-2 h-5 w-5 fill-current"
 						}), isSending ? "Enviando..." : isScheduled ? "Agendar Campanha" : "Iniciar Disparo"]
@@ -32251,182 +32338,186 @@ function History() {
 }
 //#endregion
 //#region src/components/config/WhatsAppInstances.tsx
-var MOCK_INSTANCES = [{
-	id: "1",
-	displayName: "Número Principal",
-	apiUrl: "https://api.bulksender.adapta.org",
-	apiKey: "sk_live_123",
-	instanceName: "main-instance",
-	active: true
-}];
 function WhatsAppInstances() {
-	const [instances, setInstances] = (0, import_react.useState)([]);
-	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
+	const { instances, setInstances } = useAppStore();
+	const [isLoading, setIsLoading] = (0, import_react.useState)(false);
 	const [isModalOpen, setIsModalOpen] = (0, import_react.useState)(false);
 	const [editingId, setEditingId] = (0, import_react.useState)(null);
 	const [isDeleting, setIsDeleting] = (0, import_react.useState)(false);
 	const [error, setError] = (0, import_react.useState)(null);
 	const [formData, setFormData] = (0, import_react.useState)({
-		displayName: "",
-		apiUrl: "",
-		apiKey: "",
-		instanceName: ""
+		display_name: "",
+		api_url: "",
+		api_key: "",
+		instance_name: ""
 	});
-	(0, import_react.useEffect)(() => {
-		const timer = setTimeout(() => {
-			setInstances(MOCK_INSTANCES);
-			setIsLoading(false);
-		}, 800);
-		return () => clearTimeout(timer);
-	}, []);
 	const openModal = (inst) => {
 		setEditingId(inst?.id || null);
 		setFormData({
-			displayName: inst?.displayName || "",
-			apiUrl: inst?.apiUrl || "",
-			apiKey: "",
-			instanceName: inst?.instanceName || ""
+			display_name: inst?.display_name || "",
+			api_url: inst?.api_url || "",
+			api_key: "",
+			instance_name: inst?.instance_name || ""
 		});
 		setError(null);
 		setIsDeleting(false);
 		setIsModalOpen(true);
 	};
 	const handleSave = () => {
-		if (!formData.displayName || !formData.apiUrl || !formData.instanceName) {
+		if (!formData.display_name || !formData.api_url || !formData.instance_name) {
 			setError("Por favor, preencha todos os campos obrigatórios.");
 			return;
 		}
-		if (!editingId && !formData.apiKey) {
-			setError("A API Key é obrigatória para novos números.");
-			return;
+		if (editingId) setInstances(instances.map((i) => i.id === editingId ? {
+			...i,
+			...formData,
+			api_key: formData.api_key || i.api_key
+		} : i));
+		else {
+			const newId = Date.now().toString();
+			setInstances([...instances, {
+				...formData,
+				id: newId,
+				provider: "Evolution API",
+				status: "connected",
+				is_active: true
+			}]);
 		}
-		if (editingId) setInstances((prev) => prev.map((i) => i.id === editingId ? {
-			...i,
-			...formData,
-			apiKey: formData.apiKey || i.apiKey
-		} : i));
-		else setInstances([...instances, {
-			...formData,
-			id: Date.now().toString(),
-			active: true
-		}]);
 		setIsModalOpen(false);
 	};
-	const handleDelete = () => {
-		setInstances((prev) => prev.filter((i) => i.id !== editingId));
+	const handleDelete = async () => {
+		if (!editingId) return;
+		await fetch(`/api/whatsapp/instances/${editingId}/hard`, { method: "DELETE" }).catch(() => {});
+		setInstances(instances.filter((i) => i.id !== editingId));
 		setIsModalOpen(false);
 	};
-	const handleToggleActive = () => {
-		setInstances((prev) => prev.map((i) => i.id === editingId ? {
+	const handleToggleActive = async () => {
+		if (!editingId) return;
+		await fetch(`/api/whatsapp/instances/${editingId}`, { method: "DELETE" }).catch(() => {});
+		setInstances(instances.map((i) => i.id === editingId ? {
 			...i,
-			active: !i.active
+			is_active: !i.is_active
 		} : i));
 		setIsModalOpen(false);
+	};
+	const getStatusDot = (status) => {
+		if (status === "connected") return "bg-green-500";
+		if (status === "pending_qr") return "bg-yellow-500 animate-pulse";
+		return "bg-slate-500";
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		"data-uid": "src/components/config/WhatsAppInstances.tsx:100:5",
+		"data-uid": "src/components/config/WhatsAppInstances.tsx:91:5",
 		"data-prohibitions": "[editContent]",
 		className: "shadow-md border-border/50 bg-background",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-				"data-uid": "src/components/config/WhatsAppInstances.tsx:101:7",
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:92:7",
 				"data-prohibitions": "[]",
 				className: "flex flex-row items-center justify-between pb-4 border-b border-border/50",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:102:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:93:9",
 					"data-prohibitions": "[]",
-					className: "flex items-center gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:103:11",
-						"data-prohibitions": "[editContent]",
-						className: "w-2.5 h-2.5 rounded-full bg-primary animate-pulse"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:104:11",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:94:11",
 						"data-prohibitions": "[]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:105:13",
-							"data-prohibitions": "[]",
-							className: "text-xl font-bold",
-							children: "Números WhatsApp"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:106:13",
-							"data-prohibitions": "[]",
-							className: "text-sm text-muted-foreground",
-							children: "Gerencie suas instâncias de envio"
-						})]
+						className: "text-xl font-bold",
+						children: "Números WhatsApp"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:95:11",
+						"data-prohibitions": "[]",
+						className: "text-sm text-muted-foreground",
+						children: "Gerencie suas instâncias de envio"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:109:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:97:9",
 					"data-prohibitions": "[]",
 					onClick: () => openModal(),
 					size: "sm",
 					className: "gap-2 bg-primary hover:bg-primary/90",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:114:11",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:102:11",
 						"data-prohibitions": "[editContent]",
 						className: "w-4 h-4"
 					}), " Adicionar número"]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-				"data-uid": "src/components/config/WhatsAppInstances.tsx:117:7",
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:105:7",
 				"data-prohibitions": "[editContent]",
 				className: "pt-6",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:118:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:106:9",
 					"data-prohibitions": "[editContent]",
-					id: "instances-list",
 					className: "space-y-4",
 					children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:120:13",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:108:13",
 						"data-prohibitions": "[]",
 						className: "text-center py-8 text-muted-foreground animate-pulse",
 						children: "Carregando..."
 					}) : instances.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:124:13",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:112:13",
 						"data-prohibitions": "[]",
 						className: "text-center py-8 text-muted-foreground",
 						children: "Nenhum número configurado."
 					}) : instances.map((inst) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:127:15",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:115:15",
 						"data-prohibitions": "[editContent]",
 						className: "flex items-center justify-between p-4 rounded-lg border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:131:17",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:119:17",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-4",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:132:19",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:120:19",
 								"data-prohibitions": "[editContent]",
-								className: cn$1("p-2 rounded-full", inst.active ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"),
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Smartphone, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:138:21",
+								className: "relative",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:121:21",
 									"data-prohibitions": "[editContent]",
-									className: "w-5 h-5"
-								})
+									className: cn$1("absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-background z-10", getStatusDot(inst.status))
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:127:21",
+									"data-prohibitions": "[editContent]",
+									className: cn$1("p-2 rounded-full", inst.is_active ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Smartphone, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:135:23",
+										"data-prohibitions": "[editContent]",
+										className: "w-5 h-5"
+									})
+								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:140:19",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:138:19",
 								"data-prohibitions": "[editContent]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:141:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:139:21",
 									"data-prohibitions": "[editContent]",
 									className: "font-semibold text-sm flex items-center gap-2",
-									children: [inst.displayName, !inst.active && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:144:25",
+									children: [inst.display_name, !inst.is_active && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:142:25",
 										"data-prohibitions": "[]",
 										variant: "secondary",
-										className: "text-[10px] h-4",
-										children: "Desativado"
+										className: "text-[10px] h-4 text-red-500 bg-red-500/10 border-red-500/20",
+										children: "Inativo"
 									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:149:21",
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:150:21",
 									"data-prohibitions": "[editContent]",
-									className: "text-xs text-muted-foreground font-mono mt-1",
-									children: inst.instanceName
+									className: "text-xs text-muted-foreground mt-1",
+									children: [
+										inst.provider || "Evolution",
+										" •",
+										" ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:152:23",
+											"data-prohibitions": "[editContent]",
+											className: "font-mono",
+											children: inst.instance_name
+										})
+									]
 								})]
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:154:17",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:156:17",
 							"data-prohibitions": "[]",
 							variant: "ghost",
 							size: "sm",
@@ -32437,116 +32528,104 @@ function WhatsAppInstances() {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-				"data-uid": "src/components/config/WhatsAppInstances.tsx:163:7",
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:165:7",
 				"data-prohibitions": "[editContent]",
 				open: isModalOpen,
 				onOpenChange: setIsModalOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:164:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:166:9",
 					"data-prohibitions": "[editContent]",
-					className: "backdrop-blur-sm sm:max-w-md bg-background border-border shadow-2xl z-50",
+					className: "backdrop-blur-sm sm:max-w-md bg-background border-border",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:165:11",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:167:11",
 							"data-prohibitions": "[editContent]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:166:13",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:168:13",
 								"data-prohibitions": "[editContent]",
-								id: "instance-modal-title",
 								children: editingId ? "Editar Número" : "Adicionar Número"
 							})
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:171:11",
-							"data-prohibitions": "[editContent]",
-							type: "hidden",
-							id: "inst-editing-id",
-							value: editingId || ""
-						}),
 						error && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:174:13",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:172:13",
 							"data-prohibitions": "[editContent]",
-							id: "instance-modal-error",
 							className: "flex items-center gap-2 p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:178:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:173:15",
 								"data-prohibitions": "[editContent]",
 								className: "w-4 h-4 shrink-0"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:179:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:174:15",
 								"data-prohibitions": "[editContent]",
 								children: error
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:183:11",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:178:11",
 							"data-prohibitions": "[editContent]",
 							className: "space-y-4 py-2",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:184:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:179:13",
 									"data-prohibitions": "[]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:185:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:180:15",
 										"data-prohibitions": "[]",
 										children: "Nome de exibição"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:186:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:181:15",
 										"data-prohibitions": "[editContent]",
 										placeholder: "Ex: Número Principal",
-										value: formData.displayName,
+										value: formData.display_name,
 										onChange: (e) => setFormData({
 											...formData,
-											displayName: e.target.value
-										}),
-										className: "bg-secondary/30"
+											display_name: e.target.value
+										})
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:193:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:187:13",
 									"data-prohibitions": "[]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:194:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:188:15",
 										"data-prohibitions": "[]",
 										children: "URL da API"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:195:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:189:15",
 										"data-prohibitions": "[editContent]",
 										placeholder: "https://sua-instancia.exemplo.com",
-										value: formData.apiUrl,
+										value: formData.api_url,
 										onChange: (e) => setFormData({
 											...formData,
-											apiUrl: e.target.value
-										}),
-										className: "bg-secondary/30"
+											api_url: e.target.value
+										})
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:202:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:195:13",
 									"data-prohibitions": "[editContent]",
 									className: "space-y-2",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:203:15",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:196:15",
 											"data-prohibitions": "[]",
 											children: "API Key"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:204:15",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:197:15",
 											"data-prohibitions": "[editContent]",
 											type: "password",
 											placeholder: "••••••••••••••••",
-											value: formData.apiKey,
+											value: formData.api_key,
 											onChange: (e) => setFormData({
 												...formData,
-												apiKey: e.target.value
-											}),
-											className: "bg-secondary/30"
+												api_key: e.target.value
+											})
 										}),
 										editingId && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:212:17",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:204:17",
 											"data-prohibitions": "[]",
 											className: "text-xs text-muted-foreground",
 											children: "Deixe em branco para manter a chave atual."
@@ -32554,50 +32633,47 @@ function WhatsAppInstances() {
 									]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:217:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:209:13",
 									"data-prohibitions": "[]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:218:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:210:15",
 										"data-prohibitions": "[]",
 										children: "Nome da Instância"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:219:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:211:15",
 										"data-prohibitions": "[editContent]",
 										placeholder: "minha-instancia",
-										value: formData.instanceName,
+										value: formData.instance_name,
 										onChange: (e) => setFormData({
 											...formData,
-											instanceName: e.target.value
-										}),
-										className: "bg-secondary/30"
+											instance_name: e.target.value
+										})
 									})]
 								})
 							]
 						}),
 						isDeleting ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:229:13",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:220:13",
 							"data-prohibitions": "[]",
-							id: "instance-delete-confirm",
-							className: "p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-3 mt-4 animate-in slide-in-from-bottom-2",
+							className: "p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-3 mt-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:233:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:221:15",
 								"data-prohibitions": "[]",
 								className: "text-sm font-medium text-red-500 text-center",
 								children: "Apagar definitivamente? Esta ação não pode ser desfeita."
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:236:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:224:15",
 								"data-prohibitions": "[]",
 								className: "flex gap-2 justify-center",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:237:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:225:17",
 									"data-prohibitions": "[]",
 									variant: "outline",
-									className: "text-slate-300 border-slate-700 hover:bg-slate-800",
 									onClick: () => setIsDeleting(false),
 									children: "Cancelar"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:244:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:228:17",
 									"data-prohibitions": "[]",
 									variant: "destructive",
 									onClick: handleDelete,
@@ -32605,15 +32681,15 @@ function WhatsAppInstances() {
 								})]
 							})]
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:250:13",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:234:13",
 							"data-prohibitions": "[editContent]",
 							className: "flex justify-between mt-4 items-center",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:251:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:235:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex gap-2",
 								children: editingId && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:254:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:238:21",
 									"data-prohibitions": "[]",
 									variant: "ghost",
 									size: "icon",
@@ -32621,38 +32697,37 @@ function WhatsAppInstances() {
 									title: "Ativar/Desativar",
 									className: "text-muted-foreground hover:text-foreground",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Power, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:261:23",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:245:23",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4"
 									})
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:263:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:247:21",
 									"data-prohibitions": "[]",
 									variant: "ghost",
 									size: "icon",
 									onClick: () => setIsDeleting(true),
 									className: "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:269:23",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:253:23",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4"
 									})
 								})] })
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:274:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:258:15",
 								"data-prohibitions": "[]",
 								className: "flex gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:275:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:259:17",
 									"data-prohibitions": "[]",
 									variant: "outline",
 									onClick: () => setIsModalOpen(false),
 									children: "Cancelar"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:278:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:262:17",
 									"data-prohibitions": "[]",
 									onClick: handleSave,
-									className: "bg-primary hover:bg-primary/90 text-primary-foreground",
 									children: "Salvar"
 								})]
 							})]
@@ -33650,4 +33725,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-Bc4Y4wO1.js.map
+//# sourceMappingURL=index-B78KUeCo.js.map
