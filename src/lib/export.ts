@@ -1,13 +1,26 @@
 import { Contact } from '@/stores/useAppStore'
 
 export function downloadCsv(filename: string, logs: Contact[]) {
-  const headers = ['#', 'Nome', 'Telefone', 'Status', 'Erro', 'Horário']
+  const headers = [
+    '#',
+    'Nome',
+    'Telefone',
+    'Status',
+    'Erro',
+    'Entrega',
+    'Entregue em',
+    'Lido em',
+    'Horário',
+  ]
   const rows = logs.map((log) => [
     log.index,
     `"${log.name}"`,
     `"${log.phone}"`,
     log.status,
     `"${log.error || ''}"`,
+    log.delivery_status || '',
+    log.delivered_at || '',
+    log.read_at || '',
     log.time || '',
   ])
 

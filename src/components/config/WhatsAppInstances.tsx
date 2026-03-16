@@ -6,16 +6,21 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
+import { cn, esc } from '@/lib/utils'
 import useAppStore, { WhatsAppInstance } from '@/stores/useAppStore'
+import { useToast } from '@/hooks/use-toast'
+import { api } from '@/lib/api'
+import { QrModal } from './QrModal'
 
 export default function WhatsAppInstances() {
   const { instances, setInstances } = useAppStore()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [qrInstance, setQrInstance] = useState<WhatsAppInstance | null>(null)
 
   const [formData, setFormData] = useState({
     display_name: '',
@@ -57,7 +62,7 @@ export default function WhatsAppInstances() {
           ...formData,
           id: newId,
           provider: 'Evolution API',
-          status: 'connected',
+          status: 'pending_qr',
           is_active: true,
         },
       ])
@@ -67,7 +72,6 @@ export default function WhatsAppInstances() {
 
   const handleDelete = async () => {
     if (!editingId) return
-    // Mock Hard Delete Request
     await fetch(`/api/whatsapp/instances/${editingId}/hard`, { method: 'DELETE' }).catch(() => {})
     setInstances(instances.filter((i) => i.id !== editingId))
     setIsModalOpen(false)
@@ -75,10 +79,21 @@ export default function WhatsAppInstances() {
 
   const handleToggleActive = async () => {
     if (!editingId) return
-    // Mock Soft Delete Request
     await fetch(`/api/whatsapp/instances/${editingId}`, { method: 'DELETE' }).catch(() => {})
     setInstances(instances.map((i) => (i.id === editingId ? { ...i, is_active: !i.is_active } : i)))
     setIsModalOpen(false)
+  }
+
+  const verifyInstance = async (inst: WhatsAppInstance) => {
+    try {
+      const res = await api.checkInstanceStatus(inst.id)
+      if (res.status === 'connected') {
+        toast({ title: 'Sucesso', description: 'Instância conectada.' })
+      } else {
+        toast({ title: 'Atenção', description: 'Instância desconectada.', variant: 'destructive' })
+      }
+      setInstances(instances.map((i) => (i.id === inst.id ? { ...i, status: res.status } : i)))
+    } catch (e) {}
   }
 
   const getStatusDot = (status: string) => {
@@ -137,7 +152,7 @@ export default function WhatsAppInstances() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-sm flex items-center gap-2">
-                      {inst.display_name}
+                      {esc(inst.display_name)}
                       {!inst.is_active && (
                         <Badge
                           variant="secondary"
@@ -148,14 +163,34 @@ export default function WhatsAppInstances() {
                       )}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {inst.provider || 'Evolution'} •{' '}
-                      <span className="font-mono">{inst.instance_name}</span>
+                      {esc(inst.provider || 'Evolution')} •{' '}
+                      <span className="font-mono">{esc(inst.instance_name)}</span>
                     </p>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => openModal(inst)}>
-                  Editar
-                </Button>
+                <div className="flex items-center gap-2">
+                  {inst.status !== 'connected' ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary"
+                      onClick={() => setQrInstance(inst)}
+                    >
+                      Conectar
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      className="bg-slate-700 hover:bg-slate-600 text-slate-300"
+                      onClick={() => verifyInstance(inst)}
+                    >
+                      Verificar
+                    </Button>
+                  )}
+                  <Button variant="ghost" size="sm" onClick={() => openModal(inst)}>
+                    Editar
+                  </Button>
+                </div>
               </div>
             ))
           )}
@@ -265,6 +300,8 @@ export default function WhatsAppInstances() {
           )}
         </DialogContent>
       </Dialog>
+
+      <QrModal instance={qrInstance} onClose={() => setQrInstance(null)} />
     </Card>
   )
 }

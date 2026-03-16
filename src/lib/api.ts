@@ -60,4 +60,15 @@ export const api = {
     mockableApi('/api/dispatch/stream-token', { method: 'POST' }, () => ({
       token: `tok-${Date.now()}`,
     })),
+
+  getInstanceQr: (id: string) =>
+    mockableApi(`/api/whatsapp/instances/${id}/qr`, { method: 'GET' }, () => ({
+      qr: 'https://img.usecurling.com/i?q=qrcode&shape=outline',
+      expires_in_seconds: 45,
+    })),
+
+  checkInstanceStatus: (id: string) =>
+    mockableApi(`/api/whatsapp/instances/${id}/status`, { method: 'GET' }, () => ({
+      status: Math.random() > 0.8 ? 'connected' : 'pending_qr',
+    })),
 }

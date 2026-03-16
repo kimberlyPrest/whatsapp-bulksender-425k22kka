@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, Users, Percent, RotateCcw, ArrowRight } from 'lucide-react'
+import { Calendar, RotateCcw, ArrowRight } from 'lucide-react'
 import { HistoryLogModal } from '@/components/history/HistoryLogModal'
 import { mockableApi } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
+import { esc } from '@/lib/utils'
+import { QrModal } from '@/components/config/QrModal'
 
 interface Campaign {
   id: string
@@ -72,7 +74,6 @@ export default function History() {
   const [selectedName, setSelectedName] = useState('')
 
   useEffect(() => {
-    // Mock fetch /api/dispatches
     mockableApiFetch()
   }, [])
 
@@ -135,10 +136,10 @@ export default function History() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="font-bold text-lg group-hover:text-primary transition-colors flex items-center gap-2">
-                      {camp.name}
+                      {esc(camp.name)}
                     </h3>
                     <div className="flex items-center text-xs text-muted-foreground mt-1 gap-1">
-                      <Calendar className="w-3 h-3" /> {camp.date}
+                      <Calendar className="w-3 h-3" /> {esc(camp.date)}
                     </div>
                   </div>
                   {getStatusBadge(camp.status)}
@@ -193,6 +194,8 @@ export default function History() {
         campaignName={selectedName}
         onClose={() => setSelectedId(null)}
       />
+
+      <QrModal instance={null} onClose={() => {}} />
     </div>
   )
 }

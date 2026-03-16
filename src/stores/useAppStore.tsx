@@ -8,6 +8,9 @@ export interface Contact {
   status: 'Pronto' | 'Enviado' | 'Erro' | 'Processando'
   error?: string
   time?: string
+  delivery_status?: 'sent' | 'delivered' | 'read' | 'failed'
+  delivered_at?: string
+  read_at?: string
 }
 
 export type UserRole = 'SuperAdmin' | 'Elite' | 'Geral'

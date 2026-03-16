@@ -17672,7 +17672,7 @@ function createContext2(rootComponentName, defaultContext) {
 	}
 	return [Provider, useContext2];
 }
-function createContextScope(scopeName, createContextScopeDeps = []) {
+function createContextScope$1(scopeName, createContextScopeDeps = []) {
 	let defaultContexts = [];
 	function createContext3(rootComponentName, defaultContext) {
 		const BaseContext = import_react.createContext(defaultContext);
@@ -17710,9 +17710,9 @@ function createContextScope(scopeName, createContextScopeDeps = []) {
 		};
 	};
 	createScope.scopeName = scopeName;
-	return [createContext3, composeContextScopes(createScope, ...createContextScopeDeps)];
+	return [createContext3, composeContextScopes$1(createScope, ...createContextScopeDeps)];
 }
-function composeContextScopes(...scopes) {
+function composeContextScopes$1(...scopes) {
 	const baseScope = scopes[0];
 	if (scopes.length === 1) return baseScope;
 	const createScope = () => {
@@ -17830,7 +17830,7 @@ function getElementRef$2(element) {
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-collection@1.1.7_@types+react-dom@19.2.3_@types+react@19.2.14__@types+r_161926fa2509d0b7370b60b8bb4eb8b0/node_modules/@radix-ui/react-collection/dist/index.mjs
 function createCollection(name) {
 	const PROVIDER_NAME = name + "CollectionProvider";
-	const [createCollectionContext, createCollectionScope] = createContextScope(PROVIDER_NAME);
+	const [createCollectionContext, createCollectionScope] = createContextScope$1(PROVIDER_NAME);
 	const [CollectionProviderImpl, useCollectionContext] = createCollectionContext(PROVIDER_NAME, {
 		collectionRef: { current: null },
 		itemMap: /* @__PURE__ */ new Map()
@@ -18133,7 +18133,7 @@ function handleAndDispatchCustomEvent$1(name, handler, detail, { discrete }) {
 	if (discrete) dispatchDiscreteCustomEvent(target, event);
 	else target.dispatchEvent(event);
 }
-var Root$8 = DismissableLayer;
+var Root$9 = DismissableLayer;
 var Branch = DismissableLayerBranch;
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-use-layout-effect@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs
@@ -18333,12 +18333,12 @@ var VisuallyHidden = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 VisuallyHidden.displayName = NAME$3;
-var Root$7 = VisuallyHidden;
+var Root$8 = VisuallyHidden;
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-toast@1.2.15_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_4581e89c6ba13e4159ce65546c8b2a16/node_modules/@radix-ui/react-toast/dist/index.mjs
 var PROVIDER_NAME$1 = "ToastProvider";
 var [Collection$3, useCollection$3, createCollectionScope$3] = createCollection("Toast");
-var [createToastContext, createToastScope] = createContextScope("Toast", [createCollectionScope$3]);
+var [createToastContext, createToastScope] = createContextScope$1("Toast", [createCollectionScope$3]);
 var [ToastProviderProvider, useToastProviderContext] = createToastContext(PROVIDER_NAME$1);
 var ToastProvider$1 = (props) => {
 	const { __scopeToast, label = "Notification", duration = 5e3, swipeDirection = "right", swipeThreshold = 50, children } = props;
@@ -18633,7 +18633,7 @@ var ToastImpl = import_react.forwardRef((props, forwardedRef) => {
 		onClose: handleClose,
 		children: import_react_dom.createPortal(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$3.ItemSlot, {
 			scope: __scopeToast,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$8, {
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$9, {
 				asChild: true,
 				onEscapeKeyDown: composeEventHandlers(onEscapeKeyDown, () => {
 					if (!context.isFocusedToastEscapeKeyDownRef.current) handleClose();
@@ -19838,12 +19838,12 @@ var lengthUnitRegex = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|
 var colorFunctionRegex = /^(rgba?|hsla?|hwb|(ok)?(lab|lch)|color-mix)\(.+\)$/;
 var shadowRegex = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/;
 var imageRegex = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/;
-var isLength = (value) => isNumber(value) || stringLengths.has(value) || fractionRegex.test(value);
+var isLength = (value) => isNumber$1(value) || stringLengths.has(value) || fractionRegex.test(value);
 var isArbitraryLength = (value) => getIsArbitraryValue(value, "length", isLengthOnly);
-var isNumber = (value) => Boolean(value) && !Number.isNaN(Number(value));
-var isArbitraryNumber = (value) => getIsArbitraryValue(value, "number", isNumber);
+var isNumber$1 = (value) => Boolean(value) && !Number.isNaN(Number(value));
+var isArbitraryNumber = (value) => getIsArbitraryValue(value, "number", isNumber$1);
 var isInteger = (value) => Boolean(value) && Number.isInteger(Number(value));
-var isPercent = (value) => value.endsWith("%") && isNumber(value.slice(0, -1));
+var isPercent = (value) => value.endsWith("%") && isNumber$1(value.slice(0, -1));
 var isArbitraryValue = (value) => arbitraryValueRegex.test(value);
 var isTshirtSize = (value) => tshirtUnitRegex.test(value);
 var sizeLabels = /* @__PURE__ */ new Set([
@@ -19920,7 +19920,7 @@ var getDefaultConfig = () => {
 	];
 	const getNumberWithAutoAndArbitrary = () => [
 		"auto",
-		isNumber,
+		isNumber$1,
 		isArbitraryValue
 	];
 	const getPositions = () => [
@@ -19983,7 +19983,7 @@ var getDefaultConfig = () => {
 		"right",
 		"column"
 	];
-	const getNumberAndArbitrary = () => [isNumber, isArbitraryValue];
+	const getNumberAndArbitrary = () => [isNumber$1, isArbitraryValue];
 	return {
 		cacheSize: 500,
 		separator: ":",
@@ -20372,7 +20372,7 @@ var getDefaultConfig = () => {
 			] }],
 			"line-clamp": [{ "line-clamp": [
 				"none",
-				isNumber,
+				isNumber$1,
 				isArbitraryNumber
 			] }],
 			leading: [{ leading: [
@@ -20945,6 +20945,13 @@ var twMerge = /* @__PURE__ */ createTailwindMerge(getDefaultConfig);
 */
 function cn$1(...inputs) {
 	return twMerge(clsx(inputs));
+}
+/**
+* Escapes HTML characters in a string to prevent XSS
+*/
+function esc(str) {
+	if (str === null || str === void 0) return "";
+	return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 //#endregion
 //#region src/components/ui/toast.tsx
@@ -23699,7 +23706,7 @@ var Arrow$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Arrow$1.displayName = NAME$2;
-var Root$6 = Arrow$1;
+var Root$7 = Arrow$1;
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-use-size@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-size/dist/index.mjs
 function useSize(element) {
@@ -23739,7 +23746,7 @@ function useSize(element) {
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-popper@1.2.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_13e0521d8aea7ebfbfb8bee1fb615c05/node_modules/@radix-ui/react-popper/dist/index.mjs
 var POPPER_NAME = "Popper";
-var [createPopperContext, createPopperScope] = createContextScope(POPPER_NAME);
+var [createPopperContext, createPopperScope] = createContextScope$1(POPPER_NAME);
 var [PopperProvider, usePopperContext] = createPopperContext(POPPER_NAME);
 var Popper = (props) => {
 	const { __scopePopper, children } = props;
@@ -23920,7 +23927,7 @@ var PopperArrow = import_react.forwardRef(function PopperArrow2(props, forwarded
 			}[contentContext.placedSide],
 			visibility: contentContext.shouldHideArrow ? "hidden" : void 0
 		},
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$6, {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$7, {
 			...arrowProps,
 			ref: forwardedRef,
 			style: {
@@ -23981,7 +23988,7 @@ var Content$3 = PopperContent;
 var Arrow = PopperArrow;
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-tooltip@1.2.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+reac_9074d9fb06315b089b2bee17c4c65951/node_modules/@radix-ui/react-tooltip/dist/index.mjs
-var [createTooltipContext, createTooltipScope] = createContextScope("Tooltip", [createPopperScope]);
+var [createTooltipContext, createTooltipScope] = createContextScope$1("Tooltip", [createPopperScope]);
 var usePopperScope$1 = createPopperScope();
 var PROVIDER_NAME = "TooltipProvider";
 var DEFAULT_DELAY_DURATION = 700;
@@ -24304,7 +24311,7 @@ var TooltipContentImpl = import_react.forwardRef((props, forwardedRef) => {
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slottable, { children }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VisuallyHiddenContentContextProvider, {
 				scope: __scopeTooltip,
 				isInside: true,
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$7, {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$8, {
 					id: context.contentId,
 					role: "tooltip",
 					children: ariaLabel || children
@@ -24686,7 +24693,7 @@ function usePrevious(value) {
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-checkbox@1.3.3_@types+react-dom@19.2.3_@types+react@19.2.14__@types+rea_a9bfe74df417688e01ae6068318bf0dd/node_modules/@radix-ui/react-checkbox/dist/index.mjs
 var CHECKBOX_NAME = "Checkbox";
-var [createCheckboxContext, createCheckboxScope] = createContextScope(CHECKBOX_NAME);
+var [createCheckboxContext, createCheckboxScope] = createContextScope$1(CHECKBOX_NAME);
 var [CheckboxProviderImpl, useCheckboxContext] = createCheckboxContext(CHECKBOX_NAME);
 function CheckboxProvider(props) {
 	const { __scopeCheckbox, checked: checkedProp, children, defaultChecked, disabled, form, name, onCheckedChange, required, value = "on", internal_do_not_use_render } = props;
@@ -24779,10 +24786,10 @@ var Checkbox$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Checkbox$1.displayName = CHECKBOX_NAME;
-var INDICATOR_NAME = "CheckboxIndicator";
+var INDICATOR_NAME$1 = "CheckboxIndicator";
 var CheckboxIndicator = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeCheckbox, forceMount, ...indicatorProps } = props;
-	const context = useCheckboxContext(INDICATOR_NAME, __scopeCheckbox);
+	const context = useCheckboxContext(INDICATOR_NAME$1, __scopeCheckbox);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 		present: forceMount || isIndeterminate(context.checked) || context.checked === true,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.span, {
@@ -24797,7 +24804,7 @@ var CheckboxIndicator = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-CheckboxIndicator.displayName = INDICATOR_NAME;
+CheckboxIndicator.displayName = INDICATOR_NAME$1;
 var BUBBLE_INPUT_NAME$2 = "CheckboxBubbleInput";
 var CheckboxBubbleInput = import_react.forwardRef(({ __scopeCheckbox, ...props }, forwardedRef) => {
 	const { control, hasConsumerStoppedPropagationRef, checked, defaultChecked, required, disabled, name, value, form, bubbleInput, setBubbleInput } = useCheckboxContext(BUBBLE_INPUT_NAME$2, __scopeCheckbox);
@@ -24940,18 +24947,18 @@ var Label$2 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Label$2.displayName = NAME$1;
-var Root$5 = Label$2;
+var Root$6 = Label$2;
 //#endregion
 //#region src/components/ui/label.tsx
 var labelVariants = cva("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
-var Label$1 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$5, {
+var Label$1 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$6, {
 	"data-uid": "src/components/ui/label.tsx:16:3",
 	"data-prohibitions": "[editContent]",
 	ref,
 	className: cn$1(labelVariants(), className),
 	...props
 }));
-Label$1.displayName = Root$5.displayName;
+Label$1.displayName = Root$6.displayName;
 //#endregion
 //#region src/components/dispatch/MessageEditor.tsx
 function MessageEditor({ message, setMessage }) {
@@ -26076,7 +26083,7 @@ var hideOthers = function(originalTarget, parentNode, markerName) {
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-dialog@1.1.15_@types+react-dom@19.2.3_@types+react@19.2.14__@types+reac_779045218dc2799d336e7197abef9d38/node_modules/@radix-ui/react-dialog/dist/index.mjs
 var DIALOG_NAME = "Dialog";
-var [createDialogContext, createDialogScope] = createContextScope(DIALOG_NAME);
+var [createDialogContext, createDialogScope] = createContextScope$1(DIALOG_NAME);
 var [DialogProvider, useDialogContext] = createDialogContext(DIALOG_NAME);
 var Dialog$1 = (props) => {
 	const { __scopeDialog, children, open: openProp, defaultOpen, onOpenChange, modal = true } = props;
@@ -26343,7 +26350,7 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
 	]);
 	return null;
 };
-var Root$4 = Dialog$1;
+var Root$5 = Dialog$1;
 var Portal$1 = DialogPortal$1;
 var Overlay = DialogOverlay$1;
 var Content$2 = DialogContent$1;
@@ -26352,7 +26359,7 @@ var Description = DialogDescription$1;
 var Close = DialogClose$1;
 //#endregion
 //#region src/components/ui/dialog.tsx
-var Dialog = Root$4;
+var Dialog = Root$5;
 var DialogPortal = Portal$1;
 var DialogOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
 	"data-uid": "src/components/ui/dialog.tsx:20:3",
@@ -26425,7 +26432,7 @@ DialogDescription.displayName = Description.displayName;
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-switch@1.2.6_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_e3738c514c10df2ef7e24af5ee461853/node_modules/@radix-ui/react-switch/dist/index.mjs
 var SWITCH_NAME = "Switch";
-var [createSwitchContext, createSwitchScope] = createContextScope(SWITCH_NAME);
+var [createSwitchContext, createSwitchScope] = createContextScope$1(SWITCH_NAME);
 var [SwitchProvider, useSwitchContext] = createSwitchContext(SWITCH_NAME);
 var Switch$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSwitch, name, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange, form, ...switchProps } = props;
@@ -26529,11 +26536,11 @@ SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function getState$2(checked) {
 	return checked ? "checked" : "unchecked";
 }
-var Root$3 = Switch$1;
+var Root$4 = Switch$1;
 var Thumb = SwitchThumb;
 //#endregion
 //#region src/components/ui/switch.tsx
-var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
+var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
 	"data-uid": "src/components/ui/switch.tsx:9:3",
 	"data-prohibitions": "[editContent]",
 	className: cn$1("peer inline-flex h-[24px] w-[44px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input", className),
@@ -26545,7 +26552,7 @@ var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PUR
 		className: cn$1("pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0")
 	})
 }));
-Switch.displayName = Root$3.displayName;
+Switch.displayName = Root$4.displayName;
 //#endregion
 //#region src/components/dispatch/MessageVariations.tsx
 var LOADING_MSGS = [
@@ -26949,7 +26956,7 @@ function MessageVariations({ template, contactsCount, variations, onChange }) {
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-collapsible@1.1.12_@types+react-dom@19.2.3_@types+react@19.2.14__@types_10a2c6d0ac3bcc7422bd3020fe61e076/node_modules/@radix-ui/react-collapsible/dist/index.mjs
 var COLLAPSIBLE_NAME = "Collapsible";
-var [createCollapsibleContext, createCollapsibleScope] = createContextScope(COLLAPSIBLE_NAME);
+var [createCollapsibleContext, createCollapsibleScope] = createContextScope$1(COLLAPSIBLE_NAME);
 var [CollapsibleProvider, useCollapsibleContext] = createCollapsibleContext(COLLAPSIBLE_NAME);
 var Collapsible = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeCollapsible, open: openProp, defaultOpen, disabled, onOpenChange, ...collapsibleProps } = props;
@@ -27059,7 +27066,7 @@ var CollapsibleContentImpl = import_react.forwardRef((props, forwardedRef) => {
 function getState$1(open) {
 	return open ? "open" : "closed";
 }
-var Root$2 = Collapsible;
+var Root$3 = Collapsible;
 var Trigger$2 = CollapsibleTrigger;
 var Content$1 = CollapsibleContent;
 //#endregion
@@ -27081,7 +27088,7 @@ var ACCORDION_KEYS = [
 	"ArrowRight"
 ];
 var [Collection$2, useCollection$2, createCollectionScope$2] = createCollection(ACCORDION_NAME);
-var [createAccordionContext, createAccordionScope] = createContextScope(ACCORDION_NAME, [createCollectionScope$2, createCollapsibleScope]);
+var [createAccordionContext, createAccordionScope] = createContextScope$1(ACCORDION_NAME, [createCollectionScope$2, createCollapsibleScope]);
 var useCollapsibleScope = createCollapsibleScope();
 var Accordion$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { type, ...accordionProps } = props;
@@ -27229,7 +27236,7 @@ var AccordionItem$1 = import_react.forwardRef((props, forwardedRef) => {
 		open,
 		disabled,
 		triggerId,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
 			"data-orientation": accordionContext.orientation,
 			"data-state": getState(open),
 			...collapsibleScope,
@@ -27619,6 +27626,9 @@ function downloadCsv(filename, logs) {
 		"Telefone",
 		"Status",
 		"Erro",
+		"Entrega",
+		"Entregue em",
+		"Lido em",
 		"Horário"
 	];
 	const rows = logs.map((log) => [
@@ -27627,6 +27637,9 @@ function downloadCsv(filename, logs) {
 		`"${log.phone}"`,
 		log.status,
 		`"${log.error || ""}"`,
+		log.delivery_status || "",
+		log.delivered_at || "",
+		log.read_at || "",
 		log.time || ""
 	]);
 	const csvContent = [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
@@ -27945,7 +27958,7 @@ var EVENT_OPTIONS = {
 };
 var GROUP_NAME$1 = "RovingFocusGroup";
 var [Collection$1, useCollection$1, createCollectionScope$1] = createCollection(GROUP_NAME$1);
-var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContextScope(GROUP_NAME$1, [createCollectionScope$1]);
+var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContextScope$1(GROUP_NAME$1, [createCollectionScope$1]);
 var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME$1);
 var RovingFocusGroup = import_react.forwardRef((props, forwardedRef) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$1.Provider, {
@@ -28118,12 +28131,12 @@ function focusFirst(candidates, preventScroll = false) {
 function wrapArray$1(array, startIndex) {
 	return array.map((_, index) => array[(startIndex + index) % array.length]);
 }
-var Root$1 = RovingFocusGroup;
+var Root$2 = RovingFocusGroup;
 var Item$1 = RovingFocusGroupItem;
 //#endregion
 //#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-tabs@1.1.13_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react@_2ad0945e3cb98dc5bbfaaf29c105e977/node_modules/@radix-ui/react-tabs/dist/index.mjs
 var TABS_NAME = "Tabs";
-var [createTabsContext, createTabsScope] = createContextScope(TABS_NAME, [createRovingFocusGroupScope]);
+var [createTabsContext, createTabsScope] = createContextScope$1(TABS_NAME, [createRovingFocusGroupScope]);
 var useRovingFocusGroupScope = createRovingFocusGroupScope();
 var [TabsProvider, useTabsContext] = createTabsContext(TABS_NAME);
 var Tabs$1 = import_react.forwardRef((props, forwardedRef) => {
@@ -28157,7 +28170,7 @@ var TabsList$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, loop = true, ...listProps } = props;
 	const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
 	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
 		asChild: true,
 		...rovingFocusGroupScope,
 		orientation: context.orientation,
@@ -28331,7 +28344,12 @@ var api = {
 		success: true,
 		scheduled: true
 	})),
-	getStreamToken: () => mockableApi("/api/dispatch/stream-token", { method: "POST" }, () => ({ token: `tok-${Date.now()}` }))
+	getStreamToken: () => mockableApi("/api/dispatch/stream-token", { method: "POST" }, () => ({ token: `tok-${Date.now()}` })),
+	getInstanceQr: (id) => mockableApi(`/api/whatsapp/instances/${id}/qr`, { method: "GET" }, () => ({
+		qr: "https://img.usecurling.com/i?q=qrcode&shape=outline",
+		expires_in_seconds: 45
+	})),
+	checkInstanceStatus: (id) => mockableApi(`/api/whatsapp/instances/${id}/status`, { method: "GET" }, () => ({ status: Math.random() > .8 ? "connected" : "pending_qr" }))
 };
 //#endregion
 //#region src/stores/useAppStore.tsx
@@ -28372,7 +28390,7 @@ var AppProvider = ({ children }) => {
 		}
 	]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/stores/useAppStore.tsx:89:5",
+		"data-uid": "src/stores/useAppStore.tsx:92:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			user,
@@ -29419,10 +29437,10 @@ Separator$2.displayName = NAME;
 function isValidOrientation(orientation) {
 	return ORIENTATIONS.includes(orientation);
 }
-var Root = Separator$2;
+var Root$1 = Separator$2;
 //#endregion
 //#region src/components/ui/separator.tsx
-var Separator$1 = import_react.forwardRef(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root, {
+var Separator$1 = import_react.forwardRef(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
 	"data-uid": "src/components/ui/separator.tsx:11:3",
 	"data-prohibitions": "[editContent]",
 	ref,
@@ -29431,10 +29449,10 @@ var Separator$1 = import_react.forwardRef(({ className, orientation = "horizonta
 	className: cn$1("shrink-0 bg-border", orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]", className),
 	...props
 }));
-Separator$1.displayName = Root.displayName;
+Separator$1.displayName = Root$1.displayName;
 //#endregion
 //#region src/components/ui/sheet.tsx
-var Sheet = Root$4;
+var Sheet = Root$5;
 var SheetPortal = Portal$1;
 var SheetOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
 	"data-uid": "src/components/ui/sheet.tsx:21:3",
@@ -30612,7 +30630,7 @@ var OPEN_KEYS = [
 var SELECTION_KEYS = [" ", "Enter"];
 var SELECT_NAME = "Select";
 var [Collection, useCollection, createCollectionScope] = createCollection(SELECT_NAME);
-var [createSelectContext, createSelectScope] = createContextScope(SELECT_NAME, [createCollectionScope, createPopperScope]);
+var [createSelectContext, createSelectScope] = createContextScope$1(SELECT_NAME, [createCollectionScope, createPopperScope]);
 var usePopperScope = createPopperScope();
 var [SelectProvider, useSelectContext] = createSelectContext(SELECT_NAME);
 var [SelectNativeOptionsProvider, useSelectNativeOptionsContext] = createSelectContext(SELECT_NAME);
@@ -32341,181 +32359,237 @@ function HistoryLogModal({ dispatchId, campaignName, onClose }) {
 		if (!dispatchId) return;
 		setLoading(true);
 		setTimeout(() => {
-			setLogs(Array.from({ length: 15 }).map((_, i) => ({
-				id: `${i}`,
-				index: i + 1,
-				name: `Cliente ${i + 1}`,
-				phone: `+55 11 99999-00${i.toString().padStart(2, "0")}`,
-				status: i % 5 === 0 ? "Erro" : "Enviado",
-				error: i % 5 === 0 ? "Timeout" : void 0,
-				time: (/* @__PURE__ */ new Date()).toLocaleTimeString()
-			})));
+			setLogs(Array.from({ length: 15 }).map((_, i) => {
+				const isError = i % 5 === 0;
+				const status = isError ? "Erro" : "Enviado";
+				const delivery_status = isError ? "failed" : i % 2 === 0 ? "read" : i % 3 === 0 ? "delivered" : "sent";
+				return {
+					id: `${i}`,
+					index: i + 1,
+					name: `Cliente ${i + 1}`,
+					phone: `+55 11 99999-00${i.toString().padStart(2, "0")}`,
+					status,
+					error: isError ? "Timeout" : void 0,
+					time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
+					delivery_status,
+					delivered_at: delivery_status === "delivered" || delivery_status === "read" ? (/* @__PURE__ */ new Date()).toLocaleTimeString() : void 0,
+					read_at: delivery_status === "read" ? (/* @__PURE__ */ new Date()).toLocaleTimeString() : void 0
+				};
+			}));
 			setLoading(false);
 		}, 500);
 	}, [dispatchId]);
+	const total = logs.length;
+	const sent = logs.filter((l) => l.status === "Enviado").length;
+	const errors = logs.filter((l) => l.status === "Erro").length;
+	const delivered = logs.filter((l) => l.delivery_status === "delivered" || l.delivery_status === "read").length;
+	const read = logs.filter((l) => l.delivery_status === "read").length;
+	const getDeliveryStatus = (status) => {
+		if (status === "read") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			"data-uid": "src/components/history/HistoryLogModal.tsx:80:35",
+			"data-prohibitions": "[]",
+			className: "text-blue-400 font-medium",
+			children: "✓✓ Lido"
+		});
+		if (status === "delivered") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			"data-uid": "src/components/history/HistoryLogModal.tsx:82:14",
+			"data-prohibitions": "[]",
+			className: "text-slate-400 font-medium",
+			children: "✓✓ Entregue"
+		});
+		if (status === "failed") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			"data-uid": "src/components/history/HistoryLogModal.tsx:83:37",
+			"data-prohibitions": "[]",
+			className: "text-red-400 font-medium",
+			children: "✗ Falhou"
+		});
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			"data-uid": "src/components/history/HistoryLogModal.tsx:84:12",
+			"data-prohibitions": "[]",
+			className: "text-slate-600 font-medium",
+			children: "✓ Enviado"
+		});
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-		"data-uid": "src/components/history/HistoryLogModal.tsx:54:5",
+		"data-uid": "src/components/history/HistoryLogModal.tsx:88:5",
 		"data-prohibitions": "[editContent]",
 		open: !!dispatchId,
 		onOpenChange: (o) => !o && onClose(),
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-			"data-uid": "src/components/history/HistoryLogModal.tsx:55:7",
+			"data-uid": "src/components/history/HistoryLogModal.tsx:89:7",
 			"data-prohibitions": "[editContent]",
-			className: "max-w-4xl border-primary/20 bg-card p-0 overflow-hidden flex flex-col max-h-[85vh]",
+			className: "max-w-5xl border-primary/20 bg-card p-0 overflow-hidden flex flex-col max-h-[85vh]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-				"data-uid": "src/components/history/HistoryLogModal.tsx:56:9",
+				"data-uid": "src/components/history/HistoryLogModal.tsx:90:9",
 				"data-prohibitions": "[editContent]",
 				className: "p-6 pb-4 border-b border-border bg-secondary/30",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/history/HistoryLogModal.tsx:57:11",
+					"data-uid": "src/components/history/HistoryLogModal.tsx:91:11",
 					"data-prohibitions": "[editContent]",
 					className: "flex justify-between items-start pr-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/history/HistoryLogModal.tsx:58:13",
+						"data-uid": "src/components/history/HistoryLogModal.tsx:92:13",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogTitle, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:59:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:93:15",
 							"data-prohibitions": "[editContent]",
 							className: "text-xl",
-							children: [campaignName, " — Logs"]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:60:15",
-							"data-prohibitions": "[]",
-							className: "mt-1",
-							children: "Relatório detalhado de entrega"
+							children: [esc(campaignName), " — Logs"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogDescription, {
+							"data-uid": "src/components/history/HistoryLogModal.tsx:94:15",
+							"data-prohibitions": "[editContent]",
+							className: "mt-1 flex flex-col gap-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								"data-uid": "src/components/history/HistoryLogModal.tsx:95:17",
+								"data-prohibitions": "[]",
+								children: "Relatório detalhado de entrega"
+							}), !loading && logs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								"data-uid": "src/components/history/HistoryLogModal.tsx:97:19",
+								"data-prohibitions": "[editContent]",
+								className: "modal-stats text-xs font-medium text-muted-foreground bg-secondary/50 p-1.5 rounded inline-block w-fit mt-1",
+								children: [
+									total,
+									" registros · ",
+									sent,
+									" enviados · ",
+									errors,
+									" erros",
+									delivered > 0 && ` · ${delivered} entregues`,
+									read > 0 && ` · ${read} lidos`
+								]
+							})]
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/components/history/HistoryLogModal.tsx:62:13",
+						"data-uid": "src/components/history/HistoryLogModal.tsx:105:13",
 						"data-prohibitions": "[]",
 						variant: "outline",
 						size: "sm",
-						className: "gap-2 bg-background",
+						className: "gap-2 bg-background shrink-0",
 						onClick: () => downloadCsv(`logs_${campaignName}.csv`, logs),
 						disabled: loading || logs.length === 0,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Download, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:69:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:112:15",
 							"data-prohibitions": "[editContent]",
 							className: "w-4 h-4"
 						}), " Exportar CSV"]
 					})]
 				})
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/history/HistoryLogModal.tsx:73:9",
+				"data-uid": "src/components/history/HistoryLogModal.tsx:116:9",
 				"data-prohibitions": "[editContent]",
 				className: "flex-1 overflow-auto custom-scrollbar p-4",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/history/HistoryLogModal.tsx:74:11",
+					"data-uid": "src/components/history/HistoryLogModal.tsx:117:11",
 					"data-prohibitions": "[editContent]",
 					className: "border rounded-md border-border bg-background",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, {
-						"data-uid": "src/components/history/HistoryLogModal.tsx:75:13",
+						"data-uid": "src/components/history/HistoryLogModal.tsx:118:13",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:76:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:119:15",
 							"data-prohibitions": "[]",
 							className: "bg-secondary/40 sticky top-0 z-10 backdrop-blur-sm",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/components/history/HistoryLogModal.tsx:77:17",
+								"data-uid": "src/components/history/HistoryLogModal.tsx:120:17",
 								"data-prohibitions": "[]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:78:19",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:121:19",
 										"data-prohibitions": "[]",
 										className: "w-12",
 										children: "#"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:79:19",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:122:19",
 										"data-prohibitions": "[]",
-										children: "Destinatário"
+										children: "Nome"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:80:19",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:123:19",
 										"data-prohibitions": "[]",
-										id: "log-th-numero",
-										className: "hidden",
-										children: "Número"
+										children: "Telefone"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:83:19",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:124:19",
 										"data-prohibitions": "[]",
 										children: "Status"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:84:19",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:125:19",
+										"data-prohibitions": "[]",
+										children: "Entrega"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+										"data-uid": "src/components/history/HistoryLogModal.tsx:126:19",
 										"data-prohibitions": "[]",
 										className: "text-right",
-										children: "Hora"
+										children: "Horário"
 									})
 								]
 							})
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, {
-							"data-uid": "src/components/history/HistoryLogModal.tsx:87:15",
+							"data-uid": "src/components/history/HistoryLogModal.tsx:129:15",
 							"data-prohibitions": "[editContent]",
 							children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, {
-								"data-uid": "src/components/history/HistoryLogModal.tsx:89:19",
+								"data-uid": "src/components/history/HistoryLogModal.tsx:131:19",
 								"data-prohibitions": "[]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-									"data-uid": "src/components/history/HistoryLogModal.tsx:90:21",
+									"data-uid": "src/components/history/HistoryLogModal.tsx:132:21",
 									"data-prohibitions": "[]",
-									colSpan: 5,
+									colSpan: 6,
 									className: "text-center py-8 text-muted-foreground",
 									children: "Carregando logs..."
 								})
 							}) : logs.map((log) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/components/history/HistoryLogModal.tsx:96:21",
+								"data-uid": "src/components/history/HistoryLogModal.tsx:138:21",
 								"data-prohibitions": "[editContent]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:97:23",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:139:23",
 										"data-prohibitions": "[editContent]",
 										className: "text-muted-foreground text-xs",
 										children: log.index
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:98:23",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/components/history/HistoryLogModal.tsx:140:23",
 										"data-prohibitions": "[editContent]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											"data-uid": "src/components/history/HistoryLogModal.tsx:99:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-medium",
-											children: log.name
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											"data-uid": "src/components/history/HistoryLogModal.tsx:100:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-mono text-xs text-muted-foreground",
-											children: log.phone
-										})]
+										className: "font-medium",
+										children: esc(log.name)
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:102:23",
-										"data-prohibitions": "[]",
-										className: "hidden",
-										children: "-"
+										"data-uid": "src/components/history/HistoryLogModal.tsx:141:23",
+										"data-prohibitions": "[editContent]",
+										className: "font-mono text-xs text-muted-foreground",
+										children: esc(log.phone)
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:103:23",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:144:23",
 										"data-prohibitions": "[editContent]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/components/history/HistoryLogModal.tsx:104:25",
+											"data-uid": "src/components/history/HistoryLogModal.tsx:145:25",
 											"data-prohibitions": "[editContent]",
 											className: "flex items-center flex-wrap gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-												"data-uid": "src/components/history/HistoryLogModal.tsx:105:27",
+												"data-uid": "src/components/history/HistoryLogModal.tsx:146:27",
 												"data-prohibitions": "[editContent]",
 												variant: "outline",
 												className: log.status === "Enviado" ? "text-green-500 border-green-500/30 bg-green-500/10" : "text-red-500 border-red-500/30 bg-red-500/10",
-												children: log.status
+												children: esc(log.status)
 											}), log.error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/history/HistoryLogModal.tsx:115:41",
+												"data-uid": "src/components/history/HistoryLogModal.tsx:157:29",
 												"data-prohibitions": "[editContent]",
 												className: "text-xs text-red-400",
-												children: log.error
+												children: esc(log.error)
 											})]
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/history/HistoryLogModal.tsx:118:23",
+										"data-uid": "src/components/history/HistoryLogModal.tsx:161:23",
+										"data-prohibitions": "[editContent]",
+										children: getDeliveryStatus(log.delivery_status)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/components/history/HistoryLogModal.tsx:162:23",
 										"data-prohibitions": "[editContent]",
 										className: "text-right text-xs text-muted-foreground",
 										children: log.time
@@ -32525,6 +32599,327 @@ function HistoryLogModal({ dispatchId, campaignName, onClose }) {
 						})]
 					})
 				})
+			})]
+		})
+	});
+}
+//#endregion
+//#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-context@1.1.3_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-context/dist/index.mjs
+function createContextScope(scopeName, createContextScopeDeps = []) {
+	let defaultContexts = [];
+	function createContext3(rootComponentName, defaultContext) {
+		const BaseContext = import_react.createContext(defaultContext);
+		BaseContext.displayName = rootComponentName + "Context";
+		const index = defaultContexts.length;
+		defaultContexts = [...defaultContexts, defaultContext];
+		const Provider = (props) => {
+			const { scope, children, ...context } = props;
+			const Context = scope?.[scopeName]?.[index] || BaseContext;
+			const value = import_react.useMemo(() => context, Object.values(context));
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Context.Provider, {
+				value,
+				children
+			});
+		};
+		Provider.displayName = rootComponentName + "Provider";
+		function useContext2(consumerName, scope) {
+			const Context = scope?.[scopeName]?.[index] || BaseContext;
+			const context = import_react.useContext(Context);
+			if (context) return context;
+			if (defaultContext !== void 0) return defaultContext;
+			throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
+		}
+		return [Provider, useContext2];
+	}
+	const createScope = () => {
+		const scopeContexts = defaultContexts.map((defaultContext) => {
+			return import_react.createContext(defaultContext);
+		});
+		return function useScope(scope) {
+			const contexts = scope?.[scopeName] || scopeContexts;
+			return import_react.useMemo(() => ({ [`__scope${scopeName}`]: {
+				...scope,
+				[scopeName]: contexts
+			} }), [scope, contexts]);
+		};
+	};
+	createScope.scopeName = scopeName;
+	return [createContext3, composeContextScopes(createScope, ...createContextScopeDeps)];
+}
+function composeContextScopes(...scopes) {
+	const baseScope = scopes[0];
+	if (scopes.length === 1) return baseScope;
+	const createScope = () => {
+		const scopeHooks = scopes.map((createScope2) => ({
+			useScope: createScope2(),
+			scopeName: createScope2.scopeName
+		}));
+		return function useComposedScopes(overrideScopes) {
+			const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
+				const currentScope = useScope(overrideScopes)[`__scope${scopeName}`];
+				return {
+					...nextScopes2,
+					...currentScope
+				};
+			}, {});
+			return import_react.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
+		};
+	};
+	createScope.scopeName = baseScope.scopeName;
+	return createScope;
+}
+//#endregion
+//#region ../../cache/modules/whatsapp-bulksender-29313/node_modules/.pnpm/@radix-ui+react-progress@1.1.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+rea_7258c0b550570cef5cd6f2d2227aa6b9/node_modules/@radix-ui/react-progress/dist/index.mjs
+var PROGRESS_NAME = "Progress";
+var DEFAULT_MAX = 100;
+var [createProgressContext, createProgressScope] = createContextScope(PROGRESS_NAME);
+var [ProgressProvider, useProgressContext] = createProgressContext(PROGRESS_NAME);
+var Progress$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeProgress, value: valueProp = null, max: maxProp, getValueLabel = defaultGetValueLabel, ...progressProps } = props;
+	if ((maxProp || maxProp === 0) && !isValidMaxNumber(maxProp)) console.error(getInvalidMaxError(`${maxProp}`, "Progress"));
+	const max = isValidMaxNumber(maxProp) ? maxProp : DEFAULT_MAX;
+	if (valueProp !== null && !isValidValueNumber(valueProp, max)) console.error(getInvalidValueError(`${valueProp}`, "Progress"));
+	const value = isValidValueNumber(valueProp, max) ? valueProp : null;
+	const valueLabel = isNumber(value) ? getValueLabel(value, max) : void 0;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressProvider, {
+		scope: __scopeProgress,
+		value,
+		max,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+			"aria-valuemax": max,
+			"aria-valuemin": 0,
+			"aria-valuenow": isNumber(value) ? value : void 0,
+			"aria-valuetext": valueLabel,
+			role: "progressbar",
+			"data-state": getProgressState(value, max),
+			"data-value": value ?? void 0,
+			"data-max": max,
+			...progressProps,
+			ref: forwardedRef
+		})
+	});
+});
+Progress$1.displayName = PROGRESS_NAME;
+var INDICATOR_NAME = "ProgressIndicator";
+var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeProgress, ...indicatorProps } = props;
+	const context = useProgressContext(INDICATOR_NAME, __scopeProgress);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+		"data-state": getProgressState(context.value, context.max),
+		"data-value": context.value ?? void 0,
+		"data-max": context.max,
+		...indicatorProps,
+		ref: forwardedRef
+	});
+});
+ProgressIndicator.displayName = INDICATOR_NAME;
+function defaultGetValueLabel(value, max) {
+	return `${Math.round(value / max * 100)}%`;
+}
+function getProgressState(value, maxValue) {
+	return value == null ? "indeterminate" : value === maxValue ? "complete" : "loading";
+}
+function isNumber(value) {
+	return typeof value === "number";
+}
+function isValidMaxNumber(max) {
+	return isNumber(max) && !isNaN(max) && max > 0;
+}
+function isValidValueNumber(value, max) {
+	return isNumber(value) && !isNaN(value) && value <= max && value >= 0;
+}
+function getInvalidMaxError(propValue, componentName) {
+	return `Invalid prop \`max\` of value \`${propValue}\` supplied to \`${componentName}\`. Only numbers greater than 0 are valid max values. Defaulting to \`${DEFAULT_MAX}\`.`;
+}
+function getInvalidValueError(propValue, componentName) {
+	return `Invalid prop \`value\` of value \`${propValue}\` supplied to \`${componentName}\`. The \`value\` prop must be:
+  - a positive number
+  - less than the value passed to \`max\` (or ${DEFAULT_MAX} if no \`max\` prop is set)
+  - \`null\` or \`undefined\` if the progress is indeterminate.
+
+Defaulting to \`null\`.`;
+}
+var Root = Progress$1;
+var Indicator = ProgressIndicator;
+//#endregion
+//#region src/components/ui/progress.tsx
+var Progress = import_react.forwardRef(({ className, value, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root, {
+	"data-uid": "src/components/ui/progress.tsx:11:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className),
+	...props,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator, {
+		"data-uid": "src/components/ui/progress.tsx:16:5",
+		"data-prohibitions": "[editContent]",
+		className: "h-full w-full flex-1 bg-primary transition-all",
+		style: { transform: `translateX(-${100 - (value || 0)}%)` }
+	})
+}));
+Progress.displayName = Root.displayName;
+//#endregion
+//#region src/components/config/QrModal.tsx
+function QrModal({ instance, onClose }) {
+	const [qrCode, setQrCode] = (0, import_react.useState)(null);
+	const [loading, setLoading] = (0, import_react.useState)(false);
+	const [timeLeft, setTimeLeft] = (0, import_react.useState)(0);
+	const [maxTime, setMaxTime] = (0, import_react.useState)(45);
+	const [status, setStatus] = (0, import_react.useState)("waiting");
+	const { setInstances, instances } = useAppStore();
+	const timerRef = (0, import_react.useRef)(void 0);
+	const pollRef = (0, import_react.useRef)(void 0);
+	const fetchQr = async () => {
+		if (!instance) return;
+		setLoading(true);
+		setStatus("waiting");
+		setQrCode(null);
+		try {
+			const res = await api.getInstanceQr(instance.id);
+			setQrCode(res.qr);
+			setMaxTime(res.expires_in_seconds || 45);
+			setTimeLeft(res.expires_in_seconds || 45);
+		} catch (e) {
+			if (e?.status === 409) handleSuccess();
+		}
+		setLoading(false);
+	};
+	(0, import_react.useEffect)(() => {
+		if (instance && status === "waiting") fetchQr();
+		return () => clearTimers();
+	}, [instance]);
+	(0, import_react.useEffect)(() => {
+		if (status === "waiting") timerRef.current = setInterval(() => {
+			setTimeLeft((prev) => {
+				if (prev <= 1) {
+					clearInterval(timerRef.current);
+					setStatus("expired");
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1e3);
+		return () => clearInterval(timerRef.current);
+	}, [status, qrCode]);
+	(0, import_react.useEffect)(() => {
+		if (status === "waiting" && instance) pollRef.current = setInterval(async () => {
+			try {
+				if ((await api.checkInstanceStatus(instance.id)).status === "connected") handleSuccess();
+			} catch (e) {}
+		}, 3e3);
+		return () => clearInterval(pollRef.current);
+	}, [status, instance]);
+	const handleSuccess = () => {
+		setStatus("connected");
+		clearTimers();
+		if (instance) setInstances(instances.map((i) => i.id === instance.id ? {
+			...i,
+			status: "connected"
+		} : i));
+		setTimeout(() => {
+			onClose();
+		}, 2e3);
+	};
+	const clearTimers = () => {
+		clearInterval(timerRef.current);
+		clearInterval(pollRef.current);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+		"data-uid": "src/components/config/QrModal.tsx:97:5",
+		"data-prohibitions": "[editContent]",
+		open: !!instance,
+		onOpenChange: (o) => !o && onClose(),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+			"data-uid": "src/components/config/QrModal.tsx:98:7",
+			"data-prohibitions": "[editContent]",
+			id: "qr-modal",
+			className: "backdrop-blur-sm sm:max-w-md bg-background border-border",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
+				"data-uid": "src/components/config/QrModal.tsx:102:9",
+				"data-prohibitions": "[]",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
+					"data-uid": "src/components/config/QrModal.tsx:103:11",
+					"data-prohibitions": "[]",
+					children: "Conectar WhatsApp"
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/components/config/QrModal.tsx:105:9",
+				"data-prohibitions": "[editContent]",
+				className: "flex flex-col items-center justify-center py-6 space-y-6",
+				children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/components/config/QrModal.tsx:107:13",
+					"data-prohibitions": "[]",
+					className: "flex flex-col items-center text-green-500 animate-in zoom-in duration-300",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, {
+						"data-uid": "src/components/config/QrModal.tsx:108:15",
+						"data-prohibitions": "[editContent]",
+						className: "w-16 h-16 mb-4"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/components/config/QrModal.tsx:109:15",
+						"data-prohibitions": "[]",
+						className: "font-medium",
+						children: "Número conectado com sucesso!"
+					})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/components/config/QrModal.tsx:113:15",
+					"data-prohibitions": "[editContent]",
+					className: "w-64 h-64 bg-secondary/30 rounded-lg flex items-center justify-center border border-border overflow-hidden p-2",
+					children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/components/config/QrModal.tsx:115:19",
+						"data-prohibitions": "[]",
+						className: "text-muted-foreground animate-pulse",
+						children: "Carregando..."
+					}) : qrCode ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						"data-uid": "src/components/config/QrModal.tsx:117:19",
+						"data-prohibitions": "[editContent]",
+						src: qrCode,
+						alt: "QR Code",
+						className: `w-full h-full object-contain ${status === "expired" ? "opacity-20 grayscale" : ""}`
+					}) : null
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/components/config/QrModal.tsx:125:15",
+					"data-prohibitions": "[editContent]",
+					className: "w-full space-y-4 text-center",
+					children: status === "expired" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						"data-uid": "src/components/config/QrModal.tsx:127:19",
+						"data-prohibitions": "[]",
+						onClick: fetchQr,
+						className: "gap-2 w-full max-w-[200px]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							"data-uid": "src/components/config/QrModal.tsx:128:21",
+							"data-prohibitions": "[]",
+							className: "text-lg leading-none mb-1",
+							children: "↺"
+						}), " Gerar novo QR"]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/config/QrModal.tsx:131:19",
+						"data-prohibitions": "[editContent]",
+						className: "qr-timer-wrap space-y-2 w-full max-w-[250px] mx-auto",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								"data-uid": "src/components/config/QrModal.tsx:132:21",
+								"data-prohibitions": "[editContent]",
+								className: "text-sm font-medium",
+								children: [
+									"⏱ Expira em ",
+									timeLeft,
+									"s"
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
+								"data-uid": "src/components/config/QrModal.tsx:133:21",
+								"data-prohibitions": "[editContent]",
+								value: maxTime > 0 ? timeLeft / maxTime * 100 : 0,
+								className: "h-2"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/components/config/QrModal.tsx:137:21",
+								"data-prohibitions": "[]",
+								className: "text-xs text-muted-foreground mt-2",
+								children: "Aguardando scan..."
+							})
+						]
+					})
+				})] })
 			})]
 		})
 	});
@@ -32615,7 +33010,7 @@ function History() {
 			interrupted: "Interrompido"
 		};
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-			"data-uid": "src/pages/History.tsx:107:7",
+			"data-uid": "src/pages/History.tsx:108:7",
 			"data-prohibitions": "[editContent]",
 			variant: "outline",
 			className: styles[status],
@@ -32623,33 +33018,33 @@ function History() {
 		});
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/History.tsx:114:5",
+		"data-uid": "src/pages/History.tsx:115:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 pb-24",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/History.tsx:115:7",
+				"data-uid": "src/pages/History.tsx:116:7",
 				"data-prohibitions": "[]",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/History.tsx:116:9",
+					"data-uid": "src/pages/History.tsx:117:9",
 					"data-prohibitions": "[]",
 					className: "text-3xl font-bold",
 					children: "Histórico de Campanhas"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					"data-uid": "src/pages/History.tsx:117:9",
+					"data-uid": "src/pages/History.tsx:118:9",
 					"data-prohibitions": "[]",
 					className: "text-muted-foreground mt-1",
 					children: "Acompanhe e exporte os resultados dos seus disparos."
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/History.tsx:122:7",
+				"data-uid": "src/pages/History.tsx:123:7",
 				"data-prohibitions": "[editContent]",
 				className: "grid grid-cols-1 md:grid-cols-2 gap-4",
 				children: campaigns.map((camp) => {
 					const successRate = camp.total > 0 ? Math.round(camp.sent / camp.total * 100) : 0;
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-						"data-uid": "src/pages/History.tsx:126:13",
+						"data-uid": "src/pages/History.tsx:127:13",
 						"data-prohibitions": "[editContent]",
 						className: "cursor-pointer border-border/50 hover:border-primary/50 transition-all shadow-md group bg-card hover:bg-secondary/10",
 						onClick: () => {
@@ -32657,98 +33052,98 @@ function History() {
 							setSelectedName(camp.name);
 						},
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/History.tsx:134:15",
+							"data-uid": "src/pages/History.tsx:135:15",
 							"data-prohibitions": "[editContent]",
 							className: "p-5",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/History.tsx:135:17",
+									"data-uid": "src/pages/History.tsx:136:17",
 									"data-prohibitions": "[editContent]",
 									className: "flex justify-between items-start mb-4",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/History.tsx:136:19",
+										"data-uid": "src/pages/History.tsx:137:19",
 										"data-prohibitions": "[editContent]",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-											"data-uid": "src/pages/History.tsx:137:21",
+											"data-uid": "src/pages/History.tsx:138:21",
 											"data-prohibitions": "[editContent]",
 											className: "font-bold text-lg group-hover:text-primary transition-colors flex items-center gap-2",
-											children: camp.name
+											children: esc(camp.name)
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/History.tsx:140:21",
+											"data-uid": "src/pages/History.tsx:141:21",
 											"data-prohibitions": "[editContent]",
 											className: "flex items-center text-xs text-muted-foreground mt-1 gap-1",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-													"data-uid": "src/pages/History.tsx:141:23",
+													"data-uid": "src/pages/History.tsx:142:23",
 													"data-prohibitions": "[editContent]",
 													className: "w-3 h-3"
 												}),
 												" ",
-												camp.date
+												esc(camp.date)
 											]
 										})]
 									}), getStatusBadge(camp.status)]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/History.tsx:146:17",
+									"data-uid": "src/pages/History.tsx:147:17",
 									"data-prohibitions": "[editContent]",
 									className: "grid grid-cols-4 gap-4 border-t border-border pt-4 mt-2",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/History.tsx:147:19",
+											"data-uid": "src/pages/History.tsx:148:19",
 											"data-prohibitions": "[editContent]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:148:21",
+												"data-uid": "src/pages/History.tsx:149:21",
 												"data-prohibitions": "[]",
 												className: "text-xs text-muted-foreground mb-1",
 												children: "Contatos"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:149:21",
+												"data-uid": "src/pages/History.tsx:150:21",
 												"data-prohibitions": "[editContent]",
 												className: "font-semibold text-sm",
 												children: camp.total
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/History.tsx:151:19",
+											"data-uid": "src/pages/History.tsx:152:19",
 											"data-prohibitions": "[editContent]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:152:21",
+												"data-uid": "src/pages/History.tsx:153:21",
 												"data-prohibitions": "[]",
 												className: "text-xs text-muted-foreground mb-1",
 												children: "Enviados"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:153:21",
+												"data-uid": "src/pages/History.tsx:154:21",
 												"data-prohibitions": "[editContent]",
 												className: "font-semibold text-sm text-green-500",
 												children: camp.sent
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/History.tsx:155:19",
+											"data-uid": "src/pages/History.tsx:156:19",
 											"data-prohibitions": "[editContent]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:156:21",
+												"data-uid": "src/pages/History.tsx:157:21",
 												"data-prohibitions": "[]",
 												className: "text-xs text-muted-foreground mb-1",
 												children: "Erros"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:157:21",
+												"data-uid": "src/pages/History.tsx:158:21",
 												"data-prohibitions": "[editContent]",
 												className: "font-semibold text-sm text-red-500",
 												children: camp.error
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/History.tsx:159:19",
+											"data-uid": "src/pages/History.tsx:160:19",
 											"data-prohibitions": "[editContent]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/History.tsx:160:21",
+												"data-uid": "src/pages/History.tsx:161:21",
 												"data-prohibitions": "[]",
 												className: "text-xs text-muted-foreground mb-1",
 												children: "Sucesso"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												"data-uid": "src/pages/History.tsx:161:21",
+												"data-uid": "src/pages/History.tsx:162:21",
 												"data-prohibitions": "[editContent]",
 												className: "font-semibold text-sm text-primary",
 												children: [successRate, "%"]
@@ -32757,32 +33152,32 @@ function History() {
 									]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/History.tsx:164:17",
+									"data-uid": "src/pages/History.tsx:165:17",
 									"data-prohibitions": "[editContent]",
 									className: "flex justify-between items-center mt-4 pt-4 border-t border-border/50",
 									children: [camp.status === "interrupted" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-										"data-uid": "src/pages/History.tsx:166:21",
+										"data-uid": "src/pages/History.tsx:167:21",
 										"data-prohibitions": "[]",
 										size: "sm",
 										variant: "outline",
 										className: "h-8 gap-2 border-orange-500/50 text-orange-500 hover:bg-orange-500/10",
 										onClick: (e) => handleResume(camp.id, e),
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, {
-											"data-uid": "src/pages/History.tsx:172:23",
+											"data-uid": "src/pages/History.tsx:173:23",
 											"data-prohibitions": "[editContent]",
 											className: "w-3.5 h-3.5"
 										}), " Retomar"]
 									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										"data-uid": "src/pages/History.tsx:175:21",
+										"data-uid": "src/pages/History.tsx:176:21",
 										"data-prohibitions": "[editContent]"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-										"data-uid": "src/pages/History.tsx:177:19",
+										"data-uid": "src/pages/History.tsx:178:19",
 										"data-prohibitions": "[]",
 										size: "sm",
 										variant: "ghost",
 										className: "h-8 gap-1 text-primary hover:text-primary hover:bg-primary/10 ml-auto",
 										children: ["Ver logs ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, {
-											"data-uid": "src/pages/History.tsx:182:30",
+											"data-uid": "src/pages/History.tsx:183:30",
 											"data-prohibitions": "[editContent]",
 											className: "w-3.5 h-3.5"
 										})]
@@ -32794,11 +33189,17 @@ function History() {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HistoryLogModal, {
-				"data-uid": "src/pages/History.tsx:191:7",
+				"data-uid": "src/pages/History.tsx:192:7",
 				"data-prohibitions": "[editContent]",
 				dispatchId: selectedId,
 				campaignName: selectedName,
 				onClose: () => setSelectedId(null)
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(QrModal, {
+				"data-uid": "src/pages/History.tsx:198:7",
+				"data-prohibitions": "[editContent]",
+				instance: null,
+				onClose: () => {}
 			})
 		]
 	});
@@ -32807,11 +33208,13 @@ function History() {
 //#region src/components/config/WhatsAppInstances.tsx
 function WhatsAppInstances() {
 	const { instances, setInstances } = useAppStore();
+	const { toast } = useToast();
 	const [isLoading, setIsLoading] = (0, import_react.useState)(false);
 	const [isModalOpen, setIsModalOpen] = (0, import_react.useState)(false);
 	const [editingId, setEditingId] = (0, import_react.useState)(null);
 	const [isDeleting, setIsDeleting] = (0, import_react.useState)(false);
 	const [error, setError] = (0, import_react.useState)(null);
+	const [qrInstance, setQrInstance] = (0, import_react.useState)(null);
 	const [formData, setFormData] = (0, import_react.useState)({
 		display_name: "",
 		api_url: "",
@@ -32846,7 +33249,7 @@ function WhatsAppInstances() {
 				...formData,
 				id: newId,
 				provider: "Evolution API",
-				status: "connected",
+				status: "pending_qr",
 				is_active: true
 			}]);
 		}
@@ -32867,181 +33270,219 @@ function WhatsAppInstances() {
 		} : i));
 		setIsModalOpen(false);
 	};
+	const verifyInstance = async (inst) => {
+		try {
+			const res = await api.checkInstanceStatus(inst.id);
+			if (res.status === "connected") toast({
+				title: "Sucesso",
+				description: "Instância conectada."
+			});
+			else toast({
+				title: "Atenção",
+				description: "Instância desconectada.",
+				variant: "destructive"
+			});
+			setInstances(instances.map((i) => i.id === inst.id ? {
+				...i,
+				status: res.status
+			} : i));
+		} catch (e) {}
+	};
 	const getStatusDot = (status) => {
 		if (status === "connected") return "bg-green-500";
 		if (status === "pending_qr") return "bg-yellow-500 animate-pulse";
 		return "bg-slate-500";
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		"data-uid": "src/components/config/WhatsAppInstances.tsx:91:5",
+		"data-uid": "src/components/config/WhatsAppInstances.tsx:106:5",
 		"data-prohibitions": "[editContent]",
 		className: "shadow-md border-border/50 bg-background",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-				"data-uid": "src/components/config/WhatsAppInstances.tsx:92:7",
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:107:7",
 				"data-prohibitions": "[]",
 				className: "flex flex-row items-center justify-between pb-4 border-b border-border/50",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:93:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:108:9",
 					"data-prohibitions": "[]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:94:11",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:109:11",
 						"data-prohibitions": "[]",
 						className: "text-xl font-bold",
 						children: "Números WhatsApp"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:95:11",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:110:11",
 						"data-prohibitions": "[]",
 						className: "text-sm text-muted-foreground",
 						children: "Gerencie suas instâncias de envio"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:97:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:112:9",
 					"data-prohibitions": "[]",
 					onClick: () => openModal(),
 					size: "sm",
 					className: "gap-2 bg-primary hover:bg-primary/90",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:102:11",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:117:11",
 						"data-prohibitions": "[editContent]",
 						className: "w-4 h-4"
 					}), " Adicionar número"]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-				"data-uid": "src/components/config/WhatsAppInstances.tsx:105:7",
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:120:7",
 				"data-prohibitions": "[editContent]",
 				className: "pt-6",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:106:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:121:9",
 					"data-prohibitions": "[editContent]",
 					className: "space-y-4",
 					children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:108:13",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:123:13",
 						"data-prohibitions": "[]",
 						className: "text-center py-8 text-muted-foreground animate-pulse",
 						children: "Carregando..."
 					}) : instances.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:112:13",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:127:13",
 						"data-prohibitions": "[]",
 						className: "text-center py-8 text-muted-foreground",
 						children: "Nenhum número configurado."
 					}) : instances.map((inst) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/config/WhatsAppInstances.tsx:115:15",
+						"data-uid": "src/components/config/WhatsAppInstances.tsx:130:15",
 						"data-prohibitions": "[editContent]",
 						className: "flex items-center justify-between p-4 rounded-lg border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:119:17",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:134:17",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:120:19",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:135:19",
 								"data-prohibitions": "[editContent]",
 								className: "relative",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:121:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:136:21",
 									"data-prohibitions": "[editContent]",
 									className: cn$1("absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-background z-10", getStatusDot(inst.status))
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:127:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:142:21",
 									"data-prohibitions": "[editContent]",
 									className: cn$1("p-2 rounded-full", inst.is_active ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"),
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Smartphone, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:135:23",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:150:23",
 										"data-prohibitions": "[editContent]",
 										className: "w-5 h-5"
 									})
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:138:19",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:153:19",
 								"data-prohibitions": "[editContent]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:139:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:154:21",
 									"data-prohibitions": "[editContent]",
 									className: "font-semibold text-sm flex items-center gap-2",
-									children: [inst.display_name, !inst.is_active && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:142:25",
+									children: [esc(inst.display_name), !inst.is_active && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:157:25",
 										"data-prohibitions": "[]",
 										variant: "secondary",
 										className: "text-[10px] h-4 text-red-500 bg-red-500/10 border-red-500/20",
 										children: "Inativo"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:150:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:165:21",
 									"data-prohibitions": "[editContent]",
 									className: "text-xs text-muted-foreground mt-1",
 									children: [
-										inst.provider || "Evolution",
+										esc(inst.provider || "Evolution"),
 										" •",
 										" ",
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:152:23",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:167:23",
 											"data-prohibitions": "[editContent]",
 											className: "font-mono",
-											children: inst.instance_name
+											children: esc(inst.instance_name)
 										})
 									]
 								})]
 							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:156:17",
-							"data-prohibitions": "[]",
-							variant: "ghost",
-							size: "sm",
-							onClick: () => openModal(inst),
-							children: "Editar"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:171:17",
+							"data-prohibitions": "[editContent]",
+							className: "flex items-center gap-2",
+							children: [inst.status !== "connected" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:173:21",
+								"data-prohibitions": "[]",
+								size: "sm",
+								variant: "outline",
+								className: "bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary",
+								onClick: () => setQrInstance(inst),
+								children: "Conectar"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:182:21",
+								"data-prohibitions": "[]",
+								size: "sm",
+								className: "bg-slate-700 hover:bg-slate-600 text-slate-300",
+								onClick: () => verifyInstance(inst),
+								children: "Verificar"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:190:19",
+								"data-prohibitions": "[]",
+								variant: "ghost",
+								size: "sm",
+								onClick: () => openModal(inst),
+								children: "Editar"
+							})]
 						})]
 					}, inst.id))
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
-				"data-uid": "src/components/config/WhatsAppInstances.tsx:165:7",
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:200:7",
 				"data-prohibitions": "[editContent]",
 				open: isModalOpen,
 				onOpenChange: setIsModalOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-					"data-uid": "src/components/config/WhatsAppInstances.tsx:166:9",
+					"data-uid": "src/components/config/WhatsAppInstances.tsx:201:9",
 					"data-prohibitions": "[editContent]",
 					className: "backdrop-blur-sm sm:max-w-md bg-background border-border",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:167:11",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:202:11",
 							"data-prohibitions": "[editContent]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:168:13",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:203:13",
 								"data-prohibitions": "[editContent]",
 								children: editingId ? "Editar Número" : "Adicionar Número"
 							})
 						}),
 						error && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:172:13",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:207:13",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-2 p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:173:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:208:15",
 								"data-prohibitions": "[editContent]",
 								className: "w-4 h-4 shrink-0"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:174:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:209:15",
 								"data-prohibitions": "[editContent]",
 								children: error
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:178:11",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:213:11",
 							"data-prohibitions": "[editContent]",
 							className: "space-y-4 py-2",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:179:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:214:13",
 									"data-prohibitions": "[]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:180:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:215:15",
 										"data-prohibitions": "[]",
 										children: "Nome de exibição"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:181:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:216:15",
 										"data-prohibitions": "[editContent]",
 										placeholder: "Ex: Número Principal",
 										value: formData.display_name,
@@ -33052,15 +33493,15 @@ function WhatsAppInstances() {
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:187:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:222:13",
 									"data-prohibitions": "[]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:188:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:223:15",
 										"data-prohibitions": "[]",
 										children: "URL da API"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:189:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:224:15",
 										"data-prohibitions": "[editContent]",
 										placeholder: "https://sua-instancia.exemplo.com",
 										value: formData.api_url,
@@ -33071,17 +33512,17 @@ function WhatsAppInstances() {
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:195:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:230:13",
 									"data-prohibitions": "[editContent]",
 									className: "space-y-2",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:196:15",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:231:15",
 											"data-prohibitions": "[]",
 											children: "API Key"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:197:15",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:232:15",
 											"data-prohibitions": "[editContent]",
 											type: "password",
 											placeholder: "••••••••••••••••",
@@ -33092,7 +33533,7 @@ function WhatsAppInstances() {
 											})
 										}),
 										editingId && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/components/config/WhatsAppInstances.tsx:204:17",
+											"data-uid": "src/components/config/WhatsAppInstances.tsx:239:17",
 											"data-prohibitions": "[]",
 											className: "text-xs text-muted-foreground",
 											children: "Deixe em branco para manter a chave atual."
@@ -33100,15 +33541,15 @@ function WhatsAppInstances() {
 									]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:209:13",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:244:13",
 									"data-prohibitions": "[]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:210:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:245:15",
 										"data-prohibitions": "[]",
 										children: "Nome da Instância"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:211:15",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:246:15",
 										"data-prohibitions": "[editContent]",
 										placeholder: "minha-instancia",
 										value: formData.instance_name,
@@ -33121,26 +33562,26 @@ function WhatsAppInstances() {
 							]
 						}),
 						isDeleting ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:220:13",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:255:13",
 							"data-prohibitions": "[]",
 							className: "p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-3 mt-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:221:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:256:15",
 								"data-prohibitions": "[]",
 								className: "text-sm font-medium text-red-500 text-center",
 								children: "Apagar definitivamente? Esta ação não pode ser desfeita."
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:224:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:259:15",
 								"data-prohibitions": "[]",
 								className: "flex gap-2 justify-center",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:225:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:260:17",
 									"data-prohibitions": "[]",
 									variant: "outline",
 									onClick: () => setIsDeleting(false),
 									children: "Cancelar"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:228:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:263:17",
 									"data-prohibitions": "[]",
 									variant: "destructive",
 									onClick: handleDelete,
@@ -33148,15 +33589,15 @@ function WhatsAppInstances() {
 								})]
 							})]
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/config/WhatsAppInstances.tsx:234:13",
+							"data-uid": "src/components/config/WhatsAppInstances.tsx:269:13",
 							"data-prohibitions": "[editContent]",
 							className: "flex justify-between mt-4 items-center",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:235:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:270:15",
 								"data-prohibitions": "[editContent]",
 								className: "flex gap-2",
 								children: editingId && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:238:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:273:21",
 									"data-prohibitions": "[]",
 									variant: "ghost",
 									size: "icon",
@@ -33164,35 +33605,35 @@ function WhatsAppInstances() {
 									title: "Ativar/Desativar",
 									className: "text-muted-foreground hover:text-foreground",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Power, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:245:23",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:280:23",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4"
 									})
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:247:21",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:282:21",
 									"data-prohibitions": "[]",
 									variant: "ghost",
 									size: "icon",
 									onClick: () => setIsDeleting(true),
 									className: "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
-										"data-uid": "src/components/config/WhatsAppInstances.tsx:253:23",
+										"data-uid": "src/components/config/WhatsAppInstances.tsx:288:23",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4"
 									})
 								})] })
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/config/WhatsAppInstances.tsx:258:15",
+								"data-uid": "src/components/config/WhatsAppInstances.tsx:293:15",
 								"data-prohibitions": "[]",
 								className: "flex gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:259:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:294:17",
 									"data-prohibitions": "[]",
 									variant: "outline",
 									onClick: () => setIsModalOpen(false),
 									children: "Cancelar"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/config/WhatsAppInstances.tsx:262:17",
+									"data-uid": "src/components/config/WhatsAppInstances.tsx:297:17",
 									"data-prohibitions": "[]",
 									onClick: handleSave,
 									children: "Salvar"
@@ -33201,6 +33642,12 @@ function WhatsAppInstances() {
 						})
 					]
 				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(QrModal, {
+				"data-uid": "src/components/config/WhatsAppInstances.tsx:304:7",
+				"data-prohibitions": "[editContent]",
+				instance: qrInstance,
+				onClose: () => setQrInstance(null)
 			})
 		]
 	});
@@ -34192,4 +34639,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-CM6cKjbP.js.map
+//# sourceMappingURL=index-D4b8mAk1.js.map
