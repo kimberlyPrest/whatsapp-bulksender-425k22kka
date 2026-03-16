@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Plus, Smartphone, Trash2, AlertCircle, Power } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -72,14 +72,18 @@ export default function WhatsAppInstances() {
 
   const handleDelete = async () => {
     if (!editingId) return
-    await fetch(`/api/whatsapp/instances/${editingId}/hard`, { method: 'DELETE' }).catch(() => {})
+    await fetch(`/api/whatsapp/instances/${editingId}/hard`, { method: 'DELETE' }).catch(() => {
+      // ignore error
+    })
     setInstances(instances.filter((i) => i.id !== editingId))
     setIsModalOpen(false)
   }
 
   const handleToggleActive = async () => {
     if (!editingId) return
-    await fetch(`/api/whatsapp/instances/${editingId}`, { method: 'DELETE' }).catch(() => {})
+    await fetch(`/api/whatsapp/instances/${editingId}`, { method: 'DELETE' }).catch(() => {
+      // ignore error
+    })
     setInstances(instances.map((i) => (i.id === editingId ? { ...i, is_active: !i.is_active } : i)))
     setIsModalOpen(false)
   }
@@ -93,7 +97,9 @@ export default function WhatsAppInstances() {
         toast({ title: 'Atenção', description: 'Instância desconectada.', variant: 'destructive' })
       }
       setInstances(instances.map((i) => (i.id === inst.id ? { ...i, status: res.status } : i)))
-    } catch (e) {}
+    } catch (e) {
+      // ignore error
+    }
   }
 
   const getStatusDot = (status: string) => {

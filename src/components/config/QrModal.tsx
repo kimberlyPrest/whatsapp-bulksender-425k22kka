@@ -71,7 +71,9 @@ export function QrModal({ instance, onClose }: Props) {
           if (res.status === 'connected') {
             handleSuccess()
           }
-        } catch (e) {}
+        } catch (e) {
+          // ignore polling errors
+        }
       }, 3000)
     }
     return () => clearInterval(pollRef.current)
